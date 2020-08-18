@@ -11,7 +11,29 @@ import java.util.List;
 import java.util.Vector;
 
 public class MainActivity extends AppCompatActivity {
+    /*
+    TO DO:
+    - When a barcode is scanned, it enters automatically (no button needed)
+        (need to enable continous barcode by scanning the barcode tyron found (cocode))
 
+    - Unique barcodes only (either scan or implement)
+           when you scan
+            check if it's in the vector
+            if not in vector (add)
+            else return
+
+    - Add a location ID (
+        Struct BarcodeAndLocation {
+         string location,
+         string barcode;
+        }
+
+     when you scan
+        check if it's in the vector
+        if not in vector (add)
+        else return
+
+     */
     private Button mButtonClear;
     private Button mButtonReset;
     private Vector<String> mVectorStringBarcodesScanned = new Vector<String>();
