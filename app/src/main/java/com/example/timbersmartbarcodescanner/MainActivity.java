@@ -10,8 +10,8 @@ import android.widget.TextView;
 public class MainActivity extends AppCompatActivity {
 
     private Button mButtonClear;
-    private TextView mEditTextBarcode;
-
+    private TextView mEditTextBarcode, mTextViewBarcodesScanned;
+    static private int barcodesScanned = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,12 +19,15 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("test this is a test this is what a test has");
 
         mEditTextBarcode = findViewById(R.id.editTextBarcode);
-
+        mEditTextBarcode.setText("");
+        mTextViewBarcodesScanned = findViewById(R.id.textViewBarCodesScannedFill);
 
 
         mButtonClear = findViewById(R.id.buttonClear);
         mButtonClear.setOnClickListener((View v) -> {
             mEditTextBarcode.setText("");
+            barcodesScanned++;
+            mTextViewBarcodesScanned.setText(String.valueOf(barcodesScanned));
         });
     }
 }
