@@ -7,27 +7,46 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.List;
+import java.util.Vector;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button mButtonClear;
+    private Button mButtonReset;
+    private Vector<String> mVectorStringBarcodesScanned = new Vector<String>();
     private TextView mEditTextBarcode, mTextViewBarcodesScanned;
+    private TextView mTextViewBarcodesAlreadyScanned ;
     static private int barcodesScanned = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         System.out.println("test this is a test this is what a test has");
-
+        mButtonReset = findViewById(R.id.buttonReset);
+        mTextViewBarcodesAlreadyScanned = findViewById(R.id.textViewPrevScans);
         mEditTextBarcode = findViewById(R.id.editTextBarcode);
         mEditTextBarcode.setText("");
+        mTextViewBarcodesAlreadyScanned.setText("");
         mTextViewBarcodesScanned = findViewById(R.id.textViewBarCodesScannedFill);
 
 
         mButtonClear = findViewById(R.id.buttonClear);
         mButtonClear.setOnClickListener((View v) -> {
-            mEditTextBarcode.setText("");
             barcodesScanned++;
-            mTextViewBarcodesScanned.setText(String.valueOf(barcodesScanned));
+            String stringBarcodeScanned = "Number of barcodes scanned: " + String.valueOf(barcodesScanned);
+            mTextViewBarcodesScanned.setText(stringBarcodeScanned);
+            mVectorStringBarcodesScanned.add(mEditTextBarcode.getText().toString());
+            //Really bad code for the mean-time
+            mTextViewBarcodesAlreadyScanned.setText(mTextViewBarcodesAlreadyScanned.getText()+ "\n"
+                    + mEditTextBarcode.getText().toString());
+            mEditTextBarcode.setText("");
+        });
+        mButtonReset.setOnClickListener((View v) ->  {
+            mVectorStringBarcodesScanned.clear();
+            mTextViewBarcodesAlreadyScanned.setText("");
+            mTextViewBarcodesScanned.setText("");
+            barcodesScanned = 0;
         });
     }
 }
