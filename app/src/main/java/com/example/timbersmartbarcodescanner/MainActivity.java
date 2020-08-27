@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         else return
 
      */
+
     private Button mButtonClear;
     private Button mButtonReset;
     private Vector<String> mVectorStringBarcodesScanned = new Vector<String>();
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        System.out.println("test this is a test this is what a test has");
         mButtonReset = findViewById(R.id.buttonReset);
         mTextViewBarcodesAlreadyScanned = findViewById(R.id.textViewPrevScans);
         mEditTextBarcode = findViewById(R.id.editTextBarcode);
