@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.Vector;
 
-public class MainActivity extends AppCompatActivity {
+public class AddScanScreen extends AppCompatActivity {
     /*
     TO DO:
     - When a barcode is scanned, it enters automatically (no button needed)
