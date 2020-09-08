@@ -22,4 +22,5 @@
     <string name="rowView">View</string>
     <string name="rowDelete">Delete</string>
     <string name="rowAdd">Add new Location</string>
+
 </resources>
