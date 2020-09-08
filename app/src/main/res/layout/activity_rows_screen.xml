@@ -20,7 +20,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <include layout="@layout/content_rows_screen" />
 
     <TextView
         android:layout_width="match_parent"
@@ -41,7 +40,7 @@
         <TableRow
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:id="@+id/table_row1"
+            android:id="@+id/ActivityMainTableRowTitles"
             android:padding="10dp">
 
             <TextView
@@ -81,7 +80,7 @@
     </ListView>
 
     <Button
-        android:id="@+id/rowAdd"
+        android:id="@+id/ActivityMainAddNewStocktake"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"

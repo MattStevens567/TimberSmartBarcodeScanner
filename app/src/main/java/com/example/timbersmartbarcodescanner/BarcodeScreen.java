@@ -3,9 +3,6 @@ package com.example.timbersmartbarcodescanner;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -25,7 +22,7 @@ public class BarcodeScreen extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(BarcodeScreen.this, HomeScreen.class));
+                startActivity(new Intent(BarcodeScreen.this, ActivityMain.class));
             }
         });
     }

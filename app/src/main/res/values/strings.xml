@@ -23,4 +23,9 @@
     <string name="rowDelete">Delete</string>
     <string name="rowAdd">Add new Location</string>
 
+    <!--MAIN SCREEN-->
+    <string name="ActivityMainHeaderBarTitle">TimberSmart Barcode Scanner</string>
+    <string name="ActivityMainStockTakeName">Stock Take Title</string>
+    <string name="ActivityMainExport">Export</string>
+    <string name="ActivityMainView">View</string>
 </resources>

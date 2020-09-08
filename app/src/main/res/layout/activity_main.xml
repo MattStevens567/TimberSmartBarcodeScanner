@@ -1,64 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ActivityMainLinearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddScanScreen">
+    android:orientation="vertical"
+    tools:context=".ActivityMain">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ActivityMainToolBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/colorTimberSmartPurple"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:fontFamily="serif"
+            android:gravity="center|top"
+            android:text="@string/ActivityMainHeaderBarTitle"
+            android:textColor="@color/colorTimberSmartWhite"
+            android:textSize="40sp" />
+    </androidx.appcompat.widget.Toolbar>
 
-            <EditText
-                android:id="@+id/editTextBarcode"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="2"
-                android:ems="10"
-                android:gravity="center_horizontal|center_vertical"
-                android:inputType="textPersonName"
-                android:text="Barcode..."
-                android:textSize="50sp" />
+    <TableLayout
+        android:id="@+id/table_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.5">
 
-            <TextView
-                android:id="@+id/textViewBarCodesScannedFill"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:gravity="center"
-                android:text="When clear barcode is pressed, the scans will increase (for now)" />
-
-            <Button
-                android:id="@+id/buttonClear"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:text="Enter Barcode" />
+        <TableRow
+            android:id="@+id/ActivityMainTableRowTitles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
 
             <TextView
-                android:id="@+id/textViewPrevScans"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Test" />
-
-            <Button
-                android:id="@+id/buttonReset"
+                android:id="@+id/ActivityMainStockTakeNameRowTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RESET" />
-        </LinearLayout>
+                android:layout_weight="2"
+                android:gravity="center"
+                android:text="@string/ActivityMainStockTakeName"
+                android:textColor="#000" />
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/ActivityMainExportRowTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:gravity="center"
+                android:text="@string/ActivityMainExport"
+                android:textColor="#000" />
+
+            <TextView
+                android:id="@+id/ActivityMainViewRowTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:gravity="center"
+                android:text="@string/ActivityMainView"
+                android:textColor="#000" />
+
+        </TableRow>
+    </TableLayout>
+
+    <ListView
+        android:id="@+id/ActivityMainListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10" />
+
+    <Button
+        android:id="@+id/ActivityMainAddNewStocktake"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="bottom|end"
+        android:text="@string/rowAdd" />
+
+
+</LinearLayout>
