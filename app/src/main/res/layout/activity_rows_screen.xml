@@ -44,8 +44,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="center"
+                android:gravity="start"
                 android:text="@string/rowLocation"
+                android:textColor="#000" />
+            <TextView
+                android:id="@+id/rowDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:gravity="center"
+                android:text="@string/rowDelete"
+                android:textColor="#000" />
+            <TextView
+                android:id="@+id/rowAddEdit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".25"
+                android:gravity="center"
+                android:text="@string/rowAddEdit"
                 android:textColor="#000" />
 
             <TextView
@@ -56,6 +72,7 @@
                 android:gravity="center"
                 android:text="@string/rowView"
                 android:textColor="#000" />
+
 
             <TextView
                 android:id="@+id/rowDelete"
@@ -70,17 +87,17 @@
     </TableLayout>
 
     <ListView
-        android:id="@+id/ActivityMainListView"
+        android:id="@+id/rowListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="8" />
 
     <Button
-        android:id="@+id/ActivityMainAddNewStocktake"
+        android:id="@+id/rowAdd"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_gravity="end"
         android:layout_weight="1"
-        android:layout_gravity="bottom|end"
         android:text="@string/rowAdd" />
 
 
