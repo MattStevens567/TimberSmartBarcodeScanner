@@ -37,6 +37,7 @@
             android:id="@+id/ActivityMainTableRowTitles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="2"
             android:padding="10dp">
 
             <TextView
@@ -70,10 +71,10 @@
     </TableLayout>
 
     <ListView
-        android:id="@+id/ActivityMainListView"
+        android:id="@+id/ActivityMainListViewStocktakes"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10" />
+        android:layout_weight="9" />
 
     <Button
         android:id="@+id/ActivityMainAddNewStocktake"
@@ -81,7 +82,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="bottom|end"
-        android:text="@string/rowAdd" />
+        android:text="@string/ActivityMainAddNewStockTake" />
 
 
 </LinearLayout>

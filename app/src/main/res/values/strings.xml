@@ -26,6 +26,7 @@
     <!--MAIN SCREEN-->
     <string name="ActivityMainHeaderBarTitle">TimberSmart Barcode Scanner</string>
     <string name="ActivityMainStockTakeName">Stock Take Title</string>
+    <string name="ActivityMainAddNewStockTake">Add New Stock Take</string>
     <string name="ActivityMainExport">Export</string>
     <string name="ActivityMainView">View</string>
 </resources>
