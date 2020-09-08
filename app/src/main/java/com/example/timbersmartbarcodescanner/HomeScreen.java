@@ -12,6 +12,7 @@ import android.service.quicksettings.Tile;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -81,6 +82,14 @@ public class HomeScreen extends AppCompatActivity {
                 startActivity(new Intent(HomeScreen.this, AddScanScreen.class));
             }
         });
+
+        Button barcodes = findViewById(R.id.barcodes_button);
+        barcodes.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            startActivity(new Intent(HomeScreen.this, BarcodeScreen.class));
+                                        }
+                                    });
 
         mBarcodeEntries = findViewById(R.id.gridView);
         mBarcodeEntries.setNumColumns(NCOLS);
