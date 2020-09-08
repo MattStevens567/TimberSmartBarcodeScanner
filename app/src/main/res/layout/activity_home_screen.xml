@@ -25,6 +25,8 @@
             android:theme="@style/AppTheme.AppBarOverlay">
 
         </com.google.android.material.appbar.AppBarLayout>
+
+
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -39,16 +41,6 @@
         app:srcCompat="@android:drawable/ic_input_add" />
 
     <include layout="@layout/content_home_screen" />
-
-    <GridView
-        android:id="@+id/gridview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clipChildren="false"
-        android:horizontalSpacing="0dp"
-        android:numColumns="2"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp"></GridView>
 
     <Button
         android:id="@+id/barcodes_button"
