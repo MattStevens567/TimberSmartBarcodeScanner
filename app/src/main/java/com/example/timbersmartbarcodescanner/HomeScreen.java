@@ -84,7 +84,6 @@ public class HomeScreen extends AppCompatActivity {
 
         mBarcodeEntries = findViewById(R.id.gridView);
         mBarcodeEntries.setNumColumns(NCOLS);
-
         mBarcodeEntryAdapter = new TileAdapter();
     }
 }
