@@ -1,16 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_weight="1"
+    android:orientation="vertical"
     tools:context=".BarcodeScreen">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/ActivityMainToolBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/colorTimberSmartPurple"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:layout_marginTop="0dp"
+            android:fontFamily="serif"
+            android:gravity="center|top"
+            android:text="@string/ActivityMainHeaderBarTitle"
+            android:textColor="@color/colorTimberSmartWhite"
+            android:textSize="40sp" />
+    </androidx.appcompat.widget.Toolbar>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_weight="8">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -56,29 +78,13 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <include layout="@layout/content_barcode_screen" />
-
-    <TextView
-        android:id="@+id/bsTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|top"
-        android:text="@string/bsTitle"
-        android:textSize="50sp" />
+<!--    <TextView-->
+<!--        android:id="@+id/bsTitle"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center|top"-->
+<!--        android:text="@string/bsTitle"-->
+<!--        android:textSize="50sp" />-->
 
     <Button
         android:id="@+id/back_button"
@@ -87,4 +93,5 @@
         android:layout_gravity="bottom|end"
         android:text="@string/back_button" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</LinearLayout>

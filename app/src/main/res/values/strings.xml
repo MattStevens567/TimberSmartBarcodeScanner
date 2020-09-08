@@ -19,9 +19,12 @@
     <!--Rows Screen string values -->
     <string name="rowTitle">Area/Locations</string>
     <string name="rowLocation">Location</string>
+    <string name="rowDate">Date</string>
+    <string name="rowAddEdit">Add/Edit</string>
     <string name="rowView">View</string>
     <string name="rowDelete">Delete</string>
     <string name="rowAdd">Add new Location</string>
+    <string name="rowBarcodes">Barcodes</string>
 
     <!--MAIN SCREEN-->
     <string name="ActivityMainHeaderBarTitle">TimberSmart Barcode Scanner</string>
