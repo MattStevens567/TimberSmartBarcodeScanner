@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/SSLVBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/barcode"
+            android:textColor="#000" />
+        <TextView
+            android:id="@+id/SSLVArea"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/area"
+            android:textColor="#000" />
+        <TextView
+            android:id="@+id/SSLVDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/date"
+            android:textColor="#000" />
+        <TextView
+            android:id="@+id/SSLVTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/time"
+            android:textColor="#000" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="20"
+        android:background="@color/colorTimberSmartPurple"
+        android:text="@string/delete"
+        android:textColor="@color/colorTimberSmartWhite" />
+
+
+</LinearLayout>

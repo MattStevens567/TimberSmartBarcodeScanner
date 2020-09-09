@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".ScanningScreen"></activity>
         <activity
-            android:name=".RowsScreen"
+            android:name=".AreasScreen"
             android:label="@string/title_activity_rows_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

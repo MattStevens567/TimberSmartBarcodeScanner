@@ -3,8 +3,6 @@ package com.example.timbersmartbarcodescanner;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -30,14 +28,9 @@ public class ActivityMain extends AppCompatActivity {
 
         StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
         mListView.setAdapter(stockTakeListAdapter);
-//
-//        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
-//        back.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                startActivity(new Intent(ActivityMain.this, RowsScreen.class));
-//            }
-//        });
+
+        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
+        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
     }
 
 

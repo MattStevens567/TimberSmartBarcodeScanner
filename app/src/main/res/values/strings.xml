@@ -16,15 +16,16 @@
     <string name="bsTitle">Barcodes</string>
     <string name="title_activity_rows_screen">RowsScreen</string>
 
-    <!--Rows Screen string values -->
-    <string name="rowTitle">Area/ Locations</string>
-    <string name="rowLocation">Area/ Locations</string>
+    <!--Areas Screen string values -->
+    <string name="rowTitle">Area</string>
+    <string name="rowLocation">Area</string>
     <string name="rowDate">Date</string>
     <string name="rowAddEdit">Add</string>
     <string name="rowView">View</string>
     <string name="rowDelete">Delete</string>
     <string name="rowAdd">Add New Area</string>
     <string name="rowBarcodes">Barcodes</string>
+    <string name="AreasScreenDate">Date</string>
     <!--Rows Screen listview string values-->
     <string name="rowDateText">Date</string>
     <string name="rowAddButton">Add</string>
@@ -34,8 +35,22 @@
 
     <!--MAIN SCREEN-->
     <string name="ActivityMainHeaderBarTitle">TimberSmart Barcode Scanner</string>
-    <string name="ActivityMainStockTakeName">Stock Take Title</string>
+    <string name="ActivityMainStockTakeName"><u>Stock Take Name</u></string>
     <string name="ActivityMainAddNewStockTake">Add New Stock Take</string>
     <string name="ActivityMainExport">Export</string>
     <string name="ActivityMainView">View</string>
+    <string name="ScanningScreenBlankCounter">XXX</string>
+    <string name="ScanningScreenPreCount">Pre-count:</string>
+    <string name="enter">Enter</string>
+    <string name="enter_barcode_here">Enter Barcode Here</string>
+    <string name="count">Count:</string>
+    <string name="difference">Difference:</string>
+    <string name="xxx">XXX</string>
+    <string name="finished">Finished</string>
+    <string name="delete">Delete</string>
+    <string name="time">Time</string>
+    <string name="date">Date</string>
+    <string name="row">Row</string>
+    <string name="barcode">Barcode</string>
+    <string name="area">Area</string>
 </resources>

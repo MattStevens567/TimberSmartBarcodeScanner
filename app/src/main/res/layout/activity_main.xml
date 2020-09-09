@@ -9,7 +9,7 @@
     tools:context=".ActivityMain">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/ActivityMainToolBar"
+        android:id="@+id/ScanningScreenToolBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -30,41 +30,20 @@
     <TableLayout
         android:id="@+id/table_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5">
+        android:layout_height="wrap_content">
 
         <TableRow
             android:id="@+id/ActivityMainTableRowTitles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
-            android:padding="10dp">
+           >
 
             <TextView
                 android:id="@+id/ActivityMainStockTakeNameRowTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
-                android:gravity="center"
                 android:text="@string/ActivityMainStockTakeName"
-                android:textColor="#000" />
-
-            <TextView
-                android:id="@+id/ActivityMainViewRowTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".25"
-                android:gravity="center"
-                android:text="@string/ActivityMainView"
-                android:textColor="#000" />
-
-            <TextView
-                android:id="@+id/ActivityMainExportRowTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight=".25"
-                android:gravity="center"
-                android:text="@string/ActivityMainExport"
                 android:textColor="#000" />
 
         </TableRow>
@@ -81,6 +60,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/colorTimberSmartPurple"
+        android:textColor="@color/colorTimberSmartWhite"
         android:text="@string/ActivityMainAddNewStockTake" />
 
 
