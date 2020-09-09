@@ -19,7 +19,6 @@ public class ActivityMain extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Started");
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
-        //asada
         //Some Test Data for the meantime
         ArrayList<Stocktake> sampleStockTakes = new ArrayList<>();
         for (int i = 0; i < 50; i++){
