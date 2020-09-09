@@ -1,6 +1,7 @@
 package com.example.timbersmartbarcodescanner;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -10,17 +11,22 @@ import java.util.ArrayList;
 
 public class ActivityMain extends AppCompatActivity {
 
-    ListView ActivityMainListViewStocktake;
+    private static final String TAG = "ActivityMain";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ActivityMainListViewStocktake = findViewById(R.id.ActivityMainListViewStocktakes);
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("Stocktake 1");
-        arrayList.add("Stocktake 2");
-        arrayList.add("Stocktake 3");
+        Log.d(TAG, "onCreate: Started");
+        ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
 
+        //Some Test Data for the meantime
+        ArrayList<Stocktake> sampleStockTakes = new ArrayList<>();
+        for (int i = 0; i < 50; i++){
+            sampleStockTakes.add(new Stocktake("Stocktake number: " + i));
+        }
 
+        StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
+        mListView.setAdapter(stockTakeListAdapter);
     }
 }
