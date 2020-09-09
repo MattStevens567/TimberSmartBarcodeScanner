@@ -22,7 +22,7 @@
             android:layout_marginTop="0dp"
             android:fontFamily="serif"
             android:gravity="center|top"
-            android:text="@string/ActivityMainHeaderBarTitle"
+            android:text="@string/rowTitle"
             android:textColor="@color/colorTimberSmartWhite"
             android:textSize="40sp" />
     </androidx.appcompat.widget.Toolbar>
@@ -30,8 +30,8 @@
     <TableLayout
         android:id="@+id/table_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.5">
+        android:layout_height="wrap_content"
+        android:weightSum="100">
 
         <TableRow
             android:id="@+id/rowsColumnHeaders"
@@ -41,47 +41,52 @@
 
             <TextView
                 android:id="@+id/rowLocation"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="start"
+                android:layout_weight="50"
+                android:gravity="center"
                 android:text="@string/rowLocation"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textSize="20sp"/>
             <TextView
                 android:id="@+id/rowDate"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight="14"
                 android:gravity="center"
-                android:text="@string/rowDelete"
-                android:textColor="#000" />
+                android:text="@string/rowDate"
+                android:textColor="#000"
+                android:textSize="20sp"/>
             <TextView
                 android:id="@+id/rowAddEdit"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight="12"
                 android:gravity="center"
                 android:text="@string/rowAddEdit"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/rowView"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight="12"
                 android:gravity="center"
                 android:text="@string/rowView"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textSize="20sp"/>
 
 
             <TextView
                 android:id="@+id/rowDelete"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".25"
+                android:layout_weight="12"
                 android:gravity="center"
                 android:text="@string/rowDelete"
-                android:textColor="#000" />
+                android:textColor="#000"
+                android:textSize="20sp"/>
 
         </TableRow>
     </TableLayout>
@@ -93,7 +98,7 @@
         android:layout_weight="8" />
 
     <Button
-        android:id="@+id/rowAdd"
+        android:id="@+id/rowAddButton"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_gravity="end"
