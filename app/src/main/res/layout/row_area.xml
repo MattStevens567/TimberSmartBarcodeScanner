@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+
+    <TextView
+        android:id="@+id/rowLocationText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="50"
+        android:text="@string/rowLocation"
+        android:layout_marginStart="10dp"
+        android:textColor="#000"/>
+
+
+    <TextView
+        android:id="@+id/rowEditDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="14"
+        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/rowAddButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="12"
+        android:text="@string/rowAddButton"
+        android:gravity="center"/>
+    <Button
+        android:id="@+id/rowViewButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="12"
+        android:text="@string/rowViewButton"
+        android:gravity="center"/>
+    <Button
+        android:id="@+id/rowDeleteButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="12"
+        android:text="@string/rowDeleteButton"
+        android:gravity="center"/>
+
+</LinearLayout>

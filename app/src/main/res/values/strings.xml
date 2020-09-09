@@ -17,14 +17,20 @@
     <string name="title_activity_rows_screen">RowsScreen</string>
 
     <!--Rows Screen string values -->
-    <string name="rowTitle">Area/Locations</string>
-    <string name="rowLocation">Location</string>
+    <string name="rowTitle">Area/ Locations</string>
+    <string name="rowLocation">Area/ Locations</string>
     <string name="rowDate">Date</string>
-    <string name="rowAddEdit">Add/Edit</string>
+    <string name="rowAddEdit">Add</string>
     <string name="rowView">View</string>
     <string name="rowDelete">Delete</string>
-    <string name="rowAdd">Add new Location</string>
+    <string name="rowAdd">Add New Area</string>
     <string name="rowBarcodes">Barcodes</string>
+    <!--Rows Screen listview string values-->
+    <string name="rowDateText">Date</string>
+    <string name="rowAddButton">Add</string>
+    <string name="rowViewButton">View</string>
+    <string name="rowDeleteButton">Delete</string>
+
 
     <!--MAIN SCREEN-->
     <string name="ActivityMainHeaderBarTitle">TimberSmart Barcode Scanner</string>
