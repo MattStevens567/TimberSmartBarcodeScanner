@@ -43,50 +43,30 @@
                 android:id="@+id/rowLocation"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:gravity="center"
+                android:layout_weight="20"
+                android:gravity="center_vertical"
                 android:text="@string/rowLocation"
                 android:textColor="#000"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
+
             <TextView
                 android:id="@+id/rowDate"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="14"
+                android:layout_weight="10"
                 android:gravity="center"
                 android:text="@string/rowDate"
                 android:textColor="#000"
-                android:textSize="20sp"/>
+                android:textSize="20sp" />
             <TextView
-                android:id="@+id/rowAddEdit"
+                android:id="@+id/placeholder"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="12"
+                android:layout_weight="30"
                 android:gravity="center"
-                android:text="@string/rowAddEdit"
                 android:textColor="#000"
                 android:textSize="20sp"/>
 
-            <TextView
-                android:id="@+id/rowView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="12"
-                android:gravity="center"
-                android:text="@string/rowView"
-                android:textColor="#000"
-                android:textSize="20sp"/>
-
-
-            <TextView
-                android:id="@+id/rowDelete"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="12"
-                android:gravity="center"
-                android:text="@string/rowDelete"
-                android:textColor="#000"
-                android:textSize="20sp"/>
 
         </TableRow>
     </TableLayout>
