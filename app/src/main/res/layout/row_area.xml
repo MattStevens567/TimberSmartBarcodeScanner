@@ -28,20 +28,23 @@
         android:layout_height="wrap_content"
         android:layout_weight="12"
         android:text="@string/rowAddButton"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:onClick="AddHandler"/>
     <Button
         android:id="@+id/rowViewButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="12"
         android:text="@string/rowViewButton"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:onClick="ViewHandler"/>
     <Button
         android:id="@+id/rowDeleteButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="12"
         android:text="@string/rowDeleteButton"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:onClick="DeleteHandler"/>
 
 </LinearLayout>
