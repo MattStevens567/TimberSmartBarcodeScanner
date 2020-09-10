@@ -29,6 +29,6 @@ public class ScanningScreen extends Activity {
         }
 
         BarcodeListAdapter barcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, sampleBarcodes);
-        mListView.setAdapter(barcodeListAdapter);
+        mListView.setAdapter(barcodeListAdapter);//
     }
 }
