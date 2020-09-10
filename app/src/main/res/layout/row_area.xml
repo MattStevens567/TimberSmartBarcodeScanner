@@ -27,33 +27,28 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="10"
-        android:background="@color/colorTimberSmartPurple"
         android:gravity="center"
         android:layout_marginEnd="5dp"
-        android:text="@string/add_barcodes"
-        android:textColor="@color/colorTimberSmartWhite" />
+        android:text="@string/add_barcodes"/>
 
     <Button
         android:id="@+id/rowViewButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="10"
-        android:background="@color/colorTimberSmartPurple"
         android:gravity="center"
         android:layout_marginEnd="5dp"
         android:text="@string/view_barcodes"
-        android:textColor="@color/colorTimberSmartWhite" />
+        />
 
     <Button
         android:id="@+id/rowDeleteButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="10"
-        android:background="@color/colorTimberSmartPurple"
         android:gravity="center"
         android:layout_marginEnd="5dp"
         android:onClick="AreaScreenDeleteAreaButton"
         android:text="@string/delete_area"
-        android:textColor="@color/colorTimberSmartWhite" />
-
+>
 </LinearLayout>

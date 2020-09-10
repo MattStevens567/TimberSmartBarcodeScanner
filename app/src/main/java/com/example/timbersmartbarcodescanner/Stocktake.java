@@ -10,10 +10,16 @@ public class Stocktake {
     Vector<Area>  mStockTakeAreas;
     String mStartDate, mMostRecentEdit;
 
+    // Constructors
     public Stocktake(String mStringStockTakeName) {
         this.mStringStockTakeName = mStringStockTakeName;
     }
 
+    public Stocktake(String mStringStockTakeName, Vector<Area> stocktakeAreas) {
+        this.mStringStockTakeName = mStringStockTakeName;
+    }
+
+    // Getters and setters
     public String getmStringStockTakeName() {
         return mStringStockTakeName;
     }
