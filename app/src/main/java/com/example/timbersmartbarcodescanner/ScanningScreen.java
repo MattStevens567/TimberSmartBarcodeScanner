@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -23,11 +24,11 @@ public class ScanningScreen extends Activity {
 
     private static final String TAG = "ScanningScreen";
 
-    private int mCountGlobal;
+    private int mCountGlobal, mPreCountGlobal;
 
     private TextView mCount, mDifference;
     private EditText mBarcode, mPreCount;
-    private Button mEnter;
+    private Button mEnter, mConfirmPreCount;
     private ListView mListView;
 
 
@@ -55,14 +56,19 @@ public class ScanningScreen extends Activity {
         mBarcode = findViewById(R.id.editTextBarcode);
         mPreCount = findViewById(R.id.editTextPreCount);
         mEnter = findViewById(R.id.buttonEnter);
+        mConfirmPreCount = findViewById(R.id.buttonConfirmPreCount);
         mListView = findViewById(R.id.ScanningScreenListView);
+
 
         // Set this to be the value passed from area
         // or just count how many barcodes are currently in array
         mCountGlobal = 0;
-        mCount.setText(String.valueOf(mCountGlobal));
+        mPreCountGlobal = 0;
 
+        mCount.setText(String.valueOf(mCountGlobal));
+        mPreCount.setHint("Enter PreCount");
         mDifference.setText("0");
+        mPreCount.setText("0");
 
 
         // Some Test Data for the meantime =============================
@@ -75,6 +81,7 @@ public class ScanningScreen extends Activity {
         // =============================================================
         mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, sampleBarcodes);
         mListView.setAdapter(mBarcodeListAdapter);
+
         //update();
 
         // When enter is pressed, adds on a \n character
@@ -95,6 +102,23 @@ public class ScanningScreen extends Activity {
             }
             mBarcode.setText(temp);
             //update();
+        });
+
+        mConfirmPreCount.setOnClickListener((View v) -> {
+            String tempString = mPreCount.getText().toString();
+            int tempPreCount;
+            Log.d(TAG, "tempString: " + tempString);
+            if(tempString == "") {
+                tempPreCount = 0;
+                Log.d(TAG, "I like tempStrings that aren't null");
+            } else {
+                tempPreCount = Integer.parseInt(tempString);
+            }
+
+            mPreCountGlobal = tempPreCount;
+            calculateDifference();
+            mBarcode.requestFocus();
+
         });
 
 
@@ -149,32 +173,32 @@ public class ScanningScreen extends Activity {
         mBarcode.addTextChangedListener(barcodeTextWatcher);
 
         // preCountTextWatcher
-        TextWatcher preCountTextWatcher = new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Unused
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Unused
-                String temp = charSequence.toString();
-                if(temp.length() <= 0) {
-                    mPreCount.setText("0");
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable preCount) {
-                // Updates difference when preCount is changed
-                // Difference also updates if the count increases (this happens elsewhere in code)
-                calculateDifference();
-            }
-        };
-
-        // Attach TextWatchers to editTextViews
-
-        mPreCount.addTextChangedListener(preCountTextWatcher);
+//        TextWatcher preCountTextWatcher = new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                // Unused
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                // Unused
+//                String temp = charSequence.toString();
+//                if(temp.length() <= 0) {
+//                    mPreCount.setText("0");
+//                }
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable preCount) {
+//                // Updates difference when preCount is changed
+//                // Difference also updates if the count increases (this happens elsewhere in code)
+//                calculateDifference();
+//            }
+//        };
+//
+//        // Attach TextWatchers to editTextViews
+//
+//        mPreCount.addTextChangedListener(preCountTextWatcher);
     }
 
     public void calculateDifference() {
@@ -182,13 +206,12 @@ public class ScanningScreen extends Activity {
         mCount.setText(String.valueOf(mCountGlobal));
 
         if(mPreCount.getText().toString() == "") {
-            temp = 0;
-        } else {
-            temp = Integer.parseInt(mPreCount.getText().toString());
+            mPreCountGlobal = 0;
+
         }
         //count = Integer.parseInt(mCount.getText().toString());
 
-        difference = mCountGlobal - temp;
+        difference = mCountGlobal - mPreCountGlobal;
         // if 0, set difference text to green
         // Otherwise set text Colour to red
         if(difference == 0) {
