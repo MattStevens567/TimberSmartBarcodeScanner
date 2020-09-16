@@ -1,5 +1,8 @@
 package com.example.timbersmartbarcodescanner;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Barcode {
     private String mBarcode;
     private String mDateTime;
@@ -8,19 +11,26 @@ public class Barcode {
     //Constructors
     public Barcode(String mBarcode, String mDateTime, String mArea) {
         this.mBarcode = mBarcode;
-        this.mDateTime = mDateTime;
+
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        this.mDateTime = formatter.format(date);
         this.mArea = mArea;
     }
 
     public Barcode(String mBarcode) {
         this.mBarcode = mBarcode;
-        this.mDateTime = "Temp Date Time";
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        Date date = new Date();
+        this.mDateTime = formatter.format(date);
         this.mArea = "Temp Area";
     }
 
     public Barcode(String mBarcode, String mDateTime) {
         this.mBarcode = mBarcode;
         this.mDateTime = mDateTime;
+
     }
 
     public Barcode() {

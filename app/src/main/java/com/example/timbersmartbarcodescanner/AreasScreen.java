@@ -19,6 +19,8 @@ import java.util.ArrayList;
 public class AreasScreen extends AppCompatActivity {
     ArrayList<Area> sampleStockTakes = new ArrayList<>();
     private static final String TAG = "RowsScrean";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,8 +36,6 @@ public class AreasScreen extends AppCompatActivity {
 
         update();
 
-//        Button back = findViewById(R.id.rowAddButton);
-//        back.setOnClickListener(view -> startActivity(new Intent(AreasScreen.this, ScanningScreen.class)));
         Button add = findViewById(R.id.rowAddButton);
         add.setOnClickListener(new View.OnClickListener(){
             @Override

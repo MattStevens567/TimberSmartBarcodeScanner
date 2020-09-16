@@ -32,6 +32,13 @@ public class ActivityMain extends AppCompatActivity {
         Button back = findViewById(R.id.ActivityMainAddNewStocktake);
         back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
     }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_scanning_screen);
+//        Log.d(TAG, "onCreate: Started");
+//
+//    }
 
 
 }

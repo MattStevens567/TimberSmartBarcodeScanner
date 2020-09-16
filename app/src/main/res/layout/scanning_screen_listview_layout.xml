@@ -38,9 +38,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="20"
-        android:background="@color/colorTimberSmartPurple"
+        android:onClick="DeleteRow"
         android:text="@string/delete"
-        android:textColor="@color/colorTimberSmartWhite" />
+        android:textColor="?android:attr/textColorPrimary" />
 
 
 </LinearLayout>
