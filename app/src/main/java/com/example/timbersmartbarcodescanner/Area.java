@@ -34,4 +34,15 @@ public class Area implements Serializable {
     public void setmDate(String mDate) {
         this.mDate = mDate;
     }
+
+    public ArrayList<Barcode> getmBarcodes() {
+        return mBarcodes;
+    }
+
+    public void setmBarcodes(ArrayList<Barcode> mBarcodes) {
+        this.mBarcodes = mBarcodes;
+    }
+    public void addmBarcodes(Barcode mBarcodes) {
+        this.mBarcodes.add(mBarcodes);
+    }
 }

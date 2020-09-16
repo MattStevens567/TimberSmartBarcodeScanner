@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,9 +18,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class ScanningScreen extends Activity {
+public class ScanningScreen extends Activity implements Serializable {
 
     private static final String TAG = "ScanningScreen";
 
@@ -34,11 +36,25 @@ public class ScanningScreen extends Activity {
     private BarcodeListAdapter mBarcodeListAdapter;
     private ArrayList<Barcode> sampleBarcodes;
 
+    static private Area mArea = new Area("temp");
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanning_screen);
+
+        //grab Area object from AreaScreen
+        Intent intent = getIntent();
+        Area tester = (Area) intent.getSerializableExtra("Area");
+        mArea = tester;
+
+//        mArea.setAreaName(tester.getmAreaName());
+//        mArea.setmBarcodes(tester.getmBarcodes());
+
+
 
         Log.d(TAG, "onCreate: Started");
 
@@ -73,7 +89,7 @@ public class ScanningScreen extends Activity {
 //            sampleBarcodes.add(new Barcode(barcodeDetail));
 //        }
         // =============================================================
-        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, sampleBarcodes);
+        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, mArea.getmBarcodes());
         mListView.setAdapter(mBarcodeListAdapter);
         //update();
 
@@ -203,7 +219,7 @@ public class ScanningScreen extends Activity {
     // Not sure whether to do processing here or in barcode class
     // Processing currently done in barcode class
     public void addBarcodeLogic (String barcode) {
-        sampleBarcodes.add(new Barcode (barcode));
+        mArea.addmBarcodes(new Barcode (barcode, mArea.getmAreaName()));
     }
 
 //    public void update(){
@@ -220,9 +236,9 @@ public class ScanningScreen extends Activity {
         String item = child.getText().toString();
 
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
-        for (int i=0;i <sampleBarcodes.size();i++){
-            if (sampleBarcodes.get(i).getmBarcode().equals(item)){
-                sampleBarcodes.remove(i);
+        for (int i=0;i <mArea.getmBarcodes().size();i++){
+            if (mArea.getmBarcodes().get(i).getmBarcode().equals(item)){
+                mArea.getmBarcodes().remove(i);
                 final ListView mListView = findViewById(R.id.rowListView);
                 mBarcodeListAdapter.notifyDataSetChanged();
 
@@ -233,7 +249,10 @@ public class ScanningScreen extends Activity {
     }
 
 
+    public void BackHandler(View view) {
 
-
-
+        Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);
+        intents.putExtra("Area",mArea);
+        startActivity(intents);
+    }
 }

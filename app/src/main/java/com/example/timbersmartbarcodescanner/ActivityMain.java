@@ -44,7 +44,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 for (int t = 0; t < sampleStockTakes.size(); t++) {
 
                     if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
-                        Toast.makeText(ActivityMain.this, "updated2", Toast.LENGTH_LONG).show();
 
                         sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
 
@@ -77,7 +76,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         String item = child.getText().toString();
 
         int index=0;
-        Toast.makeText(this, "Going to " + item, Toast.LENGTH_LONG).show();
         for (int i=0;i <sampleStockTakes.size();i++) {
             if (sampleStockTakes.get(i).getmStringStockTakeName().equals(item)) {
                 index = i;

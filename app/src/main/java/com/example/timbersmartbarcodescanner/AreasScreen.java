@@ -31,14 +31,42 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_rows_screen);
 
        // if(test == 0){
-            Intent intent = getIntent();
-            stocktake.setmStockTakeAreas(((Stocktake)intent.getSerializableExtra("Stocktake")).getmStockTakeAreas());
-            stocktake.setmStringStockTakeName(((Stocktake)intent.getSerializableExtra("Stocktake")).getmStringStockTakeName());
 
-            update();
         //}
 
-        Log.d(TAG, "onCreate: Started");
+//        Intent barcode_intent = getIntent();
+//        Toast.makeText(AreasScreen.this, "updated0", Toast.LENGTH_LONG).show();
+
+        Intent intent = getIntent();
+        if (intent.getSerializableExtra("Area") != null) {
+            Toast.makeText(AreasScreen.this, "yolo1", Toast.LENGTH_LONG).show();
+                Toast.makeText(AreasScreen.this, "updated1", Toast.LENGTH_LONG).show();
+                Area tester = (Area) intent.getSerializableExtra("Area");
+
+                for (int t = 0; t < stocktake.getmStockTakeAreas().size(); t++) {
+                    Toast.makeText(AreasScreen.this, "updated2", Toast.LENGTH_LONG).show();
+                    if (stocktake.getmStockTakeAreas().get(t).getmAreaName().equals(tester.getmAreaName())) {
+                        Toast.makeText(AreasScreen.this, "updated2", Toast.LENGTH_LONG).show();
+
+                        stocktake.getmStockTakeAreas().get(t).setmBarcodes(tester.getmBarcodes());
+
+                    }
+                }
+
+            }
+        else if(intent.getSerializableExtra("Stocktake") != null){
+            Toast.makeText(AreasScreen.this, "Stocktake", Toast.LENGTH_LONG).show();
+            stocktake.setmStockTakeAreas(((Stocktake) intent.getSerializableExtra("Stocktake")).getmStockTakeAreas());
+            stocktake.setmStringStockTakeName(((Stocktake) intent.getSerializableExtra("Stocktake")).getmStringStockTakeName());
+        }
+
+
+
+
+
+        update();
+
+
         //ListView mListView = findViewById(R.id.rowListView);
         //Some Test Data for the meantime
 

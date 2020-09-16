@@ -1,15 +1,17 @@
 package com.example.timbersmartbarcodescanner;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Barcode {
+public class Barcode implements Serializable {
     private String mBarcode;
     private String mDateTime;
     private String mArea;
 
     //Constructors
-    public Barcode(String mBarcode, String mDateTime, String mArea) {
+    public Barcode(String mBarcode, String mArea) {
         this.mBarcode = mBarcode;
 
 
@@ -27,11 +29,11 @@ public class Barcode {
         this.mArea = "Temp Area";
     }
 
-    public Barcode(String mBarcode, String mDateTime) {
-        this.mBarcode = mBarcode;
-        this.mDateTime = mDateTime;
-
-    }
+//    public Barcode(String mBarcode, String mDateTime) {
+//        this.mBarcode = mBarcode;
+//        this.mDateTime = mDateTime;
+//
+//    }
 
     public Barcode() {
         this.mBarcode = "Temp Barcode";
