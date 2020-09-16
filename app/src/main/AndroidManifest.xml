@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ScanningScreen"></activity>
+
+        <activity
+            android:name=".ScanningScreen"
+            android:windowSoftInputMode="adjustPan"/>
+
+
         <activity
             android:name=".AreasScreen"
             android:label="@string/title_activity_rows_screen"
