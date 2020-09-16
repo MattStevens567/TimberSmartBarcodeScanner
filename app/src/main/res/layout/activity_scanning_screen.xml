@@ -12,11 +12,12 @@
         android:id="@+id/ScanningScreenToolBar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="5"
+        android:layout_weight="6"
         android:background="@color/colorTimberSmartPurple"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
         <TextView
+            android:id="@+id/textViewTitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="0dp"
@@ -31,24 +32,28 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="10"
+        android:layout_weight="15"
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/editTextBarcode"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
-            android:text="@string/enter_barcode_here">
+            android:importantForAutofill="no"
+            android:inputType="none"
+            tools:text="Scan data here...">
+
 
         </EditText>
 
         <Button
+            android:id="@+id/buttonEnter"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="20"
-            android:background="@color/colorTimberSmartPurple"
             android:text="@string/enter"
-            android:textColor="@color/colorTimberSmartWhite">
+            android:textColor="?android:attr/textColorPrimary">
 
         </Button>
 
@@ -56,83 +61,90 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
-            android:orientation="vertical">
+            android:baselineAligned="false">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50"
-                android:orientation="horizontal">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
+                    android:id="@+id/textViewTextPreCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/ScanningScreenPreCount">
 
                 </TextView>
 
-                <EditText
-                    android:layout_width="0dp"
-                    android:inputType="text"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
-                    android:gravity="center"
-                    android:text="@string/ScanningScreenBlankCounter">
-
-                </EditText>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50"
-                android:orientation="horizontal">
-
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
-                    android:gravity="center"
-                    android:text="@string/count">
-
-                </TextView>
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
-                    android:gravity="center"
-                    android:text="@string/xxx">
-
-                </TextView>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
+                    android:id="@+id/textViewTextDifference"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/difference">
 
                 </TextView>
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="50"
+                    android:id="@+id/textViewTextCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     android:gravity="center"
-                    android:text="@string/xxx">
+                    android:text="@string/count">
 
                 </TextView>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextPreCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:textSize="15sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/textViewDifference"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textViewCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                </TextView>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/buttonConfirmPreCount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Confirm Pre Count" />
+
         </LinearLayout>
 
     </LinearLayout>
@@ -141,66 +153,62 @@
         android:layout_height="1dp"
         android:background="@android:color/darker_gray"/>
     <!--    Table Row    Layout_Weight: 3-->
-    <TableRow
-        android:id="@+id/ActivityMainTableRowTitles"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="3"
-        >
-        <LinearLayout
+        android:layout_weight="5"
+        android:orientation="horizontal">
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:text="@string/barcode"
+            android:textColor="#000" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                android:text="@string/barcode"
-                android:gravity="center_vertical"
-                android:textColor="#000" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                android:text="@string/row"
-                android:gravity="center_vertical"
-                android:textColor="#000" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                android:text="@string/date"
-                android:gravity="center_vertical"
-                android:textColor="#000" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                android:text="@string/time"
-                android:gravity="center_vertical"
-                android:textColor="#000" />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="20"
-                android:text="@string/delete"
-                android:gravity="center_vertical"
-                android:textColor="#000" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:text="@string/row"
+            android:textColor="#000" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:text="@string/date"
+            android:textColor="#000" />
 
-        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:text="@string/time"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center_vertical"
+            android:text="@string/delete"
+            android:textColor="#000" />
 
 
+    </LinearLayout>
 
-
-
-    </TableRow>
-<!--    Listview    Layout_Weight: 75-->
+    <!--    Listview    Layout_Weight: 75-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@android:color/darker_gray" />
+
     <ListView
         android:id="@+id/ScanningScreenListView"
         android:layout_width="match_parent"

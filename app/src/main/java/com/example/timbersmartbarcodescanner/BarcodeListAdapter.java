@@ -1,6 +1,7 @@
 package com.example.timbersmartbarcodescanner;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,10 @@ public class BarcodeListAdapter extends ArrayAdapter {
             String barcodeDeatails = barcode.getmBarcode();
             String dateTime = barcode.getmDateTime();
             String area = barcode.getmArea();
+
+            Log.d(TAG, "barcodeString: " + barcodeDeatails);
+            Log.d(TAG, "dateTime: " + dateTime);
+            Log.d(TAG, "area: " + area);
 
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(mResource, parent, false);
