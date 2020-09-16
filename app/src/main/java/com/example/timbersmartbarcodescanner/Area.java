@@ -1,9 +1,12 @@
 package com.example.timbersmartbarcodescanner;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
-public class Area {
+public class Area implements Serializable {
+    private ArrayList<Barcode> mBarcodes;
     private String mArea, mDate;
 
 
@@ -12,6 +15,7 @@ public class Area {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         mDate = formatter.format(date);
+        mBarcodes = new ArrayList<>() ;
     }
 
     public String getmAreaName() {
