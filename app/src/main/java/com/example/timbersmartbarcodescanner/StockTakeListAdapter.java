@@ -39,6 +39,8 @@ public class StockTakeListAdapter extends ArrayAdapter {
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
 
+
+
         TextView textViewStockTakeName = convertView.findViewById(R.id.ActivityMainTextViewStockTakeName);
         textViewStockTakeName.setText(stocktakeName);
         return convertView;

@@ -18,8 +18,7 @@ import java.util.ArrayList;
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "ActivityMain";
-    static ArrayList<Stocktake> sampleStockTakes = new ArrayList<Stocktake>();
-    static int test =0;
+    ArrayList<Stocktake> sampleStockTakes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,63 +27,56 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
         //Some Test Data for the meantime
 
-        if (test == 0) {
-            for (int i = 0; i < 5; i++) {
-                sampleStockTakes.add(new Stocktake("Stocktake number: " + i));
-            }
-            test++;
+        // Adding test data ----------------------------------------------------
+        sampleStockTakes = new ArrayList<Stocktake>();
+        for (int i = 0; i < 5; i++) {
+            sampleStockTakes.add(new Stocktake("Stocktake number: " + i*292%100));
         }
-        else {
+        Data.getDataInstance(sampleStockTakes);
+        //----------------------------------------------------------------------------
 
-            Intent intent = getIntent();
 
-            if (intent.getSerializableExtra("stocktake") != null) {
-                Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
 
-                for (int t = 0; t < sampleStockTakes.size(); t++) {
-
-                    if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
-
-                        sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
-
-                    }
+        //Listing for an Area----------------------------------------
+        Intent intent = getIntent();
+        if (intent.getSerializableExtra("stocktake") != null) {
+            Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
+            for (int t = 0; t < sampleStockTakes.size(); t++) {
+                if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
+                    sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
                 }
-
             }
+
         }
+        //----------------------------------------------------------------------------
 
 
 
-
+        // Layout stuff----------------------------------------
         StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
         mListView.setAdapter(stockTakeListAdapter);
 
         Button back = findViewById(R.id.ActivityMainAddNewStocktake);
         back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
+        //----------------------------------------------------------------------------
     }
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_scanning_screen);
-//        Log.d(TAG, "onCreate: Started");
-//
-//    }
-
-    public void StockTakeViewHHandler(View view) {
+    public void StockTakeViewHHandler(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
-        String item = child.getText().toString();
+        String stockTakeClicked = child.getText().toString();
 
         int index=0;
-        for (int i=0;i <sampleStockTakes.size();i++) {
-            if (sampleStockTakes.get(i).getmStringStockTakeName().equals(item)) {
+        int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
+        ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
+        for (int i=0;i < stockTakeListSize; i++) {
+            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)) {
                 index = i;
-
-                //return;
+                break;
             }
         }
+        // Passes an intent which holds the index of a stock take
         Intent intent = new Intent (ActivityMain.this, AreasScreen.class);
-        intent.putExtra("Stocktake", sampleStockTakes.get(index));
+        intent.putExtra("Stocktake", index);
         startActivity(intent);
     }
 }
