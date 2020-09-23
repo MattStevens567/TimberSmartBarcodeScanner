@@ -54,20 +54,27 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         Button add = findViewById(R.id.rowAddButton);
         add.setOnClickListener(view -> {
             EditText location = findViewById(R.id.rowsAddAreaEdit);
-            Area mArea = new Area(location.getText().toString());
             try {
                 boolean unique = true;
-                for (int i = 0; i<getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size(); i++) {
-                    if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(mArea.getmAreaName())){
-                        unique = false;
+                if(!location.getText().equals("")){
+                    for (int i = 0; i<getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size(); i++) {
+
+                        if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(location.getText().toString())){
+                            unique = false;
+                        }
+                    }
+                    if (unique) {
+                        Area mArea = new Area(location.getText().toString());
+                        getStocktakeFromData(passedStockTakeIndex).addmStockTakeAreas(mArea);
+                    }
+                    else {
+                        Toast.makeText(AreasScreen.this, "There is already an area which exists under this name, consider renaming the new area", Toast.LENGTH_SHORT).show();
                     }
                 }
-                if (unique) {
-                    getStocktakeFromData(passedStockTakeIndex).addmStockTakeAreas(mArea);
+                else{
+                    Toast.makeText(AreasScreen.this, "Field is empty", Toast.LENGTH_SHORT).show();
                 }
-                else {
-                    Toast.makeText(AreasScreen.this, "There is already an area which exists under this name, consider renaming the new area", Toast.LENGTH_SHORT).show();
-                }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

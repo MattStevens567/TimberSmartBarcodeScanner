@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +26,9 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
         Log.d(TAG, "onCreate: Started");
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
+        //Set button/EditText for add new stocktake Item
+        Button addNew = findViewById(R.id.ActivityMainAddNewStocktake);
+        EditText newStocktakeItem = findViewById(R.id.ActivityMainEditStocktake);
         //Some Test Data for the meantime
 
         // Adding test data ----------------------------------------------------
@@ -35,6 +39,10 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         Data.getDataInstance(sampleStockTakes);
         //----------------------------------------------------------------------------
 
+        // Layout stuff----------------------------------------
+        StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
+        mListView.setAdapter(stockTakeListAdapter);
+        //----------------------------------------------------------------------------
 
 
         //Listing for an Area----------------------------------------
@@ -50,15 +58,47 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         }
         //----------------------------------------------------------------------------
 
+        // Add addNew stocktake button onclick listener---------------
+        addNew.setOnClickListener(view -> {
+            String newStocktakeName = newStocktakeItem.getText().toString();
+
+            try {
+                boolean unique = true;
+                for (int i =0; i<Data.getDataInstance().getmStocktakeList().size();i++){
+                    if(newStocktakeName.equals("")){
+                        unique =false;
+                        break;
+                    }
+                    if (Data.getDataInstance().getmStocktakeList().get(i).getmStringStockTakeName().equals(newStocktakeName)){
+                        unique =false;
+                        break;
+                    }
+
+                }
+                if(unique){
+                    Stocktake temp = new Stocktake(newStocktakeName );
+                    Data.getDataInstance().addTomStocktakeList(temp);
+                    stockTakeListAdapter.notifyDataSetChanged();
+                    newStocktakeItem.setText("");
+                }
+                else if(newStocktakeName.equals("")){
+                    Toast.makeText(this, "Field is empty, please add in a name for the Stocktake", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Name in use, Please choose another", Toast.LENGTH_SHORT).show();
+                }
 
 
-        // Layout stuff----------------------------------------
-        StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
-        mListView.setAdapter(stockTakeListAdapter);
 
-        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
-        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
         //----------------------------------------------------------------------------
+
+//        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
+//        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
+
     }
     public void StockTakeViewHHandler(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
