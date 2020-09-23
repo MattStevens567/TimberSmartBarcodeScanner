@@ -1,6 +1,8 @@
 package com.example.timbersmartbarcodescanner;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,11 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ActivityMain extends AppCompatActivity implements Serializable {
+
+    private Button mExport;
 
     private static final String TAG = "ActivityMain";
     ArrayList<Stocktake> sampleStockTakes;
@@ -29,6 +36,13 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         //Set button/EditText for add new stocktake Item
         Button addNew = findViewById(R.id.ActivityMainAddNewStocktake);
         EditText newStocktakeItem = findViewById(R.id.ActivityMainEditStocktake);
+
+//        mExport = findViewById(R.id.ActivityMainButtonExport);
+//
+//        mExport.setOnClickListener((View view) -> {
+//           // export(view);
+//        });
+
         //Some Test Data for the meantime
 
         // Adding test data ----------------------------------------------------
@@ -100,6 +114,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 //        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
 
     }
+
     public void StockTakeViewHHandler(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
@@ -108,15 +123,60 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         int index=0;
         int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
         ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
-        for (int i=0;i < stockTakeListSize; i++) {
-            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)) {
-                index = i;
-                break;
-            }
-        }
+
         // Passes an intent which holds the index of a stock take
         Intent intent = new Intent (ActivityMain.this, AreasScreen.class);
         intent.putExtra("Stocktake", index);
         startActivity(intent);
+    }
+
+    public void export(View view) throws Exception {
+
+//        LinearLayout parent = (LinearLayout) view.getParent();
+//        TextView child = (TextView)parent.getChildAt(0);
+//        String stockTakeClicked = child.getText().toString();
+//
+//        int index = 0;
+//        int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
+//        ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
+//        for (int i = 0; i < stockTakeListSize; i++) {
+//            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)) {
+//                index = i;
+//                break;
+//            }
+//        }
+//
+//        // Generate Data from stocktake
+//        StringBuilder data = new StringBuilder();
+//        data.append("Stocktake Name, Stocktake Created Date, StockTake modified date, Area Name, Barcode, Scan Date");
+//
+//        for(int i = ; i < ) {
+//            data.append("\n" + i + ',' + i*i);
+//        }
+        StringBuilder data = new StringBuilder();
+        data.append("Barcode, Another Thing");
+        for(int i = 0; i < 19; i++) {
+            data.append("\n" + i + ',' + i*i);
+        }
+
+        try {
+            FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
+            out.write(data.toString().getBytes());
+            out.close();
+
+            // exporting
+            Context context = getApplicationContext();
+            File fileLocation = new File(getFilesDir(), "data.csv");
+            Uri path = FileProvider.getUriForFile(context, "com.example.timbersmartbarcodescanner.fileProvider", fileLocation);
+            Intent fileIntent = new Intent(Intent.ACTION_SEND);
+            fileIntent.setType("text/csv");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
+            fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            fileIntent.putExtra(Intent.EXTRA_STREAM, path);
+            startActivity(Intent.createChooser(fileIntent, "Send Mail"));
+            Toast.makeText(this, "test", Toast.LENGTH_LONG ).show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
