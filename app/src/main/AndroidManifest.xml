@@ -20,7 +20,7 @@
             android:label="@string/title_activity_rows_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".BarcodeScreen"
+            android:name=".BarcodePhotoScreen"
             android:label="@string/title_activity_barcode_screen"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

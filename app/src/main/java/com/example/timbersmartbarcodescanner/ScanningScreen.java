@@ -35,11 +35,9 @@ public class ScanningScreen extends Activity implements Serializable {
 
 
     private BarcodeListAdapter mBarcodeListAdapter;
-    private ArrayList<Barcode> sampleBarcodes;
-
-    static private Area mArea = new Area("temp");
 
 
+    int passedAreaIndex, passedStocktakeIndex;
 
 
     @Override
@@ -49,22 +47,24 @@ public class ScanningScreen extends Activity implements Serializable {
 
         //grab Area object from AreaScreen
         Intent intent = getIntent();
-        Area tester = (Area) intent.getSerializableExtra("Area");
-        mArea = tester;
+        passedAreaIndex = intent.getIntExtra("Area Index", -1);
+        passedStocktakeIndex = intent.getIntExtra("Stocktake Index", -1);
 
-//        mArea.setAreaName(tester.getmAreaName());
-//        mArea.setmBarcodes(tester.getmBarcodes());
 
 
 
         Log.d(TAG, "onCreate: Started");
 
-        init();
+        try {
+            init();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-    public void init() {
+    public void init() throws Exception {
 
         // Assigning views to variables
         mCount = findViewById(R.id.textViewCount);
@@ -87,15 +87,8 @@ public class ScanningScreen extends Activity implements Serializable {
         mPreCount.setText("0");
 
 
-        // Some Test Data for the meantime =============================
-        sampleBarcodes = new ArrayList<>();
-//        for (int i = 0; i < 50; i++){
-//            int intBarcodeDetail = i*i*1232%10000;
-//            String barcodeDetail = Integer.toString(intBarcodeDetail);
-//            sampleBarcodes.add(new Barcode(barcodeDetail));
-//        }
-        // =============================================================
-        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, mArea.getmBarcodes());
+
+        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, getAreaOnFromPassedInstance().getmBarcodes());
         mListView.setAdapter(mBarcodeListAdapter);
 
         //update();
@@ -113,8 +106,8 @@ public class ScanningScreen extends Activity implements Serializable {
                 Log.d(TAG, "YOLOLOLOO");
                 Context context = getApplicationContext();
                 int duration  = Toast.LENGTH_SHORT;
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+//                Toast toast = Toast.makeText(context, text, duration);
+//                toast.show();
             }
             mBarcode.setText(temp);
             //update();
@@ -124,7 +117,7 @@ public class ScanningScreen extends Activity implements Serializable {
             String tempString = mPreCount.getText().toString();
             int tempPreCount;
             Log.d(TAG, "tempString: " + tempString);
-            if(tempString == "") {
+            if(tempString.equals("")) {
                 tempPreCount = 0;
                 Log.d(TAG, "I like tempStrings that aren't null");
             } else {
@@ -140,6 +133,10 @@ public class ScanningScreen extends Activity implements Serializable {
 
         initTextWatchers();
 
+    }
+
+    public Area getAreaOnFromPassedInstance() throws Exception {
+        return Data.getDataInstance().getmStocktakeList().get(passedStocktakeIndex).getmStockTakeAreas().get(passedAreaIndex);
     }
 
     public void initTextWatchers() {
@@ -171,13 +168,17 @@ public class ScanningScreen extends Activity implements Serializable {
                     Log.d(TAG, text.toString());
                     Context context = getApplicationContext();
                     int duration  = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+//                    Toast toast = Toast.makeText(context, text, duration);
+//                    toast.show();
 
                     String barcodeString = mBarcode.getText().toString();
                     // Send Barcode string to addBarcodeLogic function
                     // This function handles DateTime etc. to create barcode object
-                    addBarcodeLogic(barcodeString);
+                    try {
+                        addBarcodeLogic(barcodeString);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     mBarcodeListAdapter.notifyDataSetChanged();
 
                     calculateDifference();
@@ -188,33 +189,7 @@ public class ScanningScreen extends Activity implements Serializable {
         };
         mBarcode.addTextChangedListener(barcodeTextWatcher);
 
-        // preCountTextWatcher
-//        TextWatcher preCountTextWatcher = new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                // Unused
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//                // Unused
-//                String temp = charSequence.toString();
-//                if(temp.length() <= 0) {
-//                    mPreCount.setText("0");
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable preCount) {
-//                // Updates difference when preCount is changed
-//                // Difference also updates if the count increases (this happens elsewhere in code)
-//                calculateDifference();
-//            }
-//        };
-//
-//        // Attach TextWatchers to editTextViews
-//
-//        mPreCount.addTextChangedListener(preCountTextWatcher);
+
     }
 
     public void calculateDifference() {
@@ -241,8 +216,20 @@ public class ScanningScreen extends Activity implements Serializable {
     // Contructs new barcode object and adds it to the arraylist
     // Not sure whether to do processing here or in barcode class
     // Processing currently done in barcode class
-    public void addBarcodeLogic (String barcode) {
-        mArea.addmBarcodes(new Barcode (barcode, mArea.getmAreaName()));
+    public void addBarcodeLogic (String barcode) throws Exception {
+        //Check to see if the barcode doesn't exist before adding.
+        boolean unique = true;
+        for (int i = 0; i < getAreaOnFromPassedInstance().getmBarcodes().size(); i++){
+            if (getAreaOnFromPassedInstance().getmBarcodes().get(i).getmBarcode().equals(barcode)){
+                unique = false;
+                break;
+            }
+        }
+        if (unique) {
+            getAreaOnFromPassedInstance().addmBarcodes(new Barcode(barcode, getAreaOnFromPassedInstance().getmAreaName()));
+        } else {
+            Toast.makeText(this, "You have scanned a barcode twice, we are not entering it into the system", Toast.LENGTH_LONG).show();
+        }
     }
 
 //    public void update(){
@@ -253,19 +240,19 @@ public class ScanningScreen extends Activity implements Serializable {
 //        mListView.setAdapter(update);
 //    }
 
-    public void DeleteRow(View view) {
+    public void DeleteRow(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
-
+        Log.i(TAG, "DeleteRow: item ");
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
-        for (int i=0;i <mArea.getmBarcodes().size();i++){
-            if (mArea.getmBarcodes().get(i).getmBarcode().equals(item)){
-                mArea.getmBarcodes().remove(i);
-                final ListView mListView = findViewById(R.id.rowListView);
+        for (int i=0;i <getAreaOnFromPassedInstance().getmBarcodes().size();i++){
+            if (getAreaOnFromPassedInstance().getmBarcodes().get(i).getmBarcode().equals(item)){
+                getAreaOnFromPassedInstance().getmBarcodes().remove(i);
+                view.getId();
                 mBarcodeListAdapter.notifyDataSetChanged();
-
-                return;
+                mListView.invalidateViews();
+                break;
             }
 
         }
@@ -273,9 +260,7 @@ public class ScanningScreen extends Activity implements Serializable {
 
 
     public void BackHandler(View view) {
-
         Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);
-        intents.putExtra("Area",mArea);
         startActivity(intents);
     }
 }

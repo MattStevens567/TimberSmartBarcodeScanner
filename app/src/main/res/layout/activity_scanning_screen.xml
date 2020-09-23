@@ -219,14 +219,5 @@
     </ListView>
 
 <!--    Finished Button Layout_Weight: 5-->
-    <Button
-        android:id="@+id/ScanningScreenFinishedButton"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/colorTimberSmartPurple"
-        android:textColor="@color/colorTimberSmartWhite"
-        android:layout_weight="5"
-        android:text="@string/finished"
-        android:onClick="BackHandler"/>
 
 </LinearLayout>

@@ -35,30 +35,26 @@ public class BarcodeListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
-            Barcode barcode = (Barcode) getItem(position);
-            String barcodeDeatails = barcode.getmBarcode();
-            String dateTime = barcode.getmDateTime();
-            String area = barcode.getmArea();
-
-            Log.d(TAG, "barcodeString: " + barcodeDeatails);
-            Log.d(TAG, "dateTime: " + dateTime);
-            Log.d(TAG, "area: " + area);
-
             LayoutInflater inflater = LayoutInflater.from(mContext);
             convertView = inflater.inflate(mResource, parent, false);
 
-            TextView textViewDate = convertView.findViewById(R.id.SSLVDate);
-            textViewDate.setText(dateTime);
-
-            TextView textViewTime = convertView.findViewById(R.id.SSLVTime);
-            textViewTime.setText(dateTime);
-
-            TextView textViewBarcode = convertView.findViewById(R.id.SSLVBarcode);
-            textViewBarcode.setText(barcodeDeatails);
-
-            TextView textViewArea = convertView.findViewById(R.id.SSLVArea);
-            textViewArea.setText(area);
         }
+        Barcode barcode = (Barcode) getItem(position);
+        String barcodeDetails = barcode.getmBarcode();
+        String dateTime = barcode.getmDateTime();
+        String area = barcode.getmArea();
+        TextView textViewDate = convertView.findViewById(R.id.SSLVDate);
+        textViewDate.setText(dateTime);
+
+        TextView textViewTime = convertView.findViewById(R.id.SSLVTime);
+        textViewTime.setText(dateTime);
+
+        TextView textViewBarcode = convertView.findViewById(R.id.SSLVBarcode);
+        textViewBarcode.setText(barcodeDetails);
+
+        TextView textViewArea = convertView.findViewById(R.id.SSLVArea);
+        textViewArea.setText(area);
+
         return convertView;
     }
 }

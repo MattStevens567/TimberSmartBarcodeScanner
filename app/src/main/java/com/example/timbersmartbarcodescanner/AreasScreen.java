@@ -50,18 +50,24 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
             e.printStackTrace();
         }
 
-        Button back = findViewById(R.id.back);
-        back.setOnClickListener(view ->{
-            Intent intents = new Intent(AreasScreen.this, ActivityMain.class);
-            startActivity(intents);
-        });
 
         Button add = findViewById(R.id.rowAddButton);
         add.setOnClickListener(view -> {
             EditText location = findViewById(R.id.rowsAddAreaEdit);
             Area mArea = new Area(location.getText().toString());
             try {
-                getStocktakeFromData(passedStockTakeIndex).addmStockTakeAreas(mArea);
+                boolean unique = true;
+                for (int i = 0; i<getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size(); i++) {
+                    if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(mArea.getmAreaName())){
+                        unique = false;
+                    }
+                }
+                if (unique) {
+                    getStocktakeFromData(passedStockTakeIndex).addmStockTakeAreas(mArea);
+                }
+                else {
+                    Toast.makeText(AreasScreen.this, "There is already an area which exists under this name, consider renaming the new area", Toast.LENGTH_SHORT).show();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -80,15 +86,16 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
-        int index=0;
+        int areaIndex=0;
         Toast.makeText(this, "Going to " + item, Toast.LENGTH_LONG).show();
         for (int i=0;i <getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size();i++) {
             if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(item)) {
-                index = i;
+                areaIndex = i;
             }
         }
         Intent intent = new Intent(AreasScreen.this, ScanningScreen.class);
-        intent.putExtra("Area",getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(index));
+        intent.putExtra("Stocktake Index",passedStockTakeIndex);
+        intent.putExtra("Area Index", areaIndex);
         startActivity(intent);
     }
 
