@@ -56,4 +56,5 @@
     <string name="add_barcodes">Add Barcodes</string>
     <string name="view_barcodes">View barcodes</string>
     <string name="delete_area">Delete Area</string>
+    <string name="ActivityMainEditStocktake">Add New Stocktake Here</string>
 </resources>

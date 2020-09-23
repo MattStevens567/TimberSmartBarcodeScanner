@@ -50,7 +50,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
             e.printStackTrace();
         }
 
-
+        // Add Area Button
         Button add = findViewById(R.id.rowAddButton);
         add.setOnClickListener(view -> {
             EditText location = findViewById(R.id.rowsAddAreaEdit);

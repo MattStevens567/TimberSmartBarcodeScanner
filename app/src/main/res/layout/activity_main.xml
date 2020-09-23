@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_marginTop="15dp"
-            android:hint="Add New Stocktake Here"/>
+            android:hint="@string/ActivityMainEditStocktake"/>
 
         <Button
             android:id="@+id/ActivityMainAddNewStocktake"

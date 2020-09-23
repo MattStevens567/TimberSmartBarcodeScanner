@@ -58,7 +58,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         }
         //----------------------------------------------------------------------------
 
-        // Add addNew stocktake button onclick listener---------------
+        // Add addNew stocktake button onclick listener----------------
         addNew.setOnClickListener(view -> {
             String newStocktakeName = newStocktakeItem.getText().toString();
 
