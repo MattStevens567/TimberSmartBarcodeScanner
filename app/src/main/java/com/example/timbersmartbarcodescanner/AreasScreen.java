@@ -56,7 +56,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
             EditText location = findViewById(R.id.rowsAddAreaEdit);
             try {
                 boolean unique = true;
-                if(!location.getText().equals("")){
+                if(!location.getText().toString().equals("")){
                     for (int i = 0; i<getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size(); i++) {
 
                         if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(location.getText().toString())){

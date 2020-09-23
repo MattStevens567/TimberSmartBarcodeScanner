@@ -123,6 +123,12 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         int index=0;
         int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
         ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
+        for (int i=0;i<tempStocktakes.size(); i++){
+            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked )){
+                index = i;
+                break;
+            }
+        }
 
         // Passes an intent which holds the index of a stock take
         Intent intent = new Intent (ActivityMain.this, AreasScreen.class);
