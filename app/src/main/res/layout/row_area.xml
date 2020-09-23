@@ -4,54 +4,60 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/rowLocationText"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="20"
-        android:gravity="center_vertical"
-        android:text="@string/rowLocation"
-        android:textColor="#000" />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/rowLocationText"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+
+            android:gravity="center_vertical"
+            android:text="@string/rowLocation"
+            android:textColor="#000" />
+
+        <TextView
+            android:id="@+id/rowEditDate"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:gravity="center"
+            android:text="@string/AreasScreenDate" />
+
+        <Button
+            android:id="@+id/rowAddButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+
+            android:gravity="center"
+            android:onClick="AddHandler"
+            android:text="@string/add_barcodes" />
+
+        <Button
+            android:id="@+id/rowViewButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+
+            android:gravity="center"
+            android:onClick="ViewHandler"
+            android:text="@string/view_barcodes" />
+
+        <Button
+            android:id="@+id/rowDeleteButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:gravity="center"
+            android:onClick="DeleteHandler"
+            android:text="@string/delete_area" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 
 
-    <TextView
-        android:id="@+id/rowEditDate"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_weight="10"
-        android:gravity="center"
-        android:text="@string/AreasScreenDate" />
-
-    <Button
-        android:id="@+id/rowAddButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:gravity="center"
-        android:layout_marginEnd="5dp"
-        android:text="@string/add_barcodes"
-        android:onClick="AddHandler"
-        />
-
-    <Button
-        android:id="@+id/rowViewButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:gravity="center"
-        android:layout_marginEnd="5dp"
-        android:text="@string/view_barcodes"
-        android:onClick="ViewHandler"
-        />
-
-    <Button
-        android:id="@+id/rowDeleteButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="10"
-        android:gravity="center"
-        android:layout_marginEnd="5dp"
-        android:onClick="DeleteHandler"
-        android:text="@string/delete_area"
-    />
 </LinearLayout>
