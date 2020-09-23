@@ -217,7 +217,7 @@ public class ScanningScreen extends Activity implements Serializable {
     // Not sure whether to do processing here or in barcode class
     // Processing currently done in barcode class
     public void addBarcodeLogic (String barcode) throws Exception {
-        //Check to see if the barcode doesn't exist before adding
+        //Check to see if the barcode doesn't exist before adding.
         boolean unique = true;
         for (int i = 0; i < getAreaOnFromPassedInstance().getmBarcodes().size(); i++){
             if (getAreaOnFromPassedInstance().getmBarcodes().get(i).getmBarcode().equals(barcode)){
