@@ -73,19 +73,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         //----------------------------------------------------------------------------
 
 
-//        //Listing for an Area----------------------------------------
-//        Intent intent = getIntent();
-//        if (intent.getSerializableExtra("stocktake") != null) {
-//            Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
-//            for (int t = 0; t < sampleStockTakes.size(); t++) {
-//                if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
-//                    sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
-//                }
-//            }
-//
-//        }
-//        //----------------------------------------------------------------------------
-
         // Add addNew stocktake button onclick listener----------------
         addNew.setOnClickListener(view -> {
             String newStocktakeName = newStocktakeItem.getText().toString();
@@ -101,7 +88,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         unique =false;
                         break;
                     }
-
                 }
                 if(unique){
                     Stocktake temp = new Stocktake(newStocktakeName );
@@ -110,29 +96,24 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                     newStocktakeItem.setText("");
                 }
                 else if(newStocktakeName.equals("")){
-                    Toast.makeText(this, "Field is empty, please add in a name for the Stocktake", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Field is empty. Please add in a name for the Stock take", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    Toast.makeText(this, "Name in use, Please choose another", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Name already in use. Please use another", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         //----------------------------------------------------------------------------
-
-//        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
-//        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
-
     }
 
+    // "View" button on click listener -----------------------------------------------
     public void StockTakeViewHHandler(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String stockTakeClicked = child.getText().toString();
-
         int index=0;
-        int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
         ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
         for (int i=0;i<tempStocktakes.size(); i++){
             if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked )){
@@ -146,7 +127,10 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         intent.putExtra("Stocktake", index);
         startActivity(intent);
     }
+    // ----------------------------------------------------------------------------------------------
 
+
+    // export function --------------------------------------------------------------------
     public void export(View view) throws Exception {
 
 //        LinearLayout parent = (LinearLayout) view.getParent();
@@ -173,14 +157,13 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         StringBuilder data = new StringBuilder();
         data.append("Barcode, Another Thing");
         for(int i = 0; i < 19; i++) {
-            data.append("\n" + i + ',' + i*i);
+            data.append("\n").append(i).append(',').append(i * i);
         }
 
         try {
             FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
             out.write(data.toString().getBytes());
             out.close();
-
             // exporting
             Context context = getApplicationContext();
             File fileLocation = new File(getFilesDir(), "data.csv");
@@ -196,4 +179,5 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             e.printStackTrace();
         }
     }
+    // ----------------------------------------------------------------------------------------------
 }
