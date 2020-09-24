@@ -1,12 +1,10 @@
 package com.example.timbersmartbarcodescanner;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -40,9 +38,9 @@ public class BarcodeListAdapter extends ArrayAdapter {
 
         }
         Barcode barcode = (Barcode) getItem(position);
-        String barcodeDetails = barcode.getmBarcode();
-        String dateTime = barcode.getmDateTime();
-        String area = barcode.getmArea();
+        String barcodeDetails = barcode.getBarcode();
+        String dateTime = barcode.getDateTime();
+        String area = barcode.getArea();
         TextView textViewDate = convertView.findViewById(R.id.SSLVDate);
         textViewDate.setText(dateTime);
 

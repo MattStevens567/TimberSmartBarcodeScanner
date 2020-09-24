@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Area implements Serializable {
-    private ArrayList<Barcode> mBarcodes = new ArrayList<Barcode>();
-    private String mArea, mDate = "";
+    private ArrayList<Barcode> mBarcodes;
+    private String mArea, mDate;
 
 
     public Area(String nArea) {
