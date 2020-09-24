@@ -20,7 +20,25 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-
+/*
+* This class is the back-end for the start up screen, AKA the Stock take screen.
+*
+* This app works in the following ways:
+* A singleton class named Data is used to store the inventory management data.
+*
+* The data structure is as follows:
+* Data consists of many stocktakes
+* Stocktakes consist of many areas
+* Areas consist of many barcodes.
+* Stocktakes, areas and barcodes all have extra fields to them too (date, time ....)
+*
+*
+* This is the first iteration v1.x of the Stick Barcode Scanner created by 3 Massey University Students, namely:
+* Keeghan Campbell,
+* Matt Stevens,
+* Tyron Landman.
+* Year: 2020.
+* */
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private Button mExport;
@@ -29,21 +47,17 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     ArrayList<Stocktake> sampleStockTakes;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Default --------------------------
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.d(TAG, "onCreate: Started");
+        //--------------------------
+
+        //Set up views -------------------------------
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
-        //Set button/EditText for add new stocktake Item
         Button addNew = findViewById(R.id.ActivityMainAddNewStocktake);
         EditText newStocktakeItem = findViewById(R.id.ActivityMainEditStocktake);
-
-//        mExport = findViewById(R.id.ActivityMainButtonExport);
-//
-//        mExport.setOnClickListener((View view) -> {
-//           // export(view);
-//        });
-
-        //Some Test Data for the meantime
+        //--------------------------------------------------------------
 
         // Adding test data ----------------------------------------------------
         sampleStockTakes = new ArrayList<Stocktake>();
@@ -59,18 +73,18 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         //----------------------------------------------------------------------------
 
 
-        //Listing for an Area----------------------------------------
-        Intent intent = getIntent();
-        if (intent.getSerializableExtra("stocktake") != null) {
-            Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
-            for (int t = 0; t < sampleStockTakes.size(); t++) {
-                if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
-                    sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
-                }
-            }
-
-        }
-        //----------------------------------------------------------------------------
+//        //Listing for an Area----------------------------------------
+//        Intent intent = getIntent();
+//        if (intent.getSerializableExtra("stocktake") != null) {
+//            Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
+//            for (int t = 0; t < sampleStockTakes.size(); t++) {
+//                if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
+//                    sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
+//                }
+//            }
+//
+//        }
+//        //----------------------------------------------------------------------------
 
         // Add addNew stocktake button onclick listener----------------
         addNew.setOnClickListener(view -> {
@@ -101,9 +115,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 else{
                     Toast.makeText(this, "Name in use, Please choose another", Toast.LENGTH_SHORT).show();
                 }
-
-
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
