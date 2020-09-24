@@ -6,43 +6,39 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Area implements Serializable {
-    private ArrayList<Barcode> mBarcodes;
+    private ArrayList<Barcode> mBarcodeList;
     private String mArea, mDate;
 
 
-    public Area(String nArea) {
-        this.mArea = nArea;
+    public Area(String area) {
+        this.mArea = area;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         mDate = formatter.format(date);
-        mBarcodes = new ArrayList<>() ;
+        mBarcodeList = new ArrayList<>() ;
     }
 
-    public String getmAreaName() {
-
-        return mArea;
-    }
-
+    public String getAreaName() { return mArea; }
     public void setAreaName(String mArea) {
         this.mArea = mArea;
     }
 
-    public String getmDate() {
+    public String getDate() {
         return mDate;
     }
-
-    public void setmDate(String mDate) {
+    public void setDate(String mDate) {
         this.mDate = mDate;
     }
 
-    public ArrayList<Barcode> getmBarcodes() {
-        return mBarcodes;
+    public ArrayList<Barcode> getBarcodeList() {
+        return mBarcodeList;
     }
 
-    public void setmBarcodes(ArrayList<Barcode> mBarcodes) {
-        this.mBarcodes = mBarcodes;
+    public void setBarcodeList(ArrayList<Barcode> barcodeList) {
+        mBarcodeList = barcodeList;
     }
-    public void addmBarcodes(Barcode mBarcodes) {
-        this.mBarcodes.add(mBarcodes);
+
+    public void addBarcode(Barcode barcode) {
+        mBarcodeList.add(barcode);
     }
 }

@@ -5,9 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.net.StandardProtocolFamily;
 
 //yo
 public class AreasScreen extends AppCompatActivity implements Serializable {
@@ -59,7 +56,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
                 if(!location.getText().toString().equals("")){
                     for (int i = 0; i<getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size(); i++) {
 
-                        if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(location.getText().toString())){
+                        if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getAreaName().equals(location.getText().toString())){
                             unique = false;
                         }
                     }
@@ -86,7 +83,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
     }
 
     public Stocktake getStocktakeFromData(int i) throws Exception {
-        return Data.getDataInstance().getmStocktakeList().get(i);
+        return Data.getDataInstance().getStocktakeList().get(i);
     }
 
     public void AddHandler(View view) throws Exception {
@@ -96,7 +93,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         int areaIndex=0;
         Toast.makeText(this, "Going to " + item, Toast.LENGTH_LONG).show();
         for (int i=0;i <getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size();i++) {
-            if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(item)) {
+            if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getAreaName().equals(item)) {
                 areaIndex = i;
             }
         }
@@ -117,7 +114,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
 
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
         for (int i=0;i <getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().size();i++){
-            if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getmAreaName().equals(item)){
+            if (getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().get(i).getAreaName().equals(item)){
                 getStocktakeFromData(passedStockTakeIndex).getmStockTakeAreas().remove(i);
                 final ListView mListView = findViewById(R.id.rowListView);
                 update();

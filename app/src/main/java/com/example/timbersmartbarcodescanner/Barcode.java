@@ -13,8 +13,6 @@ public class Barcode implements Serializable {
     //Constructors
     public Barcode(String mBarcode, String mArea) {
         this.mBarcode = mBarcode;
-
-
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         this.mDateTime = formatter.format(date);
@@ -40,28 +38,28 @@ public class Barcode implements Serializable {
         this.mDateTime = "Test Date Time";
     }
 
-    public String getmArea() {
+    public String getArea() {
         return mArea;
     }
 
-    public void setmArea(String mArea) {
-        this.mArea = mArea;
+    public void setArea(String area) {
+        mArea = area;
     }
 
     // Getters and setters
-    public String getmBarcode() {
+    public String getBarcode() {
         return mBarcode;
     }
 
-    public void setmBarcode(String mBarcode) {
-        this.mBarcode = mBarcode;
+    public void setBarcode(String barcode) {
+        mBarcode = barcode;
     }
 
-    public String getmDateTime() {
+    public String getDateTime() {
         return mDateTime;
     }
 
-    public void setmDateTime(String mDateTime) {
-        this.mDateTime = mDateTime;
+    public void setDateTime(String dateTime) {
+        mDateTime = dateTime;
     }
 }
