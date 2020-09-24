@@ -146,8 +146,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             }
         }
 
-
-
         // Passes an intent which holds the index of a stock take
         Intent intent = new Intent (ActivityMain.this, AreasScreen.class);
         intent.putExtra("Stocktake", index);

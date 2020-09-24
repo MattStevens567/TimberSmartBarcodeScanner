@@ -8,6 +8,7 @@ import java.util.Date;
 public class Area implements Serializable {
     private ArrayList<Barcode> mBarcodeList;
     private String mArea, mDate;
+    private int mPreCount;
 
 
     public Area(String area) {
@@ -15,7 +16,8 @@ public class Area implements Serializable {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         mDate = formatter.format(date);
-        mBarcodeList = new ArrayList<>() ;
+        mBarcodeList = new ArrayList<>();
+        mPreCount = 0;
     }
 
     public String getAreaName() { return mArea; }
@@ -40,5 +42,13 @@ public class Area implements Serializable {
 
     public void addBarcode(Barcode barcode) {
         mBarcodeList.add(barcode);
+    }
+
+    public int getPreCount() {
+        return mPreCount;
+    }
+
+    public void setPreCount(int preCount) {
+     mPreCount = preCount;
     }
 }

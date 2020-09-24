@@ -109,10 +109,9 @@ public class ScanningScreen extends Activity implements Serializable {
         mConfirmPreCount.setOnClickListener((View v) -> {
             String tempString = mPreCount.getText().toString();
             int tempPreCount;
-            Log.d(TAG, "tempString: " + tempString);
+
             if(tempString.equals("")) {
                 tempPreCount = 0;
-                Log.d(TAG, "I like tempStrings that aren't null");
             } else {
                 tempPreCount = Integer.parseInt(tempString);
             }
@@ -187,7 +186,6 @@ public class ScanningScreen extends Activity implements Serializable {
 
         if(mPreCount.getText().toString() == "") {
             mPreCountGlobal = 0;
-
         }
         //count = Integer.parseInt(mCount.getText().toString());
 
@@ -216,6 +214,7 @@ public class ScanningScreen extends Activity implements Serializable {
         }
 
         if (unique) {
+            mCountGlobal++;
             getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaName()));
         } else {
             Toast.makeText(this, "You have scanned a barcode twice, we are not entering it into the system", Toast.LENGTH_LONG).show();
