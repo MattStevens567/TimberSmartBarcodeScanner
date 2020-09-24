@@ -8,9 +8,9 @@ import java.util.SimpleTimeZone;
 import java.util.Vector;
 
 public class Stocktake implements Serializable{
-    private String mStringStockTakeName;
-    private ArrayList<Area> mStockTakeAreas;
-    private String mStartDate, mMostRecentEdit;
+    private String mStringStockTakeName = "";
+    private ArrayList<Area> mStockTakeAreas = new ArrayList<Area>();
+    private String mStartDate, mMostRecentEdit= "";
 
     // Constructors
     public Stocktake(String mStringStockTakeName) {

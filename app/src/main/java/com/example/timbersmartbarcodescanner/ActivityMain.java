@@ -179,5 +179,16 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             e.printStackTrace();
         }
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            Data.getDataInstance().saveToDataToLocalFile(getApplicationContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // ----------------------------------------------------------------------------------------------
 }

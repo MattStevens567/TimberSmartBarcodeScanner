@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Barcode implements Serializable {
-    private String mBarcode;
-    private String mDateTime;
-    private String mArea;
+    private String mBarcode = "";
+    private String mDateTime = "";
+    private String mArea = "";
 
     //Constructors
     public Barcode(String mBarcode, String mArea) {
