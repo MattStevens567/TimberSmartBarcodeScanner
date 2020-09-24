@@ -98,15 +98,12 @@ public class ScanningScreen extends Activity implements Serializable {
                 temp = temp + "\n";
             }
             catch(Exception ex) {
-                CharSequence text = "Enter Pressed";
-                Log.d(TAG, "YOLOLOLOO");
                 Context context = getApplicationContext();
                 int duration  = Toast.LENGTH_SHORT;
 //                Toast toast = Toast.makeText(context, text, duration);
 //                toast.show();
             }
             mBarcode.setText(temp);
-            //update();
         });
 
         mConfirmPreCount.setOnClickListener((View v) -> {
@@ -166,7 +163,6 @@ public class ScanningScreen extends Activity implements Serializable {
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
 
-                    String barcodeString = mBarcode.getText().toString();
                     // Send Barcode string to addBarcodeLogic function
                     // This function handles DateTime etc. to create barcode object
                     try {
@@ -183,8 +179,6 @@ public class ScanningScreen extends Activity implements Serializable {
             }
         };
         mBarcode.addTextChangedListener(barcodeTextWatcher);
-
-
     }
 
     public void calculateDifference() {
@@ -228,14 +222,6 @@ public class ScanningScreen extends Activity implements Serializable {
         }
     }
 
-//    public void update(){
-//        //ListView mListView = findViewById(R.id.ScanningScreenListView);
-//
-//        BarcodeListAdapter update = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, sampleBarcodes);
-//        //barcodeListAdapter.notifyDataSetChanged();
-//        mListView.setAdapter(update);
-//    }
-
     public void DeleteRow(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
@@ -253,7 +239,6 @@ public class ScanningScreen extends Activity implements Serializable {
 
         }
     }
-
 
     public void BackHandler(View view) {
         Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);
