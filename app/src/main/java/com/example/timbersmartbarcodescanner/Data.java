@@ -9,14 +9,12 @@ import java.util.ArrayList;
 public class Data {
     private static Data mData = null;
 
-    public ArrayList<Stocktake> getmStocktakeList() {
-        return mStocktakeList;
-    }
 
-    public void setmStocktakeList(ArrayList<Stocktake> mStocktakeList) {
+
+    public void setStocktakeList(ArrayList<Stocktake> mStocktakeList) {
         this.mStocktakeList = mStocktakeList;
     }
-    public void addTomStocktakeList(Stocktake stocktake) {
+    public void addToStocktakeList(Stocktake stocktake) {
         this.mStocktakeList.add(stocktake);
     }
 
@@ -40,5 +38,13 @@ public class Data {
             throw new Exception("You have tried to get the mData, however it is null");
         }
         return mData;
+    }
+
+    public ArrayList<Stocktake> getStocktakeList() {
+        return mStocktakeList;
+    }
+
+    public Stocktake getStockTake(int i) {
+        return mStocktakeList.get(i);
     }
 }

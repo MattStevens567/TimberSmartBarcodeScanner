@@ -62,7 +62,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         // Adding test data ----------------------------------------------------
         sampleStockTakes = new ArrayList<Stocktake>();
         for (int i = 0; i < 5; i++) {
-            sampleStockTakes.add(new Stocktake("Stocktake number: " + i*292%100));
+            sampleStockTakes.add(new Stocktake( String.valueOf(i*292%100)));
         }
         Data.getDataInstance(sampleStockTakes);
         //----------------------------------------------------------------------------
@@ -92,12 +92,12 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
             try {
                 boolean unique = true;
-                for (int i =0; i<Data.getDataInstance().getmStocktakeList().size();i++){
+                for (int i = 0; i<Data.getDataInstance().getStocktakeList().size(); i++){
                     if(newStocktakeName.equals("")){
                         unique =false;
                         break;
                     }
-                    if (Data.getDataInstance().getmStocktakeList().get(i).getmStringStockTakeName().equals(newStocktakeName)){
+                    if (Data.getDataInstance().getStocktakeList().get(i).getmStringStockTakeName().equals(newStocktakeName)){
                         unique =false;
                         break;
                     }
@@ -105,7 +105,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 }
                 if(unique){
                     Stocktake temp = new Stocktake(newStocktakeName );
-                    Data.getDataInstance().addTomStocktakeList(temp);
+                    Data.getDataInstance().addToStocktakeList(temp);
                     stockTakeListAdapter.notifyDataSetChanged();
                     newStocktakeItem.setText("");
                 }
@@ -130,16 +130,23 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String stockTakeClicked = child.getText().toString();
+        Log.d(TAG, "LinearLayoutClicked: " + parent);
+        Log.d(TAG, "childClicked: " + child);
+        Log.d(TAG, "stockTakeClicked: " + stockTakeClicked);
+
+
 
         int index=0;
-        int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
-        ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
+        int stockTakeListSize = Data.getDataInstance().getStocktakeList().size();
+        ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getStocktakeList();
         for (int i=0;i<tempStocktakes.size(); i++){
-            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked )){
+            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)){
                 index = i;
                 break;
             }
         }
+
+
 
         // Passes an intent which holds the index of a stock take
         Intent intent = new Intent (ActivityMain.this, AreasScreen.class);
@@ -149,49 +156,48 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     public void export(View view) throws Exception {
 
-//        LinearLayout parent = (LinearLayout) view.getParent();
-//        TextView child = (TextView)parent.getChildAt(0);
-//        String stockTakeClicked = child.getText().toString();
-//
-//        int index = 0;
-//        int stockTakeListSize = Data.getDataInstance().getmStocktakeList().size();
-//        ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getmStocktakeList();
-//        for (int i = 0; i < stockTakeListSize; i++) {
-//            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)) {
-//                index = i;
-//                break;
-//            }
-//        }
-//
-//        // Generate Data from stocktake
-//        StringBuilder data = new StringBuilder();
-//        data.append("Stocktake Name, Stocktake Created Date, StockTake modified date, Area Name, Barcode, Scan Date");
-//
-//        for(int i = ; i < ) {
-//            data.append("\n" + i + ',' + i*i);
-//        }
+        View parentRow = (View) view.getParent();
+        ListView listView = (ListView) parentRow.getParent();
+        final int position = listView.getPositionForView(parentRow);
+        Log.d(TAG, "parentRow: " + parentRow);
+        Log.d(TAG, "listView: " + listView);
+        Log.d(TAG, "position: " + position);
+
         StringBuilder data = new StringBuilder();
-        data.append("Barcode, Another Thing");
-        for(int i = 0; i < 19; i++) {
-            data.append("\n" + i + ',' + i*i);
+        data.append("Area, Barcode");
+
+        // Get data from selected stocktake
+        Stocktake stocktake = Data.getDataInstance().getStockTake(position);
+        ArrayList<Area> areaList = stocktake.getmStockTakeAreas();
+        for(int i = 0; i < areaList.size(); i++) {
+            Area area = areaList.get(i);
+            ArrayList<Barcode> barcodeList = area.getBarcodeList();
+            for(int j = 0; j < barcodeList.size(); j++) {
+                Barcode barcode = barcodeList.get(j);
+                data.append("\n" + area.getAreaName() + ',' + barcode.getBarcode());
+            }
         }
 
         try {
-            FileOutputStream out = openFileOutput("data.csv", Context.MODE_PRIVATE);
+            // Generating file name e.g. Stocktake_5.csv
+            // Uses name to create file as well
+            String fileSaveName = "Stocktake_" + stocktake.getmStringStockTakeName() + ".csv";
+            FileOutputStream out = openFileOutput(fileSaveName, Context.MODE_PRIVATE);
             out.write(data.toString().getBytes());
             out.close();
 
-            // exporting
+            // Exporting, allows user to choose preferred method of sharing
             Context context = getApplicationContext();
-            File fileLocation = new File(getFilesDir(), "data.csv");
+            File fileLocation = new File(getFilesDir(), fileSaveName);
             Uri path = FileProvider.getUriForFile(context, "com.example.timbersmartbarcodescanner.fileProvider", fileLocation);
             Intent fileIntent = new Intent(Intent.ACTION_SEND);
             fileIntent.setType("text/csv");
-            fileIntent.putExtra(Intent.EXTRA_SUBJECT, "Data");
+            fileIntent.putExtra(Intent.EXTRA_SUBJECT, fileSaveName);
             fileIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             fileIntent.putExtra(Intent.EXTRA_STREAM, path);
             startActivity(Intent.createChooser(fileIntent, "Send Mail"));
-            Toast.makeText(this, "test", Toast.LENGTH_LONG ).show();
+            //Toast.makeText(this, "test", Toast.LENGTH_LONG ).show();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
