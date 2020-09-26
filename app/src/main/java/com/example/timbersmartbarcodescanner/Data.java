@@ -16,17 +16,19 @@ public class Data extends Activity {
 
     private static final String FILENAME = "BarcodeStickScannerData";
     private static Data mData = null;
-
-    public void setStocktakeList(ArrayList<Stocktake> mStocktakeList) {
-        this.mStocktakeList = mStocktakeList;
-    }
-    public void addToStocktakeList(Stocktake stocktake) {
-        this.mStocktakeList.add(stocktake);
-    }
-
     private ArrayList<Stocktake> mStocktakeList;
+
+    public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
+        mStocktakeList = stocktakeList;
+    }
+    public void addStocktake(Stocktake stocktake) {
+        mStocktakeList.add(stocktake);
+    }
+
+
     private Data(ArrayList<Stocktake> stocktakeList){
-        this.mStocktakeList = stocktakeList;
+
+        mStocktakeList = stocktakeList;
     }
 
     public static Data getDataInstance(ArrayList<Stocktake> stocktakeList){
@@ -79,17 +81,17 @@ public class Data extends Activity {
         data = "\"START-OF-TIMBER-SMART-DATA\"";
         for (int i=0; i<mStocktakeList.size(); i++) {
             data += "\"Stock-take-start\"";
-            data += "\"" + mStocktakeList.get(i).getmStartDate() + "\"";
-            data += "\"" + mStocktakeList.get(i).getmMostRecentEdit() + "\"";
-            for (int j=0; j<mStocktakeList.get(i).getmStockTakeAreas().size(); j++){
+            data += "\"" + mStocktakeList.get(i).getDateCreated() + "\"";
+            data += "\"" + mStocktakeList.get(i).getDateModified() + "\"";
+            for (int j = 0; j<mStocktakeList.get(i).getAreaList().size(); j++){
                 data += "\"Area-start\"";
-                data += "\"" + mStocktakeList.get(i).getmStockTakeAreas().get(j).getAreaName() + "\"";
-                data += "\"" + mStocktakeList.get(i).getmStockTakeAreas().get(j).getDate() + "\"";
-                for (int k=0; k<mStocktakeList.get(i).getmStockTakeAreas().get(j).getBarcodeList().size(); k++){
+                data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getAreaString() + "\"";
+                data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getDate() + "\"";
+                for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
                     data += "\"Barcode-start\"";
-                    data += "\"" + mStocktakeList.get(i).getmStockTakeAreas().get(j).getBarcodeList().get(k).getBarcode() + "\"";
-                    data += "\"" + mStocktakeList.get(i).getmStockTakeAreas().get(j).getBarcodeList().get(k).getDateTime() + "\"";
-                    data += "\"" + mStocktakeList.get(i).getmStockTakeAreas().get(j).getBarcodeList().get(k).getArea() + "\"";
+                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode() + "\"";
+                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getDateTime() + "\"";
+                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getArea() + "\"";
                     data += "\"Barcode-end\"";
                 }
                 data += "\"Area-end\"";

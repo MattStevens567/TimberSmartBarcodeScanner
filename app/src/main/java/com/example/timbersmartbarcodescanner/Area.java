@@ -7,22 +7,23 @@ import java.util.Date;
 
 public class Area implements Serializable {
     private ArrayList<Barcode> mBarcodeList;
-    private String mArea, mDate;
+    private String mAreaString, mDate;
     private int mPreCount;
 
 
-    public Area(String area) {
-        this.mArea = area;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public Area(String areaString) {
+        mAreaString = areaString;
+        //SimpleDateFormat formatter =  new SimpleDateFormat("dd/MM/yyyy HH:mm")
+        SimpleDateFormat formatter =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         mDate = formatter.format(date);
         mBarcodeList = new ArrayList<>();
         mPreCount = 0;
     }
 
-    public String getAreaName() { return mArea; }
-    public void setAreaName(String mArea) {
-        this.mArea = mArea;
+    public String getAreaString() { return mAreaString; }
+    public void setAreaString(String areaString) {
+        mAreaString = areaString;
     }
 
     public String getDate() {
@@ -35,7 +36,6 @@ public class Area implements Serializable {
     public ArrayList<Barcode> getBarcodeList() {
         return mBarcodeList;
     }
-
     public void setBarcodeList(ArrayList<Barcode> barcodeList) {
         mBarcodeList = barcodeList;
     }

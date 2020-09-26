@@ -128,7 +128,7 @@ public class ScanningScreen extends Activity implements Serializable {
     }
 
     public Area getAreaOnFromPassedInstance() throws Exception {
-        return Data.getDataInstance().getStocktakeList().get(passedStocktakeIndex).getmStockTakeAreas().get(passedAreaIndex);
+        return Data.getDataInstance().getStocktakeList().get(passedStocktakeIndex).getAreaList().get(passedAreaIndex);
     }
 
     public void initTextWatchers() {
@@ -215,7 +215,7 @@ public class ScanningScreen extends Activity implements Serializable {
 
         if (unique) {
             mCountGlobal++;
-            getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaName()));
+            getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaString()));
         } else {
             Toast.makeText(this, "You have scanned a barcode twice, we are not entering it into the system", Toast.LENGTH_LONG).show();
         }

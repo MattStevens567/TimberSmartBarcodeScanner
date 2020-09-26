@@ -5,14 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class StockTakeListAdapter extends ArrayAdapter {
     private static final String TAG = "StockTakeListAdapter";
@@ -35,7 +33,7 @@ public class StockTakeListAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Stocktake stocktake  = (Stocktake) getItem(position);
-        String stocktakeName = stocktake.getmStringStockTakeName();
+        String stocktakeName = stocktake.getStocktakeString();
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
 

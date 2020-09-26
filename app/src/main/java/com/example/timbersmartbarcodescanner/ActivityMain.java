@@ -45,6 +45,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private static final String TAG = "ActivityMain";
     ArrayList<Stocktake> sampleStockTakes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -97,7 +98,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         unique =false;
                         break;
                     }
-                    if (Data.getDataInstance().getStocktakeList().get(i).getmStringStockTakeName().equals(newStocktakeName)){
+                    if (Data.getDataInstance().getStocktakeList().get(i).getStocktakeString().equals(newStocktakeName)){
                         unique =false;
                         break;
                     }
@@ -105,7 +106,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 }
                 if(unique){
                     Stocktake temp = new Stocktake(newStocktakeName );
-                    Data.getDataInstance().addToStocktakeList(temp);
+                    Data.getDataInstance().addStocktake(temp);
                     stockTakeListAdapter.notifyDataSetChanged();
                     newStocktakeItem.setText("");
                 }
@@ -140,7 +141,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         int stockTakeListSize = Data.getDataInstance().getStocktakeList().size();
         ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getStocktakeList();
         for (int i=0;i<tempStocktakes.size(); i++){
-            if (tempStocktakes.get(i).getmStringStockTakeName().equals(stockTakeClicked)){
+            if (tempStocktakes.get(i).getStocktakeString().equals(stockTakeClicked)){
                 index = i;
                 break;
             }
@@ -166,20 +167,20 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
         // Get data from selected stocktake
         Stocktake stocktake = Data.getDataInstance().getStockTake(position);
-        ArrayList<Area> areaList = stocktake.getmStockTakeAreas();
+        ArrayList<Area> areaList = stocktake.getAreaList();
         for(int i = 0; i < areaList.size(); i++) {
             Area area = areaList.get(i);
             ArrayList<Barcode> barcodeList = area.getBarcodeList();
             for(int j = 0; j < barcodeList.size(); j++) {
                 Barcode barcode = barcodeList.get(j);
-                data.append("\n" + area.getAreaName() + ',' + barcode.getBarcode());
+                data.append("\n" + area.getAreaString() + ',' + barcode.getBarcode());
             }
         }
 
         try {
             // Generating file name e.g. Stocktake_5.csv
             // Uses name to create file as well
-            String fileSaveName = "Stocktake_" + stocktake.getmStringStockTakeName() + ".csv";
+            String fileSaveName = "Stocktake_" + stocktake.getStocktakeString() + ".csv";
             FileOutputStream out = openFileOutput(fileSaveName, Context.MODE_PRIVATE);
             out.write(data.toString().getBytes());
             out.close();
