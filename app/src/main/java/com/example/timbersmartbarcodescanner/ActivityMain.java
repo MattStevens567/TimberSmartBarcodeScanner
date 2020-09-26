@@ -38,6 +38,18 @@ import java.util.ArrayList;
 * Matt Stevens,
 * Tyron Landman.
 * Year: 2020.
+*
+*
+*  //To do:
+*                                   High priority:
+*   -Import/Export data so you don't lose all your data when you close/start the app
+*   -Exports disappearing off the adapter when you rotate/go back to activity main
+*
+*                                   low priority:
+*
+*
+*
+*
 * */
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
@@ -108,6 +120,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                     Stocktake temp = new Stocktake(newStocktakeName );
                     Data.getDataInstance().addStocktake(temp);
                     stockTakeListAdapter.notifyDataSetChanged();
+                    mListView.invalidateViews();
                     newStocktakeItem.setText("");
                 }
                 else if(newStocktakeName.equals("")){
