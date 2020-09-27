@@ -61,7 +61,11 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        try {
+            Data.initialize();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         // Default --------------------------
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -74,16 +78,22 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         //--------------------------------------------------------------
 
         // Adding test data ----------------------------------------------------
-        sampleStockTakes = new ArrayList<Stocktake>();
-        for (int i = 0; i < 5; i++) {
-            sampleStockTakes.add(new Stocktake( String.valueOf(i*292%100)));
-        }
-        Data.getDataInstance(sampleStockTakes);
+        //Test data not used as the app is pretty much functional at this point
+//        sampleStockTakes = new ArrayList<Stocktake>();
+//        for (int i = 0; i < 5; i++) {
+//            sampleStockTakes.add(new Stocktake( String.valueOf(i*292%100)));
+//        }
+//        Data.getDataInstance(sampleStockTakes);
         //----------------------------------------------------------------------------
 
         // Layout stuff----------------------------------------
-        StockTakeListAdapter stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, sampleStockTakes);
-        mListView.setAdapter(stockTakeListAdapter);
+        StockTakeListAdapter stockTakeListAdapter = null;
+        try {
+            stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes);
+            mListView.setAdapter(stockTakeListAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //----------------------------------------------------------------------------
 
 
@@ -101,58 +111,66 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 //        //----------------------------------------------------------------------------
 
         // Add addNew stocktake button onclick listener----------------
+        StockTakeListAdapter finalStockTakeListAdapter = stockTakeListAdapter;
         addNew.setOnClickListener(view -> {
-            String newStocktakeName = newStocktakeItem.getText().toString();
+        String newStocktakeName = newStocktakeItem.getText().toString();
 
             try {
-                boolean unique = true;
-                for (int i = 0; i<Data.getDataInstance().getStocktakeList().size(); i++){
+                if (Data.getDataInstance().getStocktakeList().size() == 0){
                     if(newStocktakeName.equals("")){
-                        unique =false;
-                        break;
+                        Toast.makeText(this, "Field is empty, please add in a name for the Stock take", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Data.getDataInstance().addStocktake(new Stocktake(newStocktakeName));
+                        finalStockTakeListAdapter.notifyDataSetChanged();
+                        mListView.invalidateViews();
+                        newStocktakeItem.setText("");
                     }
-                    if (Data.getDataInstance().getStocktakeList().get(i).getStocktakeString().equals(newStocktakeName)){
-                        unique =false;
-                        break;
-                    }
+                }
+                else {
+                    try {
+                        boolean unique = true;
+                        for (int i = 0; i < Data.getDataInstance().getStocktakeList().size(); i++) {
+                            if (newStocktakeName.equals("")) {
+                                unique = false;
+                                break;
+                            }
+                            if (Data.getDataInstance().getStocktakeList().get(i).getStocktakeString().equals(newStocktakeName)) {
+                                unique = false;
+                                break;
+                            }
 
-                }
-                if(unique){
-                    Stocktake temp = new Stocktake(newStocktakeName );
-                    Data.getDataInstance().addStocktake(temp);
-                    stockTakeListAdapter.notifyDataSetChanged();
-                    mListView.invalidateViews();
-                    newStocktakeItem.setText("");
-                }
-                else if(newStocktakeName.equals("")){
-                    Toast.makeText(this, "Field is empty, please add in a name for the Stocktake", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(this, "Name in use, Please choose another", Toast.LENGTH_SHORT).show();
+                        }
+                        if (unique) {
+                            Stocktake temp = new Stocktake(newStocktakeName);
+                            Data.getDataInstance().addStocktake(temp);
+                            finalStockTakeListAdapter.notifyDataSetChanged();
+                            mListView.invalidateViews();
+                            newStocktakeItem.setText("");
+                        } else if (newStocktakeName.equals("")) {
+                            Toast.makeText(this, "Field is empty, please add in a name for the Stocktake", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Name in use, Please choose another", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
         //----------------------------------------------------------------------------
-
-//        Button back = findViewById(R.id.ActivityMainAddNewStocktake);
-//        back.setOnClickListener(view -> startActivity(new Intent(ActivityMain.this, AreasScreen.class)));
-
     }
 
-    public void StockTakeViewHHandler(View view) throws Exception {
+    /*This function acts as the onClickListener for the view button found on each stock-take in the activity main screen,
+     it works by finding the index of which item is clicked, it then sends that index to the next screen (areas) so it knows which stock-take's
+     areas it should be editing. */
+    public void StockTakeViewButtonClick(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String stockTakeClicked = child.getText().toString();
-        Log.d(TAG, "LinearLayoutClicked: " + parent);
-        Log.d(TAG, "childClicked: " + child);
-        Log.d(TAG, "stockTakeClicked: " + stockTakeClicked);
-
-
 
         int index=0;
-        int stockTakeListSize = Data.getDataInstance().getStocktakeList().size();
         ArrayList<Stocktake> tempStocktakes = Data.getDataInstance().getStocktakeList();
         for (int i=0;i<tempStocktakes.size(); i++){
             if (tempStocktakes.get(i).getStocktakeString().equals(stockTakeClicked)){
@@ -167,6 +185,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         startActivity(intent);
     }
 
+    // Exporting stuff
     public void export(View view) throws Exception {
 
         View parentRow = (View) view.getParent();

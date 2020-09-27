@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.25"
         android:text="@string/ActivityMainView"
-        android:onClick="StockTakeViewHHandler"/>
+        android:onClick="StockTakeViewButtonClick"/>
 
     <Button
         android:id="@+id/ActivityMainButtonExport"

@@ -17,19 +17,13 @@ public class StockTakeListAdapter extends ArrayAdapter {
     private Context mContext;
     private int mResource;
 
-    /**
-     *   Default Constructor for the StockTakeListAdapter
-      *  @param context
-      *  @param resource
-      *  @param objects
-     */
-    public StockTakeListAdapter(@NonNull Context context, int resource, @NonNull ArrayList<Stocktake> objects) {
-        super(context, resource, objects);
-        this.mContext = context;
-        this.mResource = resource;
+    public StockTakeListAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
     }
 
-    @NonNull
+
+
+
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Stocktake stocktake  = (Stocktake) getItem(position);

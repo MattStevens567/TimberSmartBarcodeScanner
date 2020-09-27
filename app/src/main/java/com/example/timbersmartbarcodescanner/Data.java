@@ -16,24 +16,25 @@ public class Data extends Activity {
 
     private static final String FILENAME = "BarcodeStickScannerData";
     private static Data mData = null;
-    private ArrayList<Stocktake> mStocktakeList = new ArrayList<Stocktake>();;
+    private ArrayList<Stocktake> mStocktakeList;
 
     public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
         mStocktakeList = stocktakeList;
     }
+
     public void addStocktake(Stocktake stocktake) {
         mStocktakeList.add(stocktake);
     }
 
 
     private Data(ArrayList<Stocktake> stocktakeList){
-
         mStocktakeList = stocktakeList;
     }
 
     private Data(){
-        mData.mStocktakeList = new ArrayList<Stocktake>();
+        if (mData == null) mStocktakeList = new ArrayList<Stocktake>();
     }
+
     public static Data getDataInstance(ArrayList<Stocktake> stocktakeList){
         if (mData == null){
             mData = new Data(stocktakeList);
@@ -46,13 +47,12 @@ public class Data extends Activity {
 
     public static Data getDataInstance() throws Exception {
         if (mData == null){
-            throw new Exception("You have tried to get the mData, however it is null");
+            mData = new Data();
         }
         return mData;
     }
-    public static Data initialize() throws Exception {
+    public static void initialize() throws Exception {
         mData = new Data();
-        return mData;
     }
 
     public ArrayList<Stocktake> getStocktakeList() {
