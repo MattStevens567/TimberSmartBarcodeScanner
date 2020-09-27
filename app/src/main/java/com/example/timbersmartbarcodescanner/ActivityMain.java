@@ -46,6 +46,7 @@ import java.util.ArrayList;
 *   -Exports disappearing off the adapter when you rotate/go back to activity main
 *
 *                                   low priority:
+*   - Timber Smart logo gets squashed when using the keyboard on activity main
 *
 *
 *
