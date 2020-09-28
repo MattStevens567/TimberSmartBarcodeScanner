@@ -16,14 +16,18 @@ public class StockTakeListAdapter extends ArrayAdapter {
     private static final String TAG = "StockTakeListAdapter";
     private Context mContext;
     private int mResource;
+    private ArrayList<Stocktake> data;
 
-    public StockTakeListAdapter(@NonNull Context context, int resource) {
-        super(context, resource);
+    public StockTakeListAdapter(@NonNull Context context, int resource, ArrayList<Stocktake> stocktakes) {
+        super(context, resource, stocktakes);
+        this.mContext = context;
+        this.mResource = resource;
+        this.data = stocktakes;
     }
 
 
 
-
+    @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         Stocktake stocktake  = (Stocktake) getItem(position);
