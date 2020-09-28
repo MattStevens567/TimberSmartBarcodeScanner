@@ -6,43 +6,49 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Area implements Serializable {
-    private ArrayList<Barcode> mBarcodes;
-    private String mArea, mDate;
+    private ArrayList<Barcode> mBarcodeList;
+    private String mAreaString, mDate;
+    private int mPreCount;
 
 
-    public Area(String nArea) {
-        this.mArea = nArea;
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+    public Area(String areaString) {
+        mAreaString = areaString;
+        //SimpleDateFormat formatter =  new SimpleDateFormat("dd/MM/yyyy HH:mm")
+        SimpleDateFormat formatter =  new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
         mDate = formatter.format(date);
-        mBarcodes = new ArrayList<>() ;
+        mBarcodeList = new ArrayList<>();
+        mPreCount = 0;
     }
 
-    public String getmAreaName() {
-
-        return mArea;
+    public String getAreaString() { return mAreaString; }
+    public void setAreaString(String areaString) {
+        mAreaString = areaString;
     }
 
-    public void setAreaName(String mArea) {
-        this.mArea = mArea;
-    }
-
-    public String getmDate() {
+    public String getDate() {
         return mDate;
     }
-
-    public void setmDate(String mDate) {
+    public void setDate(String mDate) {
         this.mDate = mDate;
     }
 
-    public ArrayList<Barcode> getmBarcodes() {
-        return mBarcodes;
+    public ArrayList<Barcode> getBarcodeList() {
+        return mBarcodeList;
+    }
+    public void setBarcodeList(ArrayList<Barcode> barcodeList) {
+        mBarcodeList = barcodeList;
     }
 
-    public void setmBarcodes(ArrayList<Barcode> mBarcodes) {
-        this.mBarcodes = mBarcodes;
+    public void addBarcode(Barcode barcode) {
+        mBarcodeList.add(barcode);
     }
-    public void addmBarcodes(Barcode mBarcodes) {
-        this.mBarcodes.add(mBarcodes);
+
+    public int getPreCount() {
+        return mPreCount;
+    }
+
+    public void setPreCount(int preCount) {
+     mPreCount = preCount;
     }
 }

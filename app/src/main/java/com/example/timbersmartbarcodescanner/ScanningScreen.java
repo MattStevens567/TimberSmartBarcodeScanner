@@ -1,14 +1,11 @@
 package com.example.timbersmartbarcodescanner;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -20,7 +17,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class ScanningScreen extends Activity implements Serializable {
 
@@ -88,7 +84,7 @@ public class ScanningScreen extends Activity implements Serializable {
 
 
 
-        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, getAreaOnFromPassedInstance().getmBarcodes());
+        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, getAreaOnFromPassedInstance().getBarcodeList());
         mListView.setAdapter(mBarcodeListAdapter);
 
         //update();
@@ -102,24 +98,20 @@ public class ScanningScreen extends Activity implements Serializable {
                 temp = temp + "\n";
             }
             catch(Exception ex) {
-                CharSequence text = "Enter Pressed";
-                Log.d(TAG, "YOLOLOLOO");
                 Context context = getApplicationContext();
                 int duration  = Toast.LENGTH_SHORT;
 //                Toast toast = Toast.makeText(context, text, duration);
 //                toast.show();
             }
             mBarcode.setText(temp);
-            //update();
         });
 
         mConfirmPreCount.setOnClickListener((View v) -> {
             String tempString = mPreCount.getText().toString();
             int tempPreCount;
-            Log.d(TAG, "tempString: " + tempString);
+
             if(tempString.equals("")) {
                 tempPreCount = 0;
-                Log.d(TAG, "I like tempStrings that aren't null");
             } else {
                 tempPreCount = Integer.parseInt(tempString);
             }
@@ -136,7 +128,7 @@ public class ScanningScreen extends Activity implements Serializable {
     }
 
     public Area getAreaOnFromPassedInstance() throws Exception {
-        return Data.getDataInstance().getmStocktakeList().get(passedStocktakeIndex).getmStockTakeAreas().get(passedAreaIndex);
+        return Data.getDataInstance().getStocktakeList().get(passedStocktakeIndex).getAreaList().get(passedAreaIndex);
     }
 
     public void initTextWatchers() {
@@ -155,27 +147,25 @@ public class ScanningScreen extends Activity implements Serializable {
             @Override
             public void afterTextChanged(Editable barcodeEditable) {
                 String temp = barcodeEditable.toString();
-                Log.d(TAG, "ya yeet");
                 if(temp.contains("\n")) {
-                    mCountGlobal++;
 
                     // Only shorten barcode if it had more then just \n
-                    if(temp.length() > 2) {
-                        temp = temp.substring(0, temp.length() - 2);
+                    if(temp.length() > 0) {
+                        temp = temp.substring(0, temp.length() - 1);
+
                     }
 
                     CharSequence text = "Barcode " + temp + " found";
                     Log.d(TAG, text.toString());
                     Context context = getApplicationContext();
                     int duration  = Toast.LENGTH_SHORT;
-//                    Toast toast = Toast.makeText(context, text, duration);
-//                    toast.show();
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
 
-                    String barcodeString = mBarcode.getText().toString();
                     // Send Barcode string to addBarcodeLogic function
                     // This function handles DateTime etc. to create barcode object
                     try {
-                        addBarcodeLogic(barcodeString);
+                        addBarcodeLogic(temp);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -188,8 +178,6 @@ public class ScanningScreen extends Activity implements Serializable {
             }
         };
         mBarcode.addTextChangedListener(barcodeTextWatcher);
-
-
     }
 
     public void calculateDifference() {
@@ -198,7 +186,6 @@ public class ScanningScreen extends Activity implements Serializable {
 
         if(mPreCount.getText().toString() == "") {
             mPreCountGlobal = 0;
-
         }
         //count = Integer.parseInt(mCount.getText().toString());
 
@@ -219,26 +206,20 @@ public class ScanningScreen extends Activity implements Serializable {
     public void addBarcodeLogic (String barcode) throws Exception {
         //Check to see if the barcode doesn't exist before adding.
         boolean unique = true;
-        for (int i = 0; i < getAreaOnFromPassedInstance().getmBarcodes().size(); i++){
-            if (getAreaOnFromPassedInstance().getmBarcodes().get(i).getmBarcode().equals(barcode)){
+        for (int i = 0; i < getAreaOnFromPassedInstance().getBarcodeList().size(); i++){
+            if (getAreaOnFromPassedInstance().getBarcodeList().get(i).getBarcode().equals(barcode)){
                 unique = false;
                 break;
             }
         }
+
         if (unique) {
-            getAreaOnFromPassedInstance().addmBarcodes(new Barcode(barcode, getAreaOnFromPassedInstance().getmAreaName()));
+            mCountGlobal++;
+            getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaString()));
         } else {
             Toast.makeText(this, "You have scanned a barcode twice, we are not entering it into the system", Toast.LENGTH_LONG).show();
         }
     }
-
-//    public void update(){
-//        //ListView mListView = findViewById(R.id.ScanningScreenListView);
-//
-//        BarcodeListAdapter update = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, sampleBarcodes);
-//        //barcodeListAdapter.notifyDataSetChanged();
-//        mListView.setAdapter(update);
-//    }
 
     public void DeleteRow(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
@@ -246,9 +227,9 @@ public class ScanningScreen extends Activity implements Serializable {
         String item = child.getText().toString();
         Log.i(TAG, "DeleteRow: item ");
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
-        for (int i=0;i <getAreaOnFromPassedInstance().getmBarcodes().size();i++){
-            if (getAreaOnFromPassedInstance().getmBarcodes().get(i).getmBarcode().equals(item)){
-                getAreaOnFromPassedInstance().getmBarcodes().remove(i);
+        for (int i=0;i <getAreaOnFromPassedInstance().getBarcodeList().size();i++){
+            if (getAreaOnFromPassedInstance().getBarcodeList().get(i).getBarcode().equals(item)){
+                getAreaOnFromPassedInstance().getBarcodeList().remove(i);
                 view.getId();
                 mBarcodeListAdapter.notifyDataSetChanged();
                 mListView.invalidateViews();
@@ -257,7 +238,6 @@ public class ScanningScreen extends Activity implements Serializable {
 
         }
     }
-
 
     public void BackHandler(View view) {
         Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);

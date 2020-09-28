@@ -4,70 +4,76 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.SimpleTimeZone;
-import java.util.Vector;
 
 public class Stocktake implements Serializable{
-    private String mStringStockTakeName;
-    private ArrayList<Area> mStockTakeAreas;
-    private String mStartDate, mMostRecentEdit;
+    /*
+    * mStocktakeString  -- Stocktakes name
+    * mAreaList         -- List of areas belonging to stocktake
+    * mDateCreated      -- Date stocktake was created
+    * mDateModified     -- Date stocktake was last edited
+     */
+    private String mStocktakeString = "";
+    private ArrayList<Area> mAreaList;
+    private String mDateCreated, mDateModified = "";
 
     // Constructors
-    public Stocktake(String mStringStockTakeName) {
-        this.mStringStockTakeName = mStringStockTakeName;
-        mStockTakeAreas = new ArrayList<>() ;
+    public Stocktake(String stocktakeString) {
+        mStocktakeString = stocktakeString;
+        mAreaList = new ArrayList<>();
     }
 
-    public Stocktake(String mStringStockTakeName, ArrayList<Area> stocktakeAreas) {
-        this.mStringStockTakeName = mStringStockTakeName;
-        this.mStockTakeAreas = stocktakeAreas;
+    public Stocktake(String stocktakeString, ArrayList<Area> areaList) {
+        mStocktakeString = stocktakeString;
+        mAreaList = areaList;
     }
 
     // Getters and setters
-    public String getmStringStockTakeName() {
-        return mStringStockTakeName;
+    public String getStocktakeString() {
+        return mStocktakeString;
     }
 
-    public void setmStringStockTakeName(String mStringStockTakeName) {
-        this.mStringStockTakeName = mStringStockTakeName;
+    public void setStocktakeString(String stockTakeString) {
+        mStocktakeString = stockTakeString;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
-        mStartDate = mMostRecentEdit =  formatter.format(date);
+        mDateCreated = formatter.format(date);
+        mDateModified = formatter.format(date);
 
     }
-    public void setmStringStockTakeName(String mStringStockTakeName, ArrayList<Area> areas) {
-        this.mStringStockTakeName = mStringStockTakeName;
+    public void setStocktakeName(String stocktakeString, ArrayList<Area> areaList) {
+        mStocktakeString = stocktakeString;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
         Date date = new Date();
-        mStartDate = mMostRecentEdit =  formatter.format(date);
-        mStockTakeAreas = areas;
+        mDateCreated = formatter.format(date);
+        mDateModified = formatter.format(date);
+        mAreaList = areaList;
     }
 
 
-    public ArrayList<Area> getmStockTakeAreas() {
-        return mStockTakeAreas;
+    public ArrayList<Area> getAreaList() {
+        return mAreaList;
     }
 
-    public void addmStockTakeAreas(Area mStockTakeAreas) {
-        this.mStockTakeAreas.add(mStockTakeAreas);
+    public void addArea(Area area) {
+        mAreaList.add(area);
     }
-    public void setmStockTakeAreas(ArrayList<Area> mStockTakeAreas) {
-        this.mStockTakeAreas = mStockTakeAreas;
-    }
-
-    public String getmStartDate() {
-        return mStartDate;
+    public void setAreaList(ArrayList<Area> areaList) {
+        mAreaList = areaList;
     }
 
-    public void setmStartDate(String mStartDate) {
-        this.mStartDate = mStartDate;
+    public String getDateCreated() {
+        return mDateCreated;
     }
 
-    public String getmMostRecentEdit() {
-        return mMostRecentEdit;
+    public void setDateCreated(String dateCreated) {
+        mDateCreated = dateCreated;
     }
 
-    public void setmMostRecentEdit(String mMostRecentEdit) {
-        this.mMostRecentEdit = mMostRecentEdit;
+    public String getDateModified() {
+        return mDateModified;
+    }
+
+    public void setDateModified(String dateModified) {
+        mDateModified = dateModified;
     }
 }
