@@ -41,11 +41,6 @@ public class StockTakeListAdapter extends ArrayAdapter {
         return 0;
     }
 
-    @Nullable
-    @Override
-    public Object getItem(int position) {
-        return super.getItem(position);
-    }
 
     @Override
     public long getItemId(int position) {
