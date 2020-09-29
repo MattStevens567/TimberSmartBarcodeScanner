@@ -62,15 +62,15 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Default --------------------------
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        //--------------------------
         try {
             Data.initialize();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        // Default --------------------------
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //--------------------------
 
         //Set up views -------------------------------
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);

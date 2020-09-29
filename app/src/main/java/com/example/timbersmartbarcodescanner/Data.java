@@ -16,7 +16,7 @@ public class Data extends Activity {
 
     private static final String FILENAME = "BarcodeStickScannerData";
     private static Data mData = null;
-    private ArrayList<Stocktake> mStocktakeList;
+    private ArrayList<Stocktake> mStocktakeList = new ArrayList<Stocktake>();
 
     public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
         mStocktakeList = stocktakeList;

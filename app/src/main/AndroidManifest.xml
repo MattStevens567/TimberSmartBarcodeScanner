@@ -10,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:configChanges="orientation|screenSize|keyboard"
+        android:screenOrientation="landscape"
         >
 
         <activity
@@ -20,14 +21,17 @@
         <activity
             android:name=".AreasScreen"
             android:label="@string/title_activity_rows_screen"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".BarcodePhotoScreen"
             android:label="@string/title_activity_barcode_screen"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ActivityMain"
             android:label="@string/title_activity_home_screen"
+            android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
