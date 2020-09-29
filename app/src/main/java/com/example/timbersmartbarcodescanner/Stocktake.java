@@ -14,7 +14,8 @@ public class Stocktake implements Serializable{
      */
     private String mStocktakeString = "";
     private ArrayList<Area> mAreaList;
-    private String mDateCreated, mDateModified = "";
+    private String mDateModified = "Not Currently Used";
+    private String mDateCreated = "Not Currently Used";
 
     // Constructors
     public Stocktake(String stocktakeString) {

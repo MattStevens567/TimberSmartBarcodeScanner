@@ -1,8 +1,11 @@
 package com.example.timbersmartbarcodescanner;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,11 +16,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 /*
@@ -52,12 +62,13 @@ import java.util.ArrayList;
 *
 *
 * */
+//Locked the screen orientation to landscape, this was used as a shortcut and will need to be fixed in future versions due to the time constraint.
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
+    private static final String FILE_NAME = "timbersmart.txt";
     private Button mExport;
 
     private static final String TAG = "ActivityMain";
-   // ArrayList<Stocktake> sampleStockTakes;
     private StockTakeListAdapter stockTakeListAdapter;
 
     @Override
@@ -66,11 +77,50 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         //--------------------------
+        if ((checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+            requestPermissions(
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        else {
+            try {
+                init();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions, int[] grantResults) {
+        // check all permissions have been granted
+        boolean granted=true;
+        for(int result: grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                granted=false;
+            }
+        }
+        if(granted) {
+            try {
+                init();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else
+            finish();
+    }
+
+    private void init() throws Exception {
         try {
-            Data.initialize();
+            Data.getDataInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
+        writeFileOnInternalStorage();
 
         //Set up views -------------------------------
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
@@ -121,7 +171,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 //        //----------------------------------------------------------------------------
 
         // Add addNew stocktake button onclick listener----------------
-    //    StockTakeListAdapter finalStockTakeListAdapter = stockTakeListAdapter;
+        //    StockTakeListAdapter finalStockTakeListAdapter = stockTakeListAdapter;
         addNew.setOnClickListener(view -> {
         String newStocktakeName = newStocktakeItem.getText().toString();
 
@@ -242,6 +292,109 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            writeFileOnInternalStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        File path = getApplicationContext().getExternalFilesDir(null);
+        File file = new File(path, "my-file-name.txt");
+        int length = (int) file.length();
+
+        byte[] bytes = new byte[length];
+
+        FileInputStream in = null;
+        try {
+            in = new FileInputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            try {
+                in.read(bytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                in.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        String contents = new String(bytes);
+        Button a = findViewById(R.id.ActivityMainAddNewStocktake);
+        a.setText(contents);
+    }
+    public boolean easySave(){
+        FileOutputStream fos;
+        ObjectOutputStream oos=null;
+        try{
+            fos = getApplicationContext().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+            oos = new ObjectOutputStream(fos);
+            oos.writeObject(Data.getDataInstance().getStocktakeList());
+            oos.close();
+            return true;
+        }catch(Exception e){
+            Log.e("Internal Stocktake Save", "Cant save records"+e.getMessage());
+            return false;
+        }
+        finally{
+            if(oos!=null)
+                try{
+                    oos.close();
+                }catch(Exception e){
+                    Log.e("Internal Stocktake Save", "Error while closing stream "+e.getMessage());
+                }
+        }
+    }
+    public boolean easyRead(){
+        FileInputStream fin;
+        ObjectInputStream ois=null;
+        try{
+            fin = getApplicationContext().openFileInput(FILE_NAME);
+            ois = new ObjectInputStream(fin);
+            Data.getDataInstance().setStocktakeList((ArrayList<Stocktake>) ois.readObject());
+            ois.close();
+            Log.v("Internal Stocktake Save", "Records read successfully");
+            return true;
+        }catch(Exception e){
+            Log.e("Internal Stocktake Save", "Cant read saved records"+e.getMessage());
+            return false;
+        }
+        finally{
+            if(ois!=null)
+                try{
+                    ois.close();
+                }catch(Exception e){
+                    Log.e("Internal Stocktake Save", "Error in closing stream while reading records"+e.getMessage());
+                }
+        }
+    }
+
+    public void writeFileOnInternalStorage() throws Exception {
+        File path = getApplicationContext().getExternalFilesDir(null);
+        File file = new File(path, "my-file-name.txt");
+        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
+        FileOutputStream stream = new FileOutputStream(file);
+        String stringToWriteInFile = Data.getDataInstance().ToString();
+        try {
+            stream.write(stringToWriteInFile.getBytes());
+        } finally {
+            stream.close();
         }
     }
 }
