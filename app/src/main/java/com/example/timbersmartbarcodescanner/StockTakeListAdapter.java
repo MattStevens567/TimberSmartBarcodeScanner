@@ -25,7 +25,27 @@ public class StockTakeListAdapter extends ArrayAdapter {
         this.data = stocktakes;
     }
 
+    public StockTakeListAdapter(@NonNull Context context, int resource) {
+        super(context, resource);
+    }
 
+    @Override
+    public int getCount() {
+        try {
+            if (!Data.getDataInstance().getStocktakeList().isEmpty())
+                return Data.getDataInstance().getStocktakeList().size();
+            else return 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
 
     @NonNull
     @Override

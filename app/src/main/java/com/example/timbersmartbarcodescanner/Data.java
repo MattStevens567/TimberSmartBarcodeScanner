@@ -4,19 +4,53 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
 * This is a singleton class which will hold all the data for each stock take.
 * This was decided to avoid passing bundles across many activities.
 * */
-public class Data extends Activity {
+public class Data implements Serializable {
 
-    private static final String FILENAME = "BarcodeStickScannerData";
+
+    private static final String FILENAME = "notused.txt";
+    private static String FILE_NAME = "timbersmart.txt";
     private static Data mData = null;
-    private ArrayList<Stocktake> mStocktakeList;
+    private ArrayList<Stocktake> mStocktakeList = new ArrayList<Stocktake>();
+
+    public String ToString() {
+        StringBuilder data;
+        data = new StringBuilder("\"START-OF-TIMBER-SMART-DATA\"");
+        for (int i=0; i<mStocktakeList.size(); i++) {
+            data.append("\"Stock-take-start\"");
+            data.append("\"").append(mStocktakeList.get(i).getStocktakeString()).append("\"");
+            data.append("\"").append(mStocktakeList.get(i).getDateCreated()).append("\"");
+            data.append("\"").append(mStocktakeList.get(i).getDateModified()).append("\"");
+            for (int j = 0; j<mStocktakeList.get(i).getAreaList().size(); j++){
+                data.append("\"Area-start\"");
+                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getAreaString()).append("\"");
+                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getDate()).append("\"");
+                for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
+                    data.append("\"Barcode-start\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode()).append("\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getDateTime()).append("\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getArea()).append("\"");
+                    data.append("\"Barcode-end\"");
+                }
+                data.append("\"Area-end\"");
+            }
+            data.append("\"Stock-take-end\"");
+        }
+        data.append("\"END-OF-TIMBER-SMART-DATA\"");
+        return data.toString();
+    }
 
     public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
         mStocktakeList = stocktakeList;
@@ -51,9 +85,12 @@ public class Data extends Activity {
         }
         return mData;
     }
-    public static void initialize() throws Exception {
-        mData = new Data();
-    }
+//    public static void initialize() throws Exception {
+//        if (mData.easyRead()){
+//        } else {
+//            mData = new Data();
+//        }
+//    }
 
     public ArrayList<Stocktake> getStocktakeList() {
         return mStocktakeList;
@@ -115,6 +152,67 @@ public class Data extends Activity {
             Log.e("Exception", "File write failed: " + e.toString());
         }
     }
+
+//    public boolean easySave(){
+//        FileOutputStream fos;
+//        ObjectOutputStream oos=null;
+//        try{
+////            fos = getApplicationContext().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+//            oos = new ObjectOutputStream(fos);
+//            oos.writeObject(mStocktakeList);
+//            oos.close();
+//            return true;
+//        }catch(Exception e){
+//            Log.e("Internal Stocktake Save", "Cant save records"+e.getMessage());
+//            return false;
+//        }
+//        finally{
+//            if(oos!=null)
+//                try{
+//                    oos.close();
+//                }catch(Exception e){
+//                    Log.e("Internal Stocktake Save", "Error while closing stream "+e.getMessage());
+//                }
+//        }
+//    }
+
+    public void reallyEasySave(Context context) throws IOException {
+        FileOutputStream fos = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
+        ObjectOutputStream os = new ObjectOutputStream(fos);
+        os.writeObject(this);
+        os.close();
+        fos.close();
+    }
+    public void reallyEasyRead(Context context) throws IOException, ClassNotFoundException {
+        FileInputStream fis = context.openFileInput(FILE_NAME);
+        ObjectInputStream is = new ObjectInputStream(fis);
+        mData = (Data) is.readObject();
+        is.close();
+        fis.close();
+    }
+//    public boolean easyRead(){
+//        FileInputStream fin;
+//        ObjectInputStream ois=null;
+//        try{
+//            fin = getApplicationContext().openFileInput(FILE_NAME);
+//            ois = new ObjectInputStream(fin);
+//            this.mStocktakeList = (ArrayList<Stocktake>) ois.readObject();
+//            ois.close();
+//            Log.v("Internal Stocktake Save", "Records read successfully");
+//            return true;
+//        }catch(Exception e){
+//            Log.e("Internal Stocktake Save", "Cant read saved records"+e.getMessage());
+//            return false;
+//        }
+//        finally{
+//            if(ois!=null)
+//                try{
+//                    ois.close();
+//                }catch(Exception e){
+//                    Log.e("Internal Stocktake Save", "Error in closing stream while reading records"+e.getMessage());
+//                }
+//        }
+//    }
 
     /*
      * Rules for loading in data from a file
