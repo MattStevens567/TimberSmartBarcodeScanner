@@ -148,32 +148,39 @@ public class ScanningScreen extends Activity implements Serializable {
             public void afterTextChanged(Editable barcodeEditable) {
                 String temp = barcodeEditable.toString();
                 if(temp.contains("\n")) {
-
                     // Only shorten barcode if it had more then just \n
-                    if(temp.length() > 0) {
+                    if (temp.length() > 0) {
                         temp = temp.substring(0, temp.length() - 1);
-
                     }
 
-                    CharSequence text = "Barcode " + temp + " found";
-                    Log.d(TAG, text.toString());
-                    Context context = getApplicationContext();
-                    int duration  = Toast.LENGTH_SHORT;
-                    Toast toast = Toast.makeText(context, text, duration);
-                    toast.show();
+                    // Check if barcode is empty,
+                    // If empty then this means user has pushed enter with nothing entered
+                    // Therefore display toast to inform user that barcode hasn't been added
+                    if (temp.equals("")) {
+                        Toast.makeText(getApplicationContext(), "Attempted to add empty barcode, please check barcode entry box", Toast.LENGTH_SHORT).show();
+                        mBarcode.setText("");
+                        return;
+                    } else {
+                        CharSequence text = "Barcode " + temp + " scanned";
+                        Log.d(TAG, text.toString());
+                        Context context = getApplicationContext();
+                        int duration = Toast.LENGTH_SHORT;
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
 
-                    // Send Barcode string to addBarcodeLogic function
-                    // This function handles DateTime etc. to create barcode object
-                    try {
-                        addBarcodeLogic(temp);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                        // Send Barcode string to addBarcodeLogic function
+                        // This function handles DateTime etc. to create barcode object
+                        try {
+                            addBarcodeLogic(temp);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mBarcodeListAdapter.notifyDataSetChanged();
+
+                        calculateDifference();
+
+                        mBarcode.setText("");
                     }
-                    mBarcodeListAdapter.notifyDataSetChanged();
-
-                    calculateDifference();
-
-                    mBarcode.setText("");
                 }
             }
         };
@@ -181,15 +188,15 @@ public class ScanningScreen extends Activity implements Serializable {
     }
 
     public void calculateDifference() {
-        int difference, temp;
+        int difference;
         mCount.setText(String.valueOf(mCountGlobal));
 
         if(mPreCount.getText().toString() == "") {
             mPreCountGlobal = 0;
         }
-        //count = Integer.parseInt(mCount.getText().toString());
 
         difference = mCountGlobal - mPreCountGlobal;
+
         // if 0, set difference text to green
         // Otherwise set text Colour to red
         if(difference == 0) {
@@ -200,7 +207,7 @@ public class ScanningScreen extends Activity implements Serializable {
         mDifference.setText(Integer.toString(difference));
     }
 
-    // Contructs new barcode object and adds it to the arraylist
+    // Constructs new barcode object and adds it to the arrayList
     // Not sure whether to do processing here or in barcode class
     // Processing currently done in barcode class
     public void addBarcodeLogic (String barcode) throws Exception {
@@ -217,7 +224,7 @@ public class ScanningScreen extends Activity implements Serializable {
             mCountGlobal++;
             getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaString()));
         } else {
-            Toast.makeText(this, "You have scanned a barcode twice, we are not entering it into the system", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Barcode ignored, already in system", Toast.LENGTH_LONG).show();
         }
     }
 
