@@ -12,14 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:configChanges="orientation|screenSize|keyboard"
-        android:screenOrientation="landscape"
-        >
+        android:screenOrientation="landscape">
 
         <activity
             android:name=".ScanningScreen"
-            android:windowSoftInputMode="adjustPan"/>
-
-
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".AreasScreen"
             android:label="@string/title_activity_rows_screen"

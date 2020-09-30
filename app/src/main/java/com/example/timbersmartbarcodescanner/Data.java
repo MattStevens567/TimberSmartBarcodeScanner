@@ -75,6 +75,7 @@ public class Data implements Serializable {
             return mData;
         }
         else {
+//            mData.mStocktakeList = stocktakeList;
             return mData;
         }
     }
