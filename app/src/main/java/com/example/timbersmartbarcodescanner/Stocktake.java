@@ -28,6 +28,13 @@ public class Stocktake implements Serializable{
         mAreaList = areaList;
     }
 
+    public Stocktake(String name, String datecreated, String dmodified) {
+        this.mStocktakeString = name;
+        this.mDateCreated = datecreated;
+        this.mDateModified = dmodified;
+        mAreaList = new ArrayList<Area>();
+    }
+
     // Getters and setters
     public String getStocktakeString() {
         return mStocktakeString;

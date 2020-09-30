@@ -18,6 +18,12 @@ public class Barcode implements Serializable {
         mArea = area;
     }
 
+    public Barcode(String barcode, String date, String area) {
+        this.mBarcodeString = barcode;
+        this.mDateTime = date;
+        this.mArea = area;
+    }
+
 //    public Barcode(String barcodeString) {
 //        mBarcodeString = barcodeString;
 //        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");

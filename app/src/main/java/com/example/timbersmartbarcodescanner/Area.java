@@ -21,6 +21,13 @@ public class Area implements Serializable {
         mPreCount = 0;
     }
 
+    public Area(String name, String date) {
+        this.mAreaString = name;
+        this.mDate = date;
+        mBarcodeList = new ArrayList<Barcode>();
+        this.mPreCount = 0;
+    }
+
     public String getAreaString() { return mAreaString; }
     public void setAreaString(String areaString) {
         mAreaString = areaString;

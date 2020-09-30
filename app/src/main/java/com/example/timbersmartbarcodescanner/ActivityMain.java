@@ -68,7 +68,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     private static final String FILE_NAME = "timbersmart.txt";
     private Button mExport;
 
-    private static final String TAG = "ActivityMain";
+    private static final String TAG = "ActivityMainDebug";
     private StockTakeListAdapter stockTakeListAdapter;
 
     @Override
@@ -114,13 +114,22 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             finish();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            writeFileOnInternalStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void init() throws Exception {
         try {
             Data.getDataInstance();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        writeFileOnInternalStorage();
 
         //Set up views -------------------------------
         ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
@@ -300,6 +309,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: onpause run");
         try {
             writeFileOnInternalStorage();
         } catch (Exception e) {
@@ -310,6 +320,11 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     @Override
     protected void onResume(){
         super.onResume();
+        Log.d(TAG, "onResume: on resume run");
+        readFromFile();
+    }
+
+    private void readFromFile() {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
         int length = (int) file.length();
@@ -335,10 +350,69 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 e.printStackTrace();
             }
         }
+        ArrayList<Stocktake> tempArrayListStocktake = new ArrayList<Stocktake>();
         String contents = new String(bytes);
-        Button a = findViewById(R.id.ActivityMainAddNewStocktake);
-        a.setText(contents);
+        String[] newContents = getQuotesString(contents);
+        if (newContents[0].equals("START-OF-TIMBER-SMART-DATA")) {
+            newContents = getQuotesString(newContents[1]);
+            //Load contents
+            if (newContents[0].equals("Stock-take-start")) {
+                newContents = getQuotesString(newContents[1]);
+                //Load contents
+                String[] StockTakeName = getQuotesString(newContents[1]);
+                String[] StockTakeDateCreated = getQuotesString(StockTakeName[1]);
+                String[] StockTakeDateModified = getQuotesString(StockTakeDateCreated[1]);
+                Stocktake tempStocktake = new Stocktake(StockTakeName[0],StockTakeDateCreated[0], StockTakeDateModified[0]);
+
+                if (newContents[0].equals("Area-start")) {
+                    newContents = getQuotesString(newContents[1]);
+                    //Load contents
+                    String[] AreaName = getQuotesString(newContents[1]);
+                    String[] AreaDate = getQuotesString(AreaName[1]);
+                    Area tempArea = new Area(AreaName[0], AreaDate[0]);
+
+                    if (newContents[0].equals("Barcode-start")) {
+                        newContents = getQuotesString(newContents[1]);
+                        String[] Barcode = getQuotesString(newContents[1]);
+                        String[] BarcodeDate = getQuotesString(Barcode[1]);
+                        String[] BarcodeArea = getQuotesString(BarcodeDate[1]);
+                        Barcode tempBarcode = new Barcode(Barcode[0], BarcodeDate[0], BarcodeArea[0]);
+                        tempArea.addBarcode(tempBarcode);
+                    }
+                    tempStocktake.addArea(tempArea);
+                }
+                tempArrayListStocktake.add(tempStocktake);
+            }
+        }
+        Log.d(TAG, "readFromFile: Stocktake read");
+        Data.getDataInstance(tempArrayListStocktake);
+        try {
+            Log.d(TAG, "readFromFile: Stocktake name 0" + tempArrayListStocktake.get(0).getStocktakeString());
+            Log.d(TAG, "readFromFile: Stocktake area 0 " + tempArrayListStocktake.get(0).getAreaList().get(0).getAreaString());
+            Log.d(TAG, "readFromFile: Stocktake barcode 0 " + tempArrayListStocktake.get(0).getAreaList().get(0).getBarcodeList().get(0).getBarcode());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        stockTakeListAdapter.notifyDataSetChanged();
+
     }
+
+    /* This function will return the first item found in quotations as the first parameter
+    * It returns the rest of the contents as a second parameter*/
+    private String[] getQuotesString(String contents) {
+        String[] newContents = new String[2];
+        StringBuilder firstItem = new StringBuilder();
+        int i = 1; //Starts at 1 to skip the first "
+        firstItem.append(contents.charAt(i));
+        while (contents.charAt(i) != '\"'){
+            firstItem.append(contents.charAt(i));
+            i++;
+        }
+        newContents[0] = firstItem.toString();
+        newContents[1] = contents.substring(i+1);//+1 to remove the end "
+        return newContents;
+    }
+
     public boolean easySave(){
         FileOutputStream fos;
         ObjectOutputStream oos=null;
@@ -358,29 +432,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                     oos.close();
                 }catch(Exception e){
                     Log.e("Internal Stocktake Save", "Error while closing stream "+e.getMessage());
-                }
-        }
-    }
-    public boolean easyRead(){
-        FileInputStream fin;
-        ObjectInputStream ois=null;
-        try{
-            fin = getApplicationContext().openFileInput(FILE_NAME);
-            ois = new ObjectInputStream(fin);
-            Data.getDataInstance().setStocktakeList((ArrayList<Stocktake>) ois.readObject());
-            ois.close();
-            Log.v("Internal Stocktake Save", "Records read successfully");
-            return true;
-        }catch(Exception e){
-            Log.e("Internal Stocktake Save", "Cant read saved records"+e.getMessage());
-            return false;
-        }
-        finally{
-            if(ois!=null)
-                try{
-                    ois.close();
-                }catch(Exception e){
-                    Log.e("Internal Stocktake Save", "Error in closing stream while reading records"+e.getMessage());
                 }
         }
     }
