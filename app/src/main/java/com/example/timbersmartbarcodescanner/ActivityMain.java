@@ -67,7 +67,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private static final String FILE_NAME = "timbersmart.txt";
     private Button mExport;
-
+    boolean temp = true;
     private static final String TAG = "ActivityMainDebug";
     private StockTakeListAdapter stockTakeListAdapter;
 
@@ -126,7 +126,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private void init() throws Exception {
         try {
-            Data.getDataInstance();
+            readFromFile();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -321,10 +321,14 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     protected void onResume(){
         super.onResume();
         Log.d(TAG, "onResume: on resume run");
-        readFromFile();
+        try {
+            readFromFile();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private void readFromFile() {
+    private void readFromFile() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
         int length = (int) file.length();
@@ -337,6 +341,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        if (in == null) return;
         try {
             try {
                 in.read(bytes);
@@ -353,45 +358,65 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         ArrayList<Stocktake> tempArrayListStocktake = new ArrayList<Stocktake>();
         String contents = new String(bytes);
         String[] newContents = getQuotesString(contents);
+        Log.d(TAG, "readFromFile: Should be start-of-timber-smart-data : " + newContents[0]);
         if (newContents[0].equals("START-OF-TIMBER-SMART-DATA")) {
             newContents = getQuotesString(newContents[1]);
             //Load contents
+            Log.d(TAG, "readFromFile: Should be stock-take-start : " + newContents[0]);
+
             if (newContents[0].equals("Stock-take-start")) {
-                newContents = getQuotesString(newContents[1]);
                 //Load contents
+
                 String[] StockTakeName = getQuotesString(newContents[1]);
                 String[] StockTakeDateCreated = getQuotesString(StockTakeName[1]);
                 String[] StockTakeDateModified = getQuotesString(StockTakeDateCreated[1]);
                 Stocktake tempStocktake = new Stocktake(StockTakeName[0],StockTakeDateCreated[0], StockTakeDateModified[0]);
 
+                Log.d(TAG, "readFromFile: stocktakename : " + StockTakeName[0]);
+                Log.d(TAG, "readFromFile: StockTakeDateCreated : " + StockTakeDateCreated[0]);
+                Log.d(TAG, "readFromFile: StockTakeDateModified : " + StockTakeDateModified[0]);
+
+                newContents = getQuotesString(StockTakeDateModified[1]);
+                Log.d(TAG, "readFromFile: Should be area-start : " + newContents[0]);
                 if (newContents[0].equals("Area-start")) {
-                    newContents = getQuotesString(newContents[1]);
                     //Load contents
                     String[] AreaName = getQuotesString(newContents[1]);
                     String[] AreaDate = getQuotesString(AreaName[1]);
                     Area tempArea = new Area(AreaName[0], AreaDate[0]);
 
+                    Log.d(TAG, "readFromFile: AreaName : " + AreaName[0]);
+                    Log.d(TAG, "readFromFile: AreaDate : " + AreaDate[0]);
+                    newContents = getQuotesString(AreaDate[1]);
+
+                    Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
                     if (newContents[0].equals("Barcode-start")) {
-                        newContents = getQuotesString(newContents[1]);
                         String[] Barcode = getQuotesString(newContents[1]);
                         String[] BarcodeDate = getQuotesString(Barcode[1]);
                         String[] BarcodeArea = getQuotesString(BarcodeDate[1]);
                         Barcode tempBarcode = new Barcode(Barcode[0], BarcodeDate[0], BarcodeArea[0]);
+
+                        Log.d(TAG, "readFromFile: Barcode : " + Barcode[0]);
+                        Log.d(TAG, "readFromFile: BarcodeDate : " + BarcodeDate[0]);
+                        Log.d(TAG, "readFromFile: BarcodeArea : " + BarcodeArea[0]);
                         tempArea.addBarcode(tempBarcode);
                     }
                     tempStocktake.addArea(tempArea);
+                    Log.d(TAG, "readFromFile: tempStockTakeArea = " + tempStocktake.getAreaAtPosition(0).getAreaString());
                 }
                 tempArrayListStocktake.add(tempStocktake);
             }
         }
         Log.d(TAG, "readFromFile: Stocktake read");
-        Data.getDataInstance(tempArrayListStocktake);
+        Data.getDataInstance().setStocktakeList(tempArrayListStocktake);
+        temp = false;
         try {
-            Log.d(TAG, "readFromFile: Stocktake name 0" + tempArrayListStocktake.get(0).getStocktakeString());
-            Log.d(TAG, "readFromFile: Stocktake area 0 " + tempArrayListStocktake.get(0).getAreaList().get(0).getAreaString());
-            Log.d(TAG, "readFromFile: Stocktake barcode 0 " + tempArrayListStocktake.get(0).getAreaList().get(0).getBarcodeList().get(0).getBarcode());
+            Log.d(TAG, "readFromFile: Logging data loaded in:\n");
+            Log.d(TAG, "readFromFile: Stocktake name: " + tempArrayListStocktake.get(0).getStocktakeString());
+            Log.d(TAG, "readFromFile: Stocktake area: " + tempArrayListStocktake.get(0).getAreaAtPosition(0).getAreaString());
+            Log.d(TAG, "readFromFile: Stocktake barcode: " + tempArrayListStocktake.get(0).getAreaList().get(0).getBarcodeList().get(0).getBarcode() + "\n");
         } catch (Exception e) {
             e.printStackTrace();
+            Log.d(TAG, "readFromFile bug: "+ e.getMessage() + e.getCause());
         }
         stockTakeListAdapter.notifyDataSetChanged();
 
@@ -403,7 +428,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         String[] newContents = new String[2];
         StringBuilder firstItem = new StringBuilder();
         int i = 1; //Starts at 1 to skip the first "
-        firstItem.append(contents.charAt(i));
         while (contents.charAt(i) != '\"'){
             firstItem.append(contents.charAt(i));
             i++;

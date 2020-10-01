@@ -61,6 +61,9 @@ public class Stocktake implements Serializable{
     public ArrayList<Area> getAreaList() {
         return mAreaList;
     }
+    public Area getAreaAtPosition(int i) {
+        return mAreaList.get(i);
+    }
 
     public void addArea(Area area) {
         mAreaList.add(area);

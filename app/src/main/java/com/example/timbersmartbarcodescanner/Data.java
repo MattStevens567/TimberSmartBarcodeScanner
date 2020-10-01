@@ -80,6 +80,7 @@ public class Data implements Serializable {
         }
     }
 
+
     public static Data getDataInstance() throws Exception {
         if (mData == null){
             mData = new Data();
