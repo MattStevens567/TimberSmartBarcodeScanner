@@ -214,7 +214,8 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         if (unique) {
                             Stocktake temp = new Stocktake(newStocktakeName);
                             Data.getDataInstance().addStocktake(temp);
-                            stockTakeListAdapter.notifyDataSetChanged();
+                            stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                            mListView.setAdapter(stockTakeListAdapter);
                             mListView.invalidateViews();
                             newStocktakeItem.setText("");
                         } else if (newStocktakeName.equals("")) {
@@ -365,7 +366,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             newContents = getQuotesString(newContents[1]);
             //Load contents
             Log.d(TAG, "readFromFile: Should be stock-take-start : " + newContents[0]);
-            if (newContents[0].equals("Stock-take-start")) {
+            while (newContents[0].equals("Stock-take-start")) {
                     //Load contents
 
                     String[] StockTakeName = getQuotesString(newContents[1]);
@@ -401,6 +402,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         Log.d(TAG, "readFromFile: area start: " + newContents[0]);
                     }
                     tempArrayListStocktake.add(tempStocktake);
+                    newContents = getQuotesString(newContents[1]); //stockatke end
             }
         }
         Log.d(TAG, "readFromFile: Stocktake read");
