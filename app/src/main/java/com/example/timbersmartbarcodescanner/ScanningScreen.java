@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 
 public class ScanningScreen extends Activity implements Serializable {
@@ -225,6 +227,29 @@ public class ScanningScreen extends Activity implements Serializable {
             getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaString()));
         } else {
             Toast.makeText(this, "Barcode ignored, already in system", Toast.LENGTH_LONG).show();
+        }
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: onpause run");
+        try {
+            writeFileOnInternalStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeFileOnInternalStorage() throws Exception {
+        File path = getApplicationContext().getExternalFilesDir(null);
+        File file = new File(path, "my-file-name.txt");
+        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
+        FileOutputStream stream = new FileOutputStream(file);
+        String stringToWriteInFile = Data.getDataInstance().ToString();
+        try {
+            stream.write(stringToWriteInFile.getBytes());
+        } finally {
+            stream.close();
         }
     }
 

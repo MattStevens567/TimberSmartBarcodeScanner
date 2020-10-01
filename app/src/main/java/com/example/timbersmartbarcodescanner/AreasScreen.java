@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +14,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 
 //yo
@@ -86,6 +89,29 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         return Data.getDataInstance().getStocktakeList().get(i);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: onpause run");
+        try {
+            writeFileOnInternalStorage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeFileOnInternalStorage() throws Exception {
+        File path = getApplicationContext().getExternalFilesDir(null);
+        File file = new File(path, "my-file-name.txt");
+        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
+        FileOutputStream stream = new FileOutputStream(file);
+        String stringToWriteInFile = Data.getDataInstance().ToString();
+        try {
+            stream.write(stringToWriteInFile.getBytes());
+        } finally {
+            stream.close();
+        }
+    }
     public void AddHandler(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);

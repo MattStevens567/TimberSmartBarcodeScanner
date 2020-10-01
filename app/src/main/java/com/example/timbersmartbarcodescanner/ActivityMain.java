@@ -30,6 +30,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.BlockingDeque;
+
 /*
 * This class is the back-end for the start up screen, AKA the Stock take screen.
 *
@@ -363,47 +365,42 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
             newContents = getQuotesString(newContents[1]);
             //Load contents
             Log.d(TAG, "readFromFile: Should be stock-take-start : " + newContents[0]);
-
             if (newContents[0].equals("Stock-take-start")) {
-                //Load contents
-
-                String[] StockTakeName = getQuotesString(newContents[1]);
-                String[] StockTakeDateCreated = getQuotesString(StockTakeName[1]);
-                String[] StockTakeDateModified = getQuotesString(StockTakeDateCreated[1]);
-                Stocktake tempStocktake = new Stocktake(StockTakeName[0],StockTakeDateCreated[0], StockTakeDateModified[0]);
-
-                Log.d(TAG, "readFromFile: stocktakename : " + StockTakeName[0]);
-                Log.d(TAG, "readFromFile: StockTakeDateCreated : " + StockTakeDateCreated[0]);
-                Log.d(TAG, "readFromFile: StockTakeDateModified : " + StockTakeDateModified[0]);
-
-                newContents = getQuotesString(StockTakeDateModified[1]);
-                Log.d(TAG, "readFromFile: Should be area-start : " + newContents[0]);
-                if (newContents[0].equals("Area-start")) {
                     //Load contents
-                    String[] AreaName = getQuotesString(newContents[1]);
-                    String[] AreaDate = getQuotesString(AreaName[1]);
-                    Area tempArea = new Area(AreaName[0], AreaDate[0]);
 
-                    Log.d(TAG, "readFromFile: AreaName : " + AreaName[0]);
-                    Log.d(TAG, "readFromFile: AreaDate : " + AreaDate[0]);
-                    newContents = getQuotesString(AreaDate[1]);
+                    String[] StockTakeName = getQuotesString(newContents[1]);
+                    String[] StockTakeDateCreated = getQuotesString(StockTakeName[1]);
+                    String[] StockTakeDateModified = getQuotesString(StockTakeDateCreated[1]);
+                    Stocktake tempStocktake = new Stocktake(StockTakeName[0], StockTakeDateCreated[0], StockTakeDateModified[0]);
 
-                    Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
-                    if (newContents[0].equals("Barcode-start")) {
-                        String[] Barcode = getQuotesString(newContents[1]);
-                        String[] BarcodeDate = getQuotesString(Barcode[1]);
-                        String[] BarcodeArea = getQuotesString(BarcodeDate[1]);
-                        Barcode tempBarcode = new Barcode(Barcode[0], BarcodeDate[0], BarcodeArea[0]);
+                    newContents = getQuotesString(StockTakeDateModified[1]);
+                    Log.d(TAG, "readFromFile: Should be area-start : " + newContents[0]);
+                    while (newContents[0].equals("Area-start")) {
+                        //Load contents
+                        String[] AreaName = getQuotesString(newContents[1]);
+                        String[] AreaDate = getQuotesString(AreaName[1]);
+                        Area tempArea = new Area(AreaName[0], AreaDate[0]);
+                        newContents = getQuotesString(AreaDate[1]);
 
-                        Log.d(TAG, "readFromFile: Barcode : " + Barcode[0]);
-                        Log.d(TAG, "readFromFile: BarcodeDate : " + BarcodeDate[0]);
-                        Log.d(TAG, "readFromFile: BarcodeArea : " + BarcodeArea[0]);
-                        tempArea.addBarcode(tempBarcode);
+                        Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
+
+                        while (newContents[0].equals("Barcode-start")) {
+
+                            String[] Barcode = getQuotesString(newContents[1]);
+                            String[] BarcodeDate = getQuotesString(Barcode[1]);
+                            String[] BarcodeArea = getQuotesString(BarcodeDate[1]);
+                            Barcode tempBarcode = new Barcode(Barcode[0], BarcodeDate[0], BarcodeArea[0]);
+                            tempArea.addBarcode(tempBarcode);
+
+                            newContents = getQuotesString(BarcodeArea[1]); //barcode end
+                            newContents = getQuotesString(newContents[1]); // set to barcode start
+
+                        }
+                        tempStocktake.addArea(tempArea);
+                        newContents = getQuotesString(newContents[1]); //area end
+                        Log.d(TAG, "readFromFile: area start: " + newContents[0]);
                     }
-                    tempStocktake.addArea(tempArea);
-                    Log.d(TAG, "readFromFile: tempStockTakeArea = " + tempStocktake.getAreaAtPosition(0).getAreaString());
-                }
-                tempArrayListStocktake.add(tempStocktake);
+                    tempArrayListStocktake.add(tempStocktake);
             }
         }
         Log.d(TAG, "readFromFile: Stocktake read");
