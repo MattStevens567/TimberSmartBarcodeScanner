@@ -383,7 +383,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         newContents = getQuotesString(AreaDate[1]);
 
                         Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
-
+//asd
                         while (newContents[0].equals("Barcode-start")) {
 
                             String[] Barcode = getQuotesString(newContents[1]);
