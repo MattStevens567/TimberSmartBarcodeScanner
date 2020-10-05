@@ -1,13 +1,17 @@
 package com.example.timbersmartbarcodescanner;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Surface;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +20,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jiangdg.usbcamera.UVCCameraHelper;
+import com.serenegiant.usb.CameraDialog;
+import com.serenegiant.usb.USBMonitor;
+import com.serenegiant.usb.common.AbstractUVCCameraHandler;
+import com.serenegiant.usb.widget.CameraViewInterface;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ScanningScreen extends Activity implements Serializable {
+public class ScanningScreen extends Activity implements Serializable, CameraDialog.CameraDialogParent, CameraViewInterface.Callback{
 
     private static final String TAG = "ScanningScreen";
 
@@ -36,6 +48,13 @@ public class ScanningScreen extends Activity implements Serializable {
 
 
     int passedAreaIndex, passedStocktakeIndex;
+    //Camera Variables
+    private View mTextureView;
+    private UVCCameraHelper mCameraHelper;
+    private CameraViewInterface mUVCCameraView;
+
+    private boolean isRequest;
+    private boolean isPreview;
 
 
     @Override
@@ -47,7 +66,21 @@ public class ScanningScreen extends Activity implements Serializable {
         Intent intent = getIntent();
         passedAreaIndex = intent.getIntExtra("Area Index", -1);
         passedStocktakeIndex = intent.getIntExtra("Stocktake Index", -1);
+        mTextureView = findViewById(R.id.TextureViewCamera);
+        mUVCCameraView = (CameraViewInterface) mTextureView;
+        mUVCCameraView.setCallback(this);
+        mCameraHelper = UVCCameraHelper.getInstance();
+        mCameraHelper.setDefaultFrameFormat(UVCCameraHelper.FRAME_FORMAT_MJPEG);
 
+        mCameraHelper.initUSBMonitor(this, mUVCCameraView, listener);
+
+//
+        mCameraHelper.setOnPreviewFrameListener(new AbstractUVCCameraHandler.OnPreViewResultListener() {
+            @Override
+            public void onPreviewResult(byte[] nv21Yuv) {
+                Log.d(TAG, "onPreviewResult: "+nv21Yuv.length);
+            }
+        });
 
 
 
@@ -239,6 +272,32 @@ public class ScanningScreen extends Activity implements Serializable {
             e.printStackTrace();
         }
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // step.2 register USB event broadcast
+        if (mCameraHelper != null) {
+            mCameraHelper.registerUSB();
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // step.3 unregister USB event broadcast
+        if (mCameraHelper != null) {
+            mCameraHelper.unregisterUSB();
+        }
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // step.4 release uvc camera resources
+        if (mCameraHelper != null) {
+            mCameraHelper.release();
+        }
+    }
 
     public void writeFileOnInternalStorage() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
@@ -274,5 +333,95 @@ public class ScanningScreen extends Activity implements Serializable {
     public void BackHandler(View view) {
         Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);
         startActivity(intents);
+    }
+
+    //Camera Methods/classes
+    //usbCameraActivity Class
+
+    private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener() {
+
+        @Override
+        public void onAttachDev(UsbDevice device) {
+            // request open permission(must have)
+            if (!isRequest) {
+                isRequest = true;
+                if (mCameraHelper != null) {
+                    mCameraHelper.requestPermission(0);
+                }
+            }
+        }
+
+        @Override
+        public void onDettachDev(UsbDevice device) {
+            // close camera(must have)
+            if (isRequest) {
+                isRequest = false;
+                mCameraHelper.closeCamera();
+            }
+        }
+
+        @Override
+        public void onConnectDev(UsbDevice device, boolean isConnected) {
+            if (!isConnected) {
+                Toast.makeText(ScanningScreen.this,"fail to connect,please check resolution params",Toast.LENGTH_LONG).show();
+                isPreview = false;
+            } else {
+                isPreview = true;
+                Toast.makeText(ScanningScreen.this,"connecting",Toast.LENGTH_LONG).show();
+                // initialize seekbar
+                // need to wait UVCCamera initialize over
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Looper.prepare();
+                        Looper.loop();
+                    }
+                }).start();
+            }
+        }
+
+        @Override
+        public void onDisConnectDev(UsbDevice device) {
+
+        }
+    };
+    public boolean isCameraOpened() {
+        return mCameraHelper.isCameraOpened();
+    }
+
+    @Override
+    public USBMonitor getUSBMonitor() {
+        return mCameraHelper.getUSBMonitor();
+    }
+    @Override
+    public void onDialogResult(boolean canceled) {
+
+    }
+    @Override
+    public void onSurfaceCreated(CameraViewInterface view, Surface surface) {
+        // must have
+        if (!isPreview && mCameraHelper.isCameraOpened()) {
+            mCameraHelper.startPreview(mUVCCameraView);
+            isPreview = true;
+        }
+    }
+
+    @Override
+    public void onSurfaceChanged(CameraViewInterface view, Surface surface, int width, int height) {
+
+    }
+
+    @Override
+    public void onSurfaceDestroy(CameraViewInterface view, Surface surface) {
+        // must have
+        if (isPreview && mCameraHelper.isCameraOpened()) {
+            mCameraHelper.stopPreview();
+            isPreview = false;
+        }
     }
 }
