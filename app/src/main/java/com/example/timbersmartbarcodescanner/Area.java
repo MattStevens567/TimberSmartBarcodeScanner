@@ -48,7 +48,8 @@ public class Area implements Serializable {
     }
 
     public void addBarcode(Barcode barcode) {
-        mBarcodeList.add(barcode);
+
+        mBarcodeList.add(0, barcode);
     }
 
     public int getPreCount() {
