@@ -26,13 +26,13 @@
             android:layout_weight="20"
             android:text="@string/date"
             android:textColor="#000" />
-        <TextView
-            android:id="@+id/SSLVTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="20"
-            android:text="@string/time"
-            android:textColor="#000" />
+<!--        <TextView-->
+<!--            android:id="@+id/SSLVTime"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="20"-->
+<!--            android:text="@string/time"-->
+<!--            android:textColor="#000" />-->
 
     <Button
         android:layout_width="match_parent"

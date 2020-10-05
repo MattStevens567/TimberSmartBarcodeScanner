@@ -44,8 +44,8 @@ public class BarcodeListAdapter extends ArrayAdapter {
         TextView textViewDate = convertView.findViewById(R.id.SSLVDate);
         textViewDate.setText(dateTime);
 
-        TextView textViewTime = convertView.findViewById(R.id.SSLVTime);
-        textViewTime.setText(dateTime);
+//        TextView textViewTime = convertView.findViewById(R.id.SSLVTime);
+//        textViewTime.setText(dateTime);
 
         TextView textViewBarcode = convertView.findViewById(R.id.SSLVBarcode);
         textViewBarcode.setText(barcodeDetails);

@@ -142,18 +142,18 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         // Adding test data ----------------------------------------------------
         //Test data not used as the app is pretty much functional at this point
 //        sampleStockTakes = new ArrayList<Stocktake>();
-//        try {
-//            Data.getDataInstance();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        for (int i = 0; i < 5; i++) {
-//            try {
-//                Data.getDataInstance().addStocktake(new Stocktake( String.valueOf(i*292%100)));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
+        try {
+            Data.getDataInstance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < 5; i++) {
+            try {
+                Data.getDataInstance().addStocktake(new Stocktake( String.valueOf(i*292%100)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
         //----------------------------------------------------------------------------
 
