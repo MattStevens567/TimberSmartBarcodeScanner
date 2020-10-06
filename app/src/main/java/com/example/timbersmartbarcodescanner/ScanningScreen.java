@@ -30,9 +30,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ScanningScreen extends Activity implements Serializable, CameraDialog.CameraDialogParent, CameraViewInterface.Callback{
+public class ScanningScreen extends Activity implements Serializable {
 
     private static final String TAG = "ScanningScreen";
 
@@ -109,13 +110,14 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
 
         // Set this to be the value passed from area
         // or just count how many barcodes are currently in array
-        mCountGlobal = 0;
-        mPreCountGlobal = 0;
+        mCountGlobal = getAreaOnFromPassedInstance().getBarcodeList().size();
+        mPreCountGlobal = getAreaOnFromPassedInstance().getPreCount();
 
         mCount.setText(String.valueOf(mCountGlobal));
         mPreCount.setHint("Enter PreCount");
-        mDifference.setText("0");
-        mPreCount.setText("0");
+        calculateDifference();
+
+        mPreCount.setText(String.valueOf(mPreCountGlobal));
 
 
 
@@ -123,7 +125,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         mListView.setAdapter(mBarcodeListAdapter);
 
         //update();
-
+        Log.d(TAG, "Reached Line 127!");
         // When enter is pressed, adds on a \n character
         // Program then picks up this change and saves the barcode
         mEnter.setOnClickListener((View v) -> {
@@ -140,6 +142,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
             }
             mBarcode.setText(temp);
         });
+        Log.d(TAG, "Reached Line 144!");
 
         mConfirmPreCount.setOnClickListener((View v) -> {
             String tempString = mPreCount.getText().toString();
@@ -152,14 +155,19 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
             }
 
             mPreCountGlobal = tempPreCount;
+            try {
+                getAreaOnFromPassedInstance().setPreCount(tempPreCount);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             calculateDifference();
             mBarcode.requestFocus();
 
         });
 
-
+        Log.d(TAG, "Reached Line 167!");
         initTextWatchers();
-
+        Log.d(TAG, "Reached Line 169! XD");
     }
 
     public Area getAreaOnFromPassedInstance() throws Exception {
@@ -210,6 +218,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+
                         mBarcodeListAdapter.notifyDataSetChanged();
 
                         calculateDifference();
@@ -335,8 +344,8 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         startActivity(intents);
     }
 
-    //Camera Methods/classes
-    //usbCameraActivity Class
+    Camera Methods/classes
+    usbCameraActivity Class
 
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener() {
 

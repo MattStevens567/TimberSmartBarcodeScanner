@@ -68,7 +68,6 @@ import java.util.concurrent.BlockingDeque;
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private static final String FILE_NAME = "timbersmart.txt";
-    private Button mExport;
     boolean temp = true;
     private static final String TAG = "ActivityMainDebug";
     private StockTakeListAdapter stockTakeListAdapter;
@@ -120,7 +119,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     protected void onDestroy() {
         super.onDestroy();
         try {
-            writeFileOnInternalStorage();
+           // writeFileOnInternalStorage();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,18 +141,18 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         // Adding test data ----------------------------------------------------
         //Test data not used as the app is pretty much functional at this point
 //        sampleStockTakes = new ArrayList<Stocktake>();
-        try {
-            Data.getDataInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < 5; i++) {
-            try {
-                Data.getDataInstance().addStocktake(new Stocktake( String.valueOf(i*292%100)));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        try {
+//            Data.getDataInstance();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        for (int i = 0; i < 5; i++) {
+//            try {
+//                Data.getDataInstance().addStocktake(new Stocktake( String.valueOf(i*292%100)));
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         //----------------------------------------------------------------------------
 
@@ -192,8 +191,11 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         Toast.makeText(this, "Field is empty, please add in a name for the Stock take", Toast.LENGTH_SHORT).show();
                     } else {
                         Data.getDataInstance().addStocktake(new Stocktake(newStocktakeName));
+                        Log.d(TAG, "Reached line 194!");
                         stockTakeListAdapter.notifyDataSetChanged();
+                        Log.d(TAG, "Reached line 196!");
                         mListView.invalidateViews();
+                        Log.d(TAG, "Reached line 198!");
                         newStocktakeItem.setText("");
                     }
                 }
@@ -258,6 +260,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     }
 
     // Exporting stuff
+    // Exports Area name and the barcode assigned to that area
     public void export(View view) throws Exception {
 
         View parentRow = (View) view.getParent();
@@ -331,6 +334,19 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         }
     }
 
+    public void writeFileOnInternalStorage() throws Exception {
+        File path = getApplicationContext().getExternalFilesDir(null);
+        File file = new File(path, "my-file-name.txt");
+        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
+        FileOutputStream stream = new FileOutputStream(file);
+        String stringToWriteInFile = Data.getDataInstance().ToString();
+        try {
+            stream.write(stringToWriteInFile.getBytes());
+        } finally {
+            stream.close();
+        }
+    }
+
     private void readFromFile() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
@@ -380,8 +396,9 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         //Load contents
                         String[] AreaName = getQuotesString(newContents[1]);
                         String[] AreaDate = getQuotesString(AreaName[1]);
-                        Area tempArea = new Area(AreaName[0], AreaDate[0]);
-                        newContents = getQuotesString(AreaDate[1]);
+                        String[] AreaPreCount = getQuotesString(AreaDate[1]);
+                        Area tempArea = new Area(AreaName[0], AreaDate[0], AreaPreCount[0]);
+                        newContents = getQuotesString(AreaPreCount[0]);
 
                         Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
 //asd
@@ -421,6 +438,8 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
     }
 
+
+
     /* This function will return the first item found in quotations as the first parameter
     * It returns the rest of the contents as a second parameter*/
     private String[] getQuotesString(String contents) {
@@ -459,16 +478,5 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         }
     }
 
-    public void writeFileOnInternalStorage() throws Exception {
-        File path = getApplicationContext().getExternalFilesDir(null);
-        File file = new File(path, "my-file-name.txt");
-        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
-        FileOutputStream stream = new FileOutputStream(file);
-        String stringToWriteInFile = Data.getDataInstance().ToString();
-        try {
-            stream.write(stringToWriteInFile.getBytes());
-        } finally {
-            stream.close();
-        }
-    }
+
 }

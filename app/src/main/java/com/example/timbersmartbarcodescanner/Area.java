@@ -21,11 +21,11 @@ public class Area implements Serializable {
         mPreCount = 0;
     }
 
-    public Area(String name, String date) {
-        this.mAreaString = name;
-        this.mDate = date;
+    public Area(String name, String date, String preCount) {
+        mAreaString = name;
+        mDate = date;
         mBarcodeList = new ArrayList<Barcode>();
-        this.mPreCount = 0;
+        mPreCount = Integer.parseInt(preCount);
     }
 
     public String getAreaString() { return mAreaString; }
@@ -47,10 +47,7 @@ public class Area implements Serializable {
         mBarcodeList = barcodeList;
     }
 
-    public void addBarcode(Barcode barcode) {
-
-        mBarcodeList.add(0, barcode);
-    }
+    public void addBarcode(Barcode barcode) { mBarcodeList.add(0, barcode); }
 
     public int getPreCount() {
         return mPreCount;

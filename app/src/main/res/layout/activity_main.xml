@@ -25,7 +25,8 @@
             android:gravity="center|top"
             android:text="@string/ActivityMainHeaderBarTitle"
             android:textColor="@color/colorTimberSmartWhite"
-            android:textSize="40sp" />
+            android:textSize="40sp"
+            />
     </androidx.appcompat.widget.Toolbar>
 
     <TableLayout

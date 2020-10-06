@@ -66,7 +66,7 @@ public class Stocktake implements Serializable{
     }
 
     public void addArea(Area area) {
-        mAreaList.add(area);
+        mAreaList.add(0, area);
     }
     public void setAreaList(ArrayList<Area> areaList) {
         mAreaList = areaList;

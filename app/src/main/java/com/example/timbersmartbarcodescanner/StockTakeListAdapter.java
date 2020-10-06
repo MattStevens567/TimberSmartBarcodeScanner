@@ -1,6 +1,7 @@
 package com.example.timbersmartbarcodescanner;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,25 +32,30 @@ public class StockTakeListAdapter extends ArrayAdapter {
 
     @Override
     public int getCount() {
-        try {
-            if (!Data.getDataInstance().getStocktakeList().isEmpty())
-                return Data.getDataInstance().getStocktakeList().size();
-            else return 0;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(!data.isEmpty()) {
+            return data.size();
+        } else{
+            return 0;
         }
-        return 0;
     }
 
+    @Override
+    public Object getItem(int position) {
+        if(data.size() == 0) {
+            return null;
+        }
+        return data.get(position);
+    }
 
     @Override
     public long getItemId(int position) {
-        return super.getItemId(position);
+        return position;
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Log.d(TAG, "position: " + position);
         Stocktake stocktake  = (Stocktake) getItem(position);
         String stocktakeName = stocktake.getStocktakeString();
         LayoutInflater inflater = LayoutInflater.from(mContext);

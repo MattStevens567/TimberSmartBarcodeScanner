@@ -23,41 +23,16 @@ public class Data implements Serializable {
     private static final String FILENAME = "notused.txt";
     private static String FILE_NAME = "timbersmart.txt";
     private static Data mData = null;
-    private ArrayList<Stocktake> mStocktakeList = new ArrayList<Stocktake>();
+    private ArrayList<Stocktake> mStocktakeList;
 
-    public String ToString() {
-        StringBuilder data;
-        data = new StringBuilder("\"START-OF-TIMBER-SMART-DATA\"");
-        for (int i=0; i<mStocktakeList.size(); i++) {
-            data.append("\"Stock-take-start\"");
-            data.append("\"").append(mStocktakeList.get(i).getStocktakeString()).append("\"");
-            data.append("\"").append(mStocktakeList.get(i).getDateCreated()).append("\"");
-            data.append("\"").append(mStocktakeList.get(i).getDateModified()).append("\"");
-            for (int j = 0; j<mStocktakeList.get(i).getAreaList().size(); j++){
-                data.append("\"Area-start\"");
-                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getAreaString()).append("\"");
-                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getDate()).append("\"");
-                for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
-                    data.append("\"Barcode-start\"");
-                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode()).append("\"");
-                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getDateTime()).append("\"");
-                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getArea()).append("\"");
-                    data.append("\"Barcode-end\"");
-                }
-                data.append("\"Area-end\"");
-            }
-            data.append("\"Stock-take-end\"");
-        }
-        data.append("\"END-OF-TIMBER-SMART-DATA\"");
-        return data.toString();
-    }
+
 
     public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
         mStocktakeList = stocktakeList;
     }
 
     public void addStocktake(Stocktake stocktake) {
-        mStocktakeList.add(stocktake);
+        mStocktakeList.add(0, stocktake);
     }
 
 
@@ -102,6 +77,33 @@ public class Data implements Serializable {
         return mStocktakeList.get(i);
     }
 
+    public String ToString() {
+        StringBuilder data;
+        data = new StringBuilder("\"START-OF-TIMBER-SMART-DATA\"");
+        for (int i=0; i<mStocktakeList.size(); i++) {
+            data.append("\"Stock-take-start\"");
+            data.append("\"").append(mStocktakeList.get(i).getStocktakeString()).append("\"");
+            data.append("\"").append(mStocktakeList.get(i).getDateCreated()).append("\"");
+            data.append("\"").append(mStocktakeList.get(i).getDateModified()).append("\"");
+            for (int j = 0; j<mStocktakeList.get(i).getAreaList().size(); j++){
+                data.append("\"Area-start\"");
+                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getAreaString()).append("\"");
+                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getDate()).append("\"");
+                data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getPreCount()).append("\"");
+                for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
+                    data.append("\"Barcode-start\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode()).append("\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getDateTime()).append("\"");
+                    data.append("\"").append(mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getArea()).append("\"");
+                    data.append("\"Barcode-end\"");
+                }
+                data.append("\"Area-end\"");
+            }
+            data.append("\"Stock-take-end\"");
+        }
+        data.append("\"END-OF-TIMBER-SMART-DATA\"");
+        return data.toString();
+    }
 
     /*
      *       Rules for saving data:
@@ -133,6 +135,7 @@ public class Data implements Serializable {
                 data += "\"Area-start\"";
                 data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getAreaString() + "\"";
                 data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getDate() + "\"";
+                //data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getPreCount + "\"";
                 for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
                     data += "\"Barcode-start\"";
                     data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode() + "\"";
