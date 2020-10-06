@@ -16,7 +16,7 @@
 
         <activity
             android:name=".ActivityMain"
-            android:windowSoftInputMode="adjustNothing|stateHidden"
+
             android:label="@string/title_activity_home_screen"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,11 +28,10 @@
         </activity>
         <activity
             android:name=".ScanningScreen"
-            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".AreasScreen"
-            android:windowSoftInputMode="adjustNothing|stateHidden"
+
             android:label="@string/title_activity_rows_screen"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.NoActionBar" />

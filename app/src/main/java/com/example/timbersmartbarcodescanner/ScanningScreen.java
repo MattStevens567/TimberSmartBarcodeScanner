@@ -33,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ScanningScreen extends Activity implements Serializable {
+public class ScanningScreen extends Activity implements Serializable, CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
 
     private static final String TAG = "ScanningScreen";
 
@@ -344,8 +344,8 @@ public class ScanningScreen extends Activity implements Serializable {
         startActivity(intents);
     }
 
-    Camera Methods/classes
-    usbCameraActivity Class
+//    Camera Methods/classes
+//    usbCameraActivity Class
 
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener() {
 

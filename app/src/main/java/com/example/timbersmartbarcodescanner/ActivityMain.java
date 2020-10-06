@@ -119,7 +119,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     protected void onDestroy() {
         super.onDestroy();
         try {
-           // writeFileOnInternalStorage();
+           writeFileOnInternalStorage();
         } catch (Exception e) {
             e.printStackTrace();
         }

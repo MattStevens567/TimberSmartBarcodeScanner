@@ -11,8 +11,8 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/ScanningScreenToolBar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="6"
+        android:layout_height="60dp"
+        android:layout_weight="0"
         android:background="@color/colorTimberSmartPurple"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -31,8 +31,8 @@
     <!--    Barcode/Enter/Counters    Layout_Weight: 10-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_height="150dp"
+        android:layout_weight="0"
         android:orientation="horizontal">
 
         <EditText
@@ -62,43 +62,6 @@
             android:layout_height="match_parent"
             android:layout_weight="40"
             android:baselineAligned="false">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/textViewTextPreCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/ScanningScreenPreCount">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/textViewTextDifference"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/difference">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/textViewTextCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="@string/count">
-
-                </TextView>
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -137,6 +100,43 @@
 
                 </TextView>
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textViewTextPreCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/ScanningScreenPreCount">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textViewTextDifference"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/difference">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textViewTextCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/count">
+
+                </TextView>
             </LinearLayout>
 
             <Button
@@ -228,12 +228,12 @@
             </ListView>
         </LinearLayout>
 
-        <!--        <com.serenegiant.usb.widget.UVCCameraTextureView-->
-        <!--            android:id="@+id/TextureViewCamera"-->
-        <!--            android:layout_width="wrap_content"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_gravity="center"-->
-        <!--            android:layout_weight="10" />-->
+                <com.serenegiant.usb.widget.UVCCameraTextureView
+                    android:id="@+id/TextureViewCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="10" />
 
 
     </LinearLayout>
