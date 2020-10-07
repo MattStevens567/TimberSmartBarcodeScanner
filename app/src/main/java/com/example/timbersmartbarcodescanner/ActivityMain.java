@@ -197,6 +197,9 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         mListView.invalidateViews();
                         Log.d(TAG, "Reached line 198!");
                         newStocktakeItem.setText("");
+                        stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                        mListView.setAdapter(stockTakeListAdapter);
+                        mListView.invalidateViews();
                     }
                 }
                 else {
