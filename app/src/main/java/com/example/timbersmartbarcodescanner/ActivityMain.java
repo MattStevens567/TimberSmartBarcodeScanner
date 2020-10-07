@@ -401,7 +401,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         String[] AreaDate = getQuotesString(AreaName[1]);
                         String[] AreaPreCount = getQuotesString(AreaDate[1]);
                         Area tempArea = new Area(AreaName[0], AreaDate[0], AreaPreCount[0]);
-                        newContents = getQuotesString(AreaPreCount[0]);
+                        newContents = getQuotesString(AreaPreCount[1]);
 
                         Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
 //asd
