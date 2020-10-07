@@ -287,7 +287,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                 data.append("\n" + area.getAreaString() + ',' + barcode.getBarcode());
             }
         }
-
+//
         try {
             // Generating file name e.g. Stocktake_5.csv
             // Uses name to create file as well
