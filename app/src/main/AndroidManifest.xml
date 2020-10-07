@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".ScanningScreen"
+            android:windowSoftInputMode="adjustPan"
             android:screenOrientation="landscape"/>
         <activity
             android:name=".AreasScreen"
