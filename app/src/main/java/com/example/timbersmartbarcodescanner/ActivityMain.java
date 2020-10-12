@@ -191,11 +191,8 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         Toast.makeText(this, "Field is empty, please add in a name for the Stock take", Toast.LENGTH_SHORT).show();
                     } else {
                         Data.getDataInstance().addStocktake(new Stocktake(newStocktakeName));
-                        Log.d(TAG, "Reached line 194!");
                         stockTakeListAdapter.notifyDataSetChanged();
-                        Log.d(TAG, "Reached line 196!");
                         mListView.invalidateViews();
-                        Log.d(TAG, "Reached line 198!");
                         newStocktakeItem.setText("");
                         stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
                         mListView.setAdapter(stockTakeListAdapter);

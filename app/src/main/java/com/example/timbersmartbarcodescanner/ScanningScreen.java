@@ -49,6 +49,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
 
 
     int passedAreaIndex, passedStocktakeIndex;
+
     //Camera Variables
     private View mTextureView;
     private UVCCameraHelper mCameraHelper;
@@ -120,12 +121,9 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         mPreCount.setText(String.valueOf(mPreCountGlobal));
 
 
-
         mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, getAreaOnFromPassedInstance().getBarcodeList());
         mListView.setAdapter(mBarcodeListAdapter);
 
-        //update();
-        Log.d(TAG, "Reached Line 127!");
         // When enter is pressed, adds on a \n character
         // Program then picks up this change and saves the barcode
         mEnter.setOnClickListener((View v) -> {
@@ -142,7 +140,6 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
             }
             mBarcode.setText(temp);
         });
-        Log.d(TAG, "Reached Line 144!");
 
         mConfirmPreCount.setOnClickListener((View v) -> {
             String tempString = mPreCount.getText().toString();
@@ -164,10 +161,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
             mBarcode.requestFocus();
 
         });
-
-        Log.d(TAG, "Reached Line 167!");
         initTextWatchers();
-        Log.d(TAG, "Reached Line 169! XD");
     }
 
     public Area getAreaOnFromPassedInstance() throws Exception {
@@ -267,10 +261,33 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         if (unique) {
             mCountGlobal++;
             getAreaOnFromPassedInstance().addBarcode(new Barcode(barcode, getAreaOnFromPassedInstance().getAreaString()));
+            writeFileOnInternalStorage();
         } else {
             Toast.makeText(this, "Barcode ignored, already in system", Toast.LENGTH_LONG).show();
         }
     }
+
+    public void DeleteRow(View view) throws Exception {
+        LinearLayout parent = (LinearLayout) view.getParent();
+        TextView child = (TextView)parent.getChildAt(0);
+        String item = child.getText().toString();
+        Log.i(TAG, "DeleteRow: item ");
+        Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
+        for (int i=0;i <getAreaOnFromPassedInstance().getBarcodeList().size();i++){
+            if (getAreaOnFromPassedInstance().getBarcodeList().get(i).getBarcode().equals(item)){
+                getAreaOnFromPassedInstance().getBarcodeList().remove(i);
+                mCountGlobal--;
+                calculateDifference();
+                writeFileOnInternalStorage();
+                view.getId();
+                mBarcodeListAdapter.notifyDataSetChanged();
+                mListView.invalidateViews();
+                break;
+            }
+
+        }
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -321,28 +338,8 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         }
     }
 
-    public void DeleteRow(View view) throws Exception {
-        LinearLayout parent = (LinearLayout) view.getParent();
-        TextView child = (TextView)parent.getChildAt(0);
-        String item = child.getText().toString();
-        Log.i(TAG, "DeleteRow: item ");
-        Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
-        for (int i=0;i <getAreaOnFromPassedInstance().getBarcodeList().size();i++){
-            if (getAreaOnFromPassedInstance().getBarcodeList().get(i).getBarcode().equals(item)){
-                getAreaOnFromPassedInstance().getBarcodeList().remove(i);
-                view.getId();
-                mBarcodeListAdapter.notifyDataSetChanged();
-                mListView.invalidateViews();
-                break;
-            }
 
-        }
-    }
 
-    public void BackHandler(View view) {
-        Intent intents = new Intent(ScanningScreen.this, AreasScreen.class);
-        startActivity(intents);
-    }
 
 //    Camera Methods/classes
 //    usbCameraActivity Class
@@ -372,7 +369,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         @Override
         public void onConnectDev(UsbDevice device, boolean isConnected) {
             if (!isConnected) {
-                Toast.makeText(ScanningScreen.this,"fail to connect,please check resolution params",Toast.LENGTH_LONG).show();
+                Toast.makeText(ScanningScreen.this,"Failed to connect, please check resolution params",Toast.LENGTH_LONG).show();
                 isPreview = false;
             } else {
                 isPreview = true;

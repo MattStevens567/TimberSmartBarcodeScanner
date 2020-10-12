@@ -63,23 +63,26 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         mAddArea.setOnClickListener(view -> {
             try {
                 boolean unique = true;
+                String areaName;
+                areaName = mNewArea.getText().toString();
+
                 if(!mNewArea.getText().toString().equals("")){
                     for (int i = 0; i < getStocktakeFromData(passedStockTakeIndex).getAreaList().size(); i++) {
-
-                        if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(mNewArea.getText().toString())){
+                        if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(areaName)){
                             unique = false;
                         }
                     }
+
                     if (unique) {
-                        Area mArea = new Area(mNewArea.getText().toString());
+                        Area mArea = new Area(areaName);
                         getStocktakeFromData(passedStockTakeIndex).addArea(mArea);
                     }
                     else {
-                        Toast.makeText(AreasScreen.this, "There is already an area which exists under this name, consider renaming the new area", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AreasScreen.this, areaName + "already exists, please use different name", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
-                    Toast.makeText(AreasScreen.this, "Field is empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AreasScreen.this, "Field is empty, please add in a name for area", Toast.LENGTH_SHORT).show();
                 }
 
             } catch (Exception e) {
@@ -124,7 +127,6 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
         int areaIndex=0;
-        Toast.makeText(this, "Going to " + item, Toast.LENGTH_LONG).show();
         for (int i = 0; i <getStocktakeFromData(passedStockTakeIndex).getAreaList().size(); i++) {
             if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(item)) {
                 areaIndex = i;
