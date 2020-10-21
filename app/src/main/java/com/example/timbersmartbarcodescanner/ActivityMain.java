@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,13 +23,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingDeque;
 
 /*
 * This class is the back-end for the start up screen, AKA the Stock take screen.
@@ -50,35 +46,26 @@ import java.util.concurrent.BlockingDeque;
 * Matt Stevens,
 * Tyron Landman.
 * Year: 2020.
-*
-*
-*  //To do:
-*                                   High priority:
-*   -Import/Export data so you don't lose all your data when you close/start the app
-*   -Exports disappearing off the adapter when you rotate/go back to activity main
-*
-*                                   low priority:
-*   - Timber Smart logo gets squashed when using the keyboard on activity main
-*
-*
-*
-*
-* */
+*/
+
 //Locked the screen orientation to landscape, this was used as a shortcut and will need to be fixed in future versions due to the time constraint.
 public class ActivityMain extends AppCompatActivity implements Serializable {
 
     private static final String FILE_NAME = "timbersmart.txt";
-    boolean temp = true;
     private static final String TAG = "ActivityMainDebug";
-    private StockTakeListAdapter stockTakeListAdapter;
+
+    private StocktakeListAdapter mStocktakeListAdapter;
+    private ListView mListView;
+    private Button mAddNewStocktake;
+    private EditText mNewStocktakeName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // Default --------------------------
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //--------------------------
-        if ((checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) || (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
+
+        if ((checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) ||
+                (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED))
             requestPermissions(
                     new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         else {
@@ -96,10 +83,10 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions, int[] grantResults) {
         // check all permissions have been granted
-        boolean granted=true;
+        boolean granted = true;
         for(int result: grantResults) {
             if (result != PackageManager.PERMISSION_GRANTED) {
-                granted=false;
+                granted = false;
             }
         }
         if(granted) {
@@ -133,57 +120,26 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         }
 
         //Set up views -------------------------------
-        ListView mListView = findViewById(R.id.ActivityMainListViewStocktakes);
-        Button addNew = findViewById(R.id.ActivityMainAddNewStocktake);
-        EditText newStocktakeItem = findViewById(R.id.ActivityMainEditStocktake);
+        mListView = findViewById(R.id.ActivityMainListViewStocktakes);
+        mAddNewStocktake = findViewById(R.id.ActivityMainAddNewStocktake);
+        mNewStocktakeName = findViewById(R.id.ActivityMainEditStocktake);
         //--------------------------------------------------------------
 
-        // Adding test data ----------------------------------------------------
-        //Test data not used as the app is pretty much functional at this point
-//        sampleStockTakes = new ArrayList<Stocktake>();
-//        try {
-//            Data.getDataInstance();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        for (int i = 0; i < 5; i++) {
-//            try {
-//                Data.getDataInstance().addStocktake(new Stocktake( String.valueOf(i*292%100)));
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-
-        //----------------------------------------------------------------------------
-
         // Layout stuff----------------------------------------
-
         try {
-            stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
-            mListView.setAdapter(stockTakeListAdapter);
+            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+            mListView.setAdapter(mStocktakeListAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }
         //----------------------------------------------------------------------------
 
 
-//        //Listing for an Area----------------------------------------
-//        Intent intent = getIntent();
-//        if (intent.getSerializableExtra("stocktake") != null) {
-//            Stocktake tester = (Stocktake) intent.getSerializableExtra("stocktake");
-//            for (int t = 0; t < sampleStockTakes.size(); t++) {
-//                if (sampleStockTakes.get(t).getmStringStockTakeName().equals(tester.getmStringStockTakeName())) {
-//                    sampleStockTakes.get(t).setmStockTakeAreas(tester.getmStockTakeAreas());
-//                }
-//            }
-//
-//        }
-//        //----------------------------------------------------------------------------
 
         // Add addNew stocktake button onclick listener----------------
         //    StockTakeListAdapter finalStockTakeListAdapter = stockTakeListAdapter;
-        addNew.setOnClickListener(view -> {
-        String newStocktakeName = newStocktakeItem.getText().toString();
+        mAddNewStocktake.setOnClickListener(view -> {
+        String newStocktakeName = mNewStocktakeName.getText().toString();
 
             try {
                 if (Data.getDataInstance().getStocktakeList().size() == 0){
@@ -191,11 +147,11 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         Toast.makeText(this, "Field is empty, please add in a name for the Stock take", Toast.LENGTH_SHORT).show();
                     } else {
                         Data.getDataInstance().addStocktake(new Stocktake(newStocktakeName));
-                        stockTakeListAdapter.notifyDataSetChanged();
+                        mStocktakeListAdapter.notifyDataSetChanged();
                         mListView.invalidateViews();
-                        newStocktakeItem.setText("");
-                        stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
-                        mListView.setAdapter(stockTakeListAdapter);
+                        mNewStocktakeName.setText("");
+                        mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                        mListView.setAdapter(mStocktakeListAdapter);
                         mListView.invalidateViews();
                     }
                 }
@@ -216,10 +172,10 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         if (unique) {
                             Stocktake temp = new Stocktake(newStocktakeName);
                             Data.getDataInstance().addStocktake(temp);
-                            stockTakeListAdapter = new StockTakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
-                            mListView.setAdapter(stockTakeListAdapter);
+                            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                            mListView.setAdapter(mStocktakeListAdapter);
                             mListView.invalidateViews();
-                            newStocktakeItem.setText("");
+                            mNewStocktakeName.setText("");
                         } else if (newStocktakeName.equals("")) {
                             Toast.makeText(this, "Field is empty, please add in a name for the Stocktake", Toast.LENGTH_SHORT).show();
                         } else {
@@ -236,9 +192,9 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         //----------------------------------------------------------------------------
     }
 
-    /*This function acts as the onClickListener for the view button found on each stock-take in the activity main screen,
-     it works by finding the index of which item is clicked, it then sends that index to the next screen (areas) so it knows which stock-take's
-     areas it should be editing. */
+    // This function acts as the onClickListener for the view button found on each stock-take in the activity main screen,
+    // it works by finding the index of which item is clicked, it then sends that index to the next screen (areas) so it knows which stock-take's
+    // areas it should be editing. */
     public void StockTakeViewButtonClick(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
@@ -259,16 +215,14 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         startActivity(intent);
     }
 
-    // Exporting stuff
-    // Exports Area name and the barcode assigned to that area
+
+    // Exports Area name and the barcode assigned to that area as specified by TimberSmart
+    // Export can be sent to google drive, email, etc.
     public void export(View view) throws Exception {
 
         View parentRow = (View) view.getParent();
         ListView listView = (ListView) parentRow.getParent();
         final int position = listView.getPositionForView(parentRow);
-        Log.d(TAG, "parentRow: " + parentRow);
-        Log.d(TAG, "listView: " + listView);
-        Log.d(TAG, "position: " + position);
 
         StringBuilder data = new StringBuilder();
         data.append("Area, Barcode");
@@ -315,7 +269,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause: onpause run");
         try {
             writeFileOnInternalStorage();
         } catch (Exception e) {
@@ -326,7 +279,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     @Override
     protected void onResume(){
         super.onResume();
-        Log.d(TAG, "onResume: on resume run");
         try {
             readFromFile();
         } catch (Exception e) {
@@ -337,7 +289,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
     public void writeFileOnInternalStorage() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
-        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
         FileOutputStream stream = new FileOutputStream(file);
         String stringToWriteInFile = Data.getDataInstance().ToString();
         try {
@@ -377,31 +328,29 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         ArrayList<Stocktake> tempArrayListStocktake = new ArrayList<Stocktake>();
         String contents = new String(bytes);
         String[] newContents = getQuotesString(contents);
-        Log.d(TAG, "readFromFile: Should be start-of-timber-smart-data : " + newContents[0]);
+
+        // Start of file read
         if (newContents[0].equals("START-OF-TIMBER-SMART-DATA")) {
             newContents = getQuotesString(newContents[1]);
-            //Load contents
-            Log.d(TAG, "readFromFile: Should be stock-take-start : " + newContents[0]);
+
+            // Start reading in stocktakes
             while (newContents[0].equals("Stock-take-start")) {
-                    //Load contents
 
                     String[] StockTakeName = getQuotesString(newContents[1]);
                     String[] StockTakeDateCreated = getQuotesString(StockTakeName[1]);
                     String[] StockTakeDateModified = getQuotesString(StockTakeDateCreated[1]);
                     Stocktake tempStocktake = new Stocktake(StockTakeName[0], StockTakeDateCreated[0], StockTakeDateModified[0]);
-
                     newContents = getQuotesString(StockTakeDateModified[1]);
-                    Log.d(TAG, "readFromFile: Should be area-start : " + newContents[0]);
+
+                    // Start reading in areas related to stocktake
                     while (newContents[0].equals("Area-start")) {
-                        //Load contents
                         String[] AreaName = getQuotesString(newContents[1]);
                         String[] AreaDate = getQuotesString(AreaName[1]);
                         String[] AreaPreCount = getQuotesString(AreaDate[1]);
                         Area tempArea = new Area(AreaName[0], AreaDate[0], AreaPreCount[0]);
                         newContents = getQuotesString(AreaPreCount[1]);
 
-                        Log.d(TAG, "readFromFile: Should be Barcode-start : " + newContents[0]);
-//asd
+//asd                   // Start reading in barcodes related to area
                         while (newContents[0].equals("Barcode-start")) {
 
                             String[] Barcode = getQuotesString(newContents[1]);
@@ -410,31 +359,20 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                             Barcode tempBarcode = new Barcode(Barcode[0], BarcodeDate[0], BarcodeArea[0]);
                             tempArea.addBarcode(tempBarcode);
 
-                            newContents = getQuotesString(BarcodeArea[1]); //barcode end
-                            newContents = getQuotesString(newContents[1]); // set to barcode start
+                            newContents = getQuotesString(BarcodeArea[1]);
+                            newContents = getQuotesString(newContents[1]);
 
                         }
                         tempStocktake.addArea(tempArea);
-                        newContents = getQuotesString(newContents[1]); //area end
-                        Log.d(TAG, "readFromFile: area start: " + newContents[0]);
+                        newContents = getQuotesString(newContents[1]);
                     }
                     tempArrayListStocktake.add(tempStocktake);
-                    newContents = getQuotesString(newContents[1]); //stockatke end
+                    newContents = getQuotesString(newContents[1]);
             }
         }
-        Log.d(TAG, "readFromFile: Stocktake read");
+
         Data.getDataInstance().setStocktakeList(tempArrayListStocktake);
-        temp = false;
-        try {
-            Log.d(TAG, "readFromFile: Logging data loaded in:\n");
-            Log.d(TAG, "readFromFile: Stocktake name: " + tempArrayListStocktake.get(0).getStocktakeString());
-            Log.d(TAG, "readFromFile: Stocktake area: " + tempArrayListStocktake.get(0).getAreaAtPosition(0).getAreaString());
-            Log.d(TAG, "readFromFile: Stocktake barcode: " + tempArrayListStocktake.get(0).getAreaList().get(0).getBarcodeList().get(0).getBarcode() + "\n");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "readFromFile bug: "+ e.getMessage() + e.getCause());
-        }
-        stockTakeListAdapter.notifyDataSetChanged();
+        mStocktakeListAdapter.notifyDataSetChanged();
 
     }
 
@@ -455,28 +393,6 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
         return newContents;
     }
 
-    public boolean easySave(){
-        FileOutputStream fos;
-        ObjectOutputStream oos=null;
-        try{
-            fos = getApplicationContext().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(Data.getDataInstance().getStocktakeList());
-            oos.close();
-            return true;
-        }catch(Exception e){
-            Log.e("Internal Stocktake Save", "Cant save records"+e.getMessage());
-            return false;
-        }
-        finally{
-            if(oos!=null)
-                try{
-                    oos.close();
-                }catch(Exception e){
-                    Log.e("Internal Stocktake Save", "Error while closing stream "+e.getMessage());
-                }
-        }
-    }
 
 
 }

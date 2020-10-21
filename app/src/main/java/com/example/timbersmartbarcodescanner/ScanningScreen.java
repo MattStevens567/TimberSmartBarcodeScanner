@@ -1,13 +1,11 @@
 package com.example.timbersmartbarcodescanner;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.usb.UsbDevice;
 import android.os.Bundle;
-import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,15 +21,11 @@ import android.widget.Toast;
 import com.jiangdg.usbcamera.UVCCameraHelper;
 import com.serenegiant.usb.CameraDialog;
 import com.serenegiant.usb.USBMonitor;
-import com.serenegiant.usb.common.AbstractUVCCameraHandler;
 import com.serenegiant.usb.widget.CameraViewInterface;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class ScanningScreen extends Activity implements Serializable, CameraDialog.CameraDialogParent, CameraViewInterface.Callback {
 
@@ -48,7 +42,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     private BarcodeListAdapter mBarcodeListAdapter;
 
 
-    int passedAreaIndex, passedStocktakeIndex;
+    int mPassedAreaIndex, mPassedStocktakeIndex;
 
     //Camera Variables
     private View mTextureView;
@@ -66,9 +60,10 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
 
         //grab Area object from AreaScreen
         Intent intent = getIntent();
-        passedAreaIndex = intent.getIntExtra("Area Index", -1);
-        passedStocktakeIndex = intent.getIntExtra("Stocktake Index", -1);
+        mPassedAreaIndex = intent.getIntExtra("Area Index", -1);
+        mPassedStocktakeIndex = intent.getIntExtra("Stocktake Index", -1);
         mTextureView = findViewById(R.id.TextureViewCamera);
+
         mUVCCameraView = (CameraViewInterface) mTextureView;
         mUVCCameraView.setCallback(this);
         mCameraHelper = UVCCameraHelper.getInstance();
@@ -77,12 +72,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         mCameraHelper.initUSBMonitor(this, mUVCCameraView, listener);
 
 //
-        mCameraHelper.setOnPreviewFrameListener(new AbstractUVCCameraHandler.OnPreViewResultListener() {
-            @Override
-            public void onPreviewResult(byte[] nv21Yuv) {
-                Log.d(TAG, "onPreviewResult: "+nv21Yuv.length);
-            }
-        });
+        mCameraHelper.setOnPreviewFrameListener(nv21Yuv -> Log.d(TAG, "onPreviewResult: "+nv21Yuv.length));
 
 
 
@@ -165,21 +155,17 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     }
 
     public Area getAreaOnFromPassedInstance() throws Exception {
-        return Data.getDataInstance().getStocktakeList().get(passedStocktakeIndex).getAreaList().get(passedAreaIndex);
+        return Data.getDataInstance().getStocktakeList().get(mPassedStocktakeIndex).getAreaList().get(mPassedAreaIndex);
     }
 
     public void initTextWatchers() {
         // barcodeTextWatcher
         TextWatcher barcodeTextWatcher = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Unused
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                // Unused
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable barcodeEditable) {
@@ -206,7 +192,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
                         toast.show();
 
                         // Send Barcode string to addBarcodeLogic function
-                        // This function handles DateTime etc. to create barcode object
+                        // This function handles creation of barcode object
                         try {
                             addBarcodeLogic(temp);
                         } catch (Exception e) {
@@ -271,7 +257,6 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
-        Log.i(TAG, "DeleteRow: item ");
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
         for (int i=0;i <getAreaOnFromPassedInstance().getBarcodeList().size();i++){
             if (getAreaOnFromPassedInstance().getBarcodeList().get(i).getBarcode().equals(item)){
@@ -291,7 +276,6 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause: onpause run");
         try {
             writeFileOnInternalStorage();
         } catch (Exception e) {
@@ -328,7 +312,6 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     public void writeFileOnInternalStorage() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
-        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
         FileOutputStream stream = new FileOutputStream(file);
         String stringToWriteInFile = Data.getDataInstance().ToString();
         try {
@@ -341,9 +324,11 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
 
 
 
-//    Camera Methods/classes
-//    usbCameraActivity Class
-
+    // Camera and usbCameraActivity Methods/classes
+    // Documentation for Library can be found here - https://github.com/jiangdongguo/AndroidUSBCamera#readme
+    //
+    // Picks up on whether or not USB camera is connected or disconnected
+    // This is required for the guidance camera to work
     private UVCCameraHelper.OnMyDevConnectListener listener = new UVCCameraHelper.OnMyDevConnectListener() {
 
         @Override
@@ -359,7 +344,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
 
         @Override
         public void onDettachDev(UsbDevice device) {
-            // close camera(must have)
+            // Close camera(must have)
             if (isRequest) {
                 isRequest = false;
                 mCameraHelper.closeCamera();
@@ -369,57 +354,30 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         @Override
         public void onConnectDev(UsbDevice device, boolean isConnected) {
             if (!isConnected) {
-                Toast.makeText(ScanningScreen.this,"Failed to connect, please check resolution params",Toast.LENGTH_LONG).show();
+                Toast.makeText(ScanningScreen.this,"Failed to connect, please check resolution parameters",Toast.LENGTH_LONG).show();
                 isPreview = false;
             } else {
                 isPreview = true;
-                Toast.makeText(ScanningScreen.this,"connecting",Toast.LENGTH_LONG).show();
-                // initialize seekbar
-                // need to wait UVCCamera initialize over
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Thread.sleep(2500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        Looper.prepare();
-                        Looper.loop();
-                    }
-                }).start();
+                Toast.makeText(ScanningScreen.this,"Connecting",Toast.LENGTH_LONG).show();
             }
         }
 
         @Override
-        public void onDisConnectDev(UsbDevice device) {
-
-        }
+        public void onDisConnectDev(UsbDevice device) {}
     };
-    public boolean isCameraOpened() {
-        return mCameraHelper.isCameraOpened();
-    }
 
     @Override
     public USBMonitor getUSBMonitor() {
         return mCameraHelper.getUSBMonitor();
     }
-    @Override
-    public void onDialogResult(boolean canceled) {
 
-    }
     @Override
     public void onSurfaceCreated(CameraViewInterface view, Surface surface) {
-        // must have
+        // Must have
         if (!isPreview && mCameraHelper.isCameraOpened()) {
             mCameraHelper.startPreview(mUVCCameraView);
             isPreview = true;
         }
-    }
-
-    @Override
-    public void onSurfaceChanged(CameraViewInterface view, Surface surface, int width, int height) {
-
     }
 
     @Override
@@ -430,4 +388,12 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
             isPreview = false;
         }
     }
+
+    // Unused but needed to be overridden ==========================================================
+    @Override
+    public void onDialogResult(boolean canceled) {}
+
+    @Override
+    public void onSurfaceChanged(CameraViewInterface view, Surface surface, int width, int height) {}
+    // =============================================================================================
 }

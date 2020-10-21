@@ -22,12 +22,12 @@ import java.io.Serializable;
 public class AreasScreen extends AppCompatActivity implements Serializable {
     private static final String TAG = "AreasScreen";
 
-    AreaListAdapter areaListAdapter;
-    private int passedStockTakeIndex;
-    ListView mListView;
-    Button mAddArea;
-    EditText mNewArea;
-    TextView mRowLocation;
+    private AreaListAdapter mAreaListAdapter;
+    private int mPassedStockTakeIndex;
+    private ListView mListView;
+    private Button mAddNewArea;
+    private EditText mNewAreaName;
+    private TextView mRowLocation;
 
 
     @Override
@@ -35,47 +35,47 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rows_screen);
 
-        mListView = findViewById(R.id.rowListView);
         // This screen constructs when we have clicked on a stocktake, so we need to retrieve
         // that specific stock take it is passed an integer of the index.
-
         // Called when returning from barcode screen
         Intent intent = getIntent();
-        passedStockTakeIndex = intent.getIntExtra("Stocktake", -1);
+        mPassedStockTakeIndex = intent.getIntExtra("Stocktake", -1);
+
+        mListView = findViewById(R.id.rowListView);
+
         try {
-            areaListAdapter = new AreaListAdapter(this, R.layout.row_area, getStocktakeFromData(passedStockTakeIndex).getAreaList());
-            mListView.setAdapter(areaListAdapter);
+            mAreaListAdapter = new AreaListAdapter(this, R.layout.row_area, getStocktakeFromData(mPassedStockTakeIndex).getAreaList());
+            mListView.setAdapter(mAreaListAdapter);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         mRowLocation = findViewById(R.id.rowLocation);
         try {
-            mRowLocation.setText(getStocktakeFromData(passedStockTakeIndex).getStocktakeString());
+            mRowLocation.setText(getStocktakeFromData(mPassedStockTakeIndex).getStocktakeString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        mNewAreaName = findViewById(R.id.rowsAddAreaEdit);
 
-        mNewArea = findViewById(R.id.rowsAddAreaEdit);
-
-        mAddArea = findViewById(R.id.rowAddButton);
-        mAddArea.setOnClickListener(view -> {
+        mAddNewArea = findViewById(R.id.rowAddButton);
+        mAddNewArea.setOnClickListener(view -> {
             try {
                 boolean unique = true;
                 String areaName;
-                areaName = mNewArea.getText().toString();
+                areaName = mNewAreaName.getText().toString();
 
-                if(!mNewArea.getText().toString().equals("")){
-                    for (int i = 0; i < getStocktakeFromData(passedStockTakeIndex).getAreaList().size(); i++) {
-                        if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(areaName)){
+                if(!mNewAreaName.getText().toString().equals("")){
+                    for (int i = 0; i < getStocktakeFromData(mPassedStockTakeIndex).getAreaList().size(); i++) {
+                        if (getStocktakeFromData(mPassedStockTakeIndex).getAreaList().get(i).getAreaString().equals(areaName)){
                             unique = false;
                         }
                     }
 
                     if (unique) {
                         Area mArea = new Area(areaName);
-                        getStocktakeFromData(passedStockTakeIndex).addArea(mArea);
+                        getStocktakeFromData(mPassedStockTakeIndex).addArea(mArea);
                     }
                     else {
                         Toast.makeText(AreasScreen.this, areaName + "already exists, please use different name", Toast.LENGTH_SHORT).show();
@@ -90,7 +90,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
             }
             update();
             Toast.makeText(AreasScreen.this, "Area added", Toast.LENGTH_LONG).show();
-            mNewArea.getText().clear();
+            mNewAreaName.getText().clear();
         });
 
     }
@@ -102,7 +102,6 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause: onpause run");
         try {
             writeFileOnInternalStorage();
         } catch (Exception e) {
@@ -113,7 +112,6 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
     public void writeFileOnInternalStorage() throws Exception {
         File path = getApplicationContext().getExternalFilesDir(null);
         File file = new File(path, "my-file-name.txt");
-        Log.d(TAG, "writeFileOnInternalStorage: file path: "+ path);
         FileOutputStream stream = new FileOutputStream(file);
         String stringToWriteInFile = Data.getDataInstance().ToString();
         try {
@@ -127,13 +125,13 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
         int areaIndex=0;
-        for (int i = 0; i <getStocktakeFromData(passedStockTakeIndex).getAreaList().size(); i++) {
-            if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(item)) {
+        for (int i = 0; i <getStocktakeFromData(mPassedStockTakeIndex).getAreaList().size(); i++) {
+            if (getStocktakeFromData(mPassedStockTakeIndex).getAreaList().get(i).getAreaString().equals(item)) {
                 areaIndex = i;
             }
         }
         Intent intent = new Intent(AreasScreen.this, ScanningScreen.class);
-        intent.putExtra("Stocktake Index", passedStockTakeIndex);
+        intent.putExtra("Stocktake Index", mPassedStockTakeIndex);
         intent.putExtra("Area Index", areaIndex);
         startActivity(intent);
     }
@@ -145,9 +143,9 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         String item = child.getText().toString();
 
         Toast.makeText(this, item +" deleted", Toast.LENGTH_LONG).show();
-        for (int i = 0; i <getStocktakeFromData(passedStockTakeIndex).getAreaList().size(); i++){
-            if (getStocktakeFromData(passedStockTakeIndex).getAreaList().get(i).getAreaString().equals(item)){
-                getStocktakeFromData(passedStockTakeIndex).getAreaList().remove(i);
+        for (int i = 0; i <getStocktakeFromData(mPassedStockTakeIndex).getAreaList().size(); i++){
+            if (getStocktakeFromData(mPassedStockTakeIndex).getAreaList().get(i).getAreaString().equals(item)){
+                getStocktakeFromData(mPassedStockTakeIndex).getAreaList().remove(i);
                 update();
 
                 return;
@@ -156,7 +154,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         }
     }
     public void update(){
-        areaListAdapter.notifyDataSetChanged();
+        mAreaListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();
     }
 }

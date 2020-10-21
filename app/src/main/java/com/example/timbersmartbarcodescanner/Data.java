@@ -13,12 +13,11 @@ import java.io.OutputStreamWriter;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/*
-* This is a singleton class which will hold all the data for each stock take.
-* This was decided to avoid passing bundles across many activities.
-* */
-public class Data implements Serializable {
 
+// This is a singleton class which will hold all the data for each stock take.
+// This was decided to avoid passing bundles across many activities.
+
+public class Data implements Serializable {
 
     private static final String FILENAME = "notused.txt";
     private static String FILE_NAME = "timbersmart.txt";
@@ -26,57 +25,67 @@ public class Data implements Serializable {
     private ArrayList<Stocktake> mStocktakeList;
 
 
-
+    // Attaches a list of stocktakes to the data class
+    // Used when reading in stocktakes from file
     public void setStocktakeList(ArrayList<Stocktake> stocktakeList) {
         mStocktakeList = stocktakeList;
     }
 
+    // Adds new stocktake to the front of the list
+    // This is done so that when the list is displayed, the most recently added is at the top
     public void addStocktake(Stocktake stocktake) {
         mStocktakeList.add(0, stocktake);
     }
 
-
-    private Data(ArrayList<Stocktake> stocktakeList){
-        mStocktakeList = stocktakeList;
-    }
-
+    // When creating a Data object, if it does not exist, it is created
+    // Otherwise nothing happens
     private Data(){
         if (mData == null) mStocktakeList = new ArrayList<Stocktake>();
     }
 
-    public static Data getDataInstance(ArrayList<Stocktake> stocktakeList){
-        if (mData == null){
-            mData = new Data(stocktakeList);
-            return mData;
-        }
-        else {
-//            mData.mStocktakeList = stocktakeList;
-            return mData;
-        }
-    }
-
-
+    // Used to access Data Class values on different screens,
+    // If function is called when no Data object is created,
+    // Then a new blank Data object is created, otherwise previously created Data object is returned
     public static Data getDataInstance() throws Exception {
         if (mData == null){
             mData = new Data();
         }
         return mData;
     }
-//    public static void initialize() throws Exception {
-//        if (mData.easyRead()){
-//        } else {
-//            mData = new Data();
-//        }
-//    }
 
+    // Used to populate listview in Activity Main
     public ArrayList<Stocktake> getStocktakeList() {
         return mStocktakeList;
     }
 
+    // Used to get selected stocktake on areaScreen
+    // Position determined by which item in ListView is clicked
     public Stocktake getStockTake(int i) {
         return mStocktakeList.get(i);
     }
 
+    /*
+     *   Rules for saving data:
+     *   START-OF-TIMBER-SMART-DATA
+     *       STOCKTAKE-START
+     *            "StockTake 1"
+     *            "StockTake Start Date"
+     *            "StockTake Most Recent Edit"
+     *            AREAS-START
+     *                 "Area 1 Name"
+     *                 "Area 1 Date"
+     *                 BARCODE-START
+     *                      "BarcodeValue"
+     *                      "BarcodeDate"
+     *                      "BardcodeArea"
+     *                 BARCODE-END
+     *            AREAS-END
+     *       STOCKTAKE-END
+     *   END-OF-TIMBER-SMART-DATA
+     */
+
+    // Used in when saving Data Class to file
+    // Turns data into text that can be read by readfile function
     public String ToString() {
         StringBuilder data;
         data = new StringBuilder("\"START-OF-TIMBER-SMART-DATA\"");
@@ -104,155 +113,4 @@ public class Data implements Serializable {
         data.append("\"END-OF-TIMBER-SMART-DATA\"");
         return data.toString();
     }
-
-    /*
-     *       Rules for saving data:
-     *       START-OF-TIMBER-SMART-DATA
-     *       STOCKTAKE-START
-     *       "StockTake 1"
-     *       "StockTake Start Date"
-     *       "StockTake Most Recent Edit"
-     *       AREAS-START
-     *       "Area 1 Name"
-     *       "Area 1 Date"
-     *       BARCODE-START
-     *       "BarcodeValue"
-     *       "BarcodeDate"
-     *       "BardcodeArea"
-     *       BARCODE-END
-     *       AREAS-END
-     *       STOCKTAKE-END
-     *       END-OF-TIMBER-SMART-DATA
-     */
-    public void saveToDataToLocalFile(Context context){
-        String data;
-        data = "\"START-OF-TIMBER-SMART-DATA\"";
-        for (int i=0; i<mStocktakeList.size(); i++) {
-            data += "\"Stock-take-start\"";
-            data += "\"" + mStocktakeList.get(i).getDateCreated() + "\"";
-            data += "\"" + mStocktakeList.get(i).getDateModified() + "\"";
-            for (int j = 0; j<mStocktakeList.get(i).getAreaList().size(); j++){
-                data += "\"Area-start\"";
-                data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getAreaString() + "\"";
-                data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getDate() + "\"";
-                //data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getPreCount + "\"";
-                for (int k = 0; k<mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().size(); k++){
-                    data += "\"Barcode-start\"";
-                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getBarcode() + "\"";
-                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getDateTime() + "\"";
-                    data += "\"" + mStocktakeList.get(i).getAreaList().get(j).getBarcodeList().get(k).getArea() + "\"";
-                    data += "\"Barcode-end\"";
-                }
-                data += "\"Area-end\"";
-            }
-            data += "\"Stock-take-end\"";
-        }
-        data = "\"END-OF-TIMBER-SMART-DATA\"";
-        try {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(context.openFileOutput(FILENAME, Context.MODE_PRIVATE));
-            outputStreamWriter.write(data);
-            outputStreamWriter.close();
-        }
-        catch (IOException e) {
-            Log.e("Exception", "File write failed: " + e.toString());
-        }
-    }
-
-//    public boolean easySave(){
-//        FileOutputStream fos;
-//        ObjectOutputStream oos=null;
-//        try{
-////            fos = getApplicationContext().openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-//            oos = new ObjectOutputStream(fos);
-//            oos.writeObject(mStocktakeList);
-//            oos.close();
-//            return true;
-//        }catch(Exception e){
-//            Log.e("Internal Stocktake Save", "Cant save records"+e.getMessage());
-//            return false;
-//        }
-//        finally{
-//            if(oos!=null)
-//                try{
-//                    oos.close();
-//                }catch(Exception e){
-//                    Log.e("Internal Stocktake Save", "Error while closing stream "+e.getMessage());
-//                }
-//        }
-//    }
-
-    public void reallyEasySave(Context context) throws IOException {
-        FileOutputStream fos = context.openFileOutput(FILE_NAME, Context.MODE_PRIVATE);
-        ObjectOutputStream os = new ObjectOutputStream(fos);
-        os.writeObject(this);
-        os.close();
-        fos.close();
-    }
-    public void reallyEasyRead(Context context) throws IOException, ClassNotFoundException {
-        FileInputStream fis = context.openFileInput(FILE_NAME);
-        ObjectInputStream is = new ObjectInputStream(fis);
-        mData = (Data) is.readObject();
-        is.close();
-        fis.close();
-    }
-//    public boolean easyRead(){
-//        FileInputStream fin;
-//        ObjectInputStream ois=null;
-//        try{
-//            fin = getApplicationContext().openFileInput(FILE_NAME);
-//            ois = new ObjectInputStream(fin);
-//            this.mStocktakeList = (ArrayList<Stocktake>) ois.readObject();
-//            ois.close();
-//            Log.v("Internal Stocktake Save", "Records read successfully");
-//            return true;
-//        }catch(Exception e){
-//            Log.e("Internal Stocktake Save", "Cant read saved records"+e.getMessage());
-//            return false;
-//        }
-//        finally{
-//            if(ois!=null)
-//                try{
-//                    ois.close();
-//                }catch(Exception e){
-//                    Log.e("Internal Stocktake Save", "Error in closing stream while reading records"+e.getMessage());
-//                }
-//        }
-//    }
-
-    /*
-     * Rules for loading in data from a file
-     *
-     *  While we haven't read "TIMBER-SMART-DATA-EOF" string
-     *  READ IN STOCK TAKES (maybe a string that says "LOAD STOCKTAKE"
-     *   First Item
-     *
-     *   Example of a saved file:
-     *
-     *  START-OF-TIMBER-SMART-DATA
-     *   STOCKTAKE-START
-     *       "StockTake 1"
-     *       "StockTake Start Date"
-     *       "StockTake Most Recent Edit"
-     *           AREAS-START
-     *           "Area 1 Name"
-     *           "Area 1 Date"
-     *               BARCODE-START
-     *               "BarcodeValue"
-     *               "BarcodeDate"
-     *               "BardcodeArea"
-     *               BARCODE-END
-     *           AREAS-END
-     *   STOCKTAKE-END
-     *  END-OF-TIMBER-SMART-DATA
-     *
-     *       Area1Date
-     *           BARCODE-START
-     *
-     *
-     *
-     */
-    public void loadDataFromLocalFile(){
-
-    }
-
 }

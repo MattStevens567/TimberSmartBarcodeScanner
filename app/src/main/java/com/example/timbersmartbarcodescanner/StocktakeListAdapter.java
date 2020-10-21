@@ -13,21 +13,17 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class StockTakeListAdapter extends ArrayAdapter {
+public class StocktakeListAdapter extends ArrayAdapter {
     private static final String TAG = "StockTakeListAdapter";
     private Context mContext;
     private int mResource;
     private ArrayList<Stocktake> data;
 
-    public StockTakeListAdapter(@NonNull Context context, int resource, ArrayList<Stocktake> stocktakes) {
+    public StocktakeListAdapter(@NonNull Context context, int resource, ArrayList<Stocktake> stocktakes) {
         super(context, resource, stocktakes);
         this.mContext = context;
         this.mResource = resource;
         this.data = stocktakes;
-    }
-
-    public StockTakeListAdapter(@NonNull Context context, int resource) {
-        super(context, resource);
     }
 
     @Override
@@ -55,13 +51,11 @@ public class StockTakeListAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Log.d(TAG, "position: " + position);
         Stocktake stocktake  = (Stocktake) getItem(position);
         String stocktakeName = stocktake.getStocktakeString();
+
         LayoutInflater inflater = LayoutInflater.from(mContext);
         convertView = inflater.inflate(mResource, parent, false);
-
-
 
         TextView textViewStockTakeName = convertView.findViewById(R.id.ActivityMainTextViewStockTakeName);
         textViewStockTakeName.setText(stocktakeName);
