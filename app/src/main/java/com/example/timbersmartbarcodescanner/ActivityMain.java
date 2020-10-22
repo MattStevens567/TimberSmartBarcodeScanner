@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,7 +23,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -127,7 +125,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
 
         // Layout stuff----------------------------------------
         try {
-            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.listview_main, Data.getDataInstance().getStocktakeList());
             mListView.setAdapter(mStocktakeListAdapter);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,7 +148,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         mStocktakeListAdapter.notifyDataSetChanged();
                         mListView.invalidateViews();
                         mNewStocktakeName.setText("");
-                        mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                        mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.listview_main, Data.getDataInstance().getStocktakeList());
                         mListView.setAdapter(mStocktakeListAdapter);
                         mListView.invalidateViews();
                     }
@@ -172,7 +170,7 @@ public class ActivityMain extends AppCompatActivity implements Serializable {
                         if (unique) {
                             Stocktake temp = new Stocktake(newStocktakeName);
                             Data.getDataInstance().addStocktake(temp);
-                            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.activity_main_adapter_list_view_stocktakes, Data.getDataInstance().getStocktakeList());
+                            mStocktakeListAdapter = new StocktakeListAdapter(this, R.layout.listview_main, Data.getDataInstance().getStocktakeList());
                             mListView.setAdapter(mStocktakeListAdapter);
                             mListView.invalidateViews();
                             mNewStocktakeName.setText("");

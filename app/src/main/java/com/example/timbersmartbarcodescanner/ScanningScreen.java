@@ -105,7 +105,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         mPreCount.setText(String.valueOf(mPreCountGlobal));
 
 
-        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.scanning_screen_listview_layout, getAreaOnFromPassedInstance().getBarcodeList());
+        mBarcodeListAdapter = new BarcodeListAdapter(this, R.layout.listview_scanning_screen, getAreaOnFromPassedInstance().getBarcodeList());
         mListView.setAdapter(mBarcodeListAdapter);
 
         // When enter is pressed, adds on a \n character

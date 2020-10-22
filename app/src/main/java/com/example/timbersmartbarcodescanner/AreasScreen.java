@@ -43,7 +43,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         mListView = findViewById(R.id.rowListView);
 
         try {
-            mAreaListAdapter = new AreaListAdapter(this, R.layout.row_area, getStocktakeFromData(mPassedStockTakeIndex).getAreaList());
+            mAreaListAdapter = new AreaListAdapter(this, R.layout.listview_areas_screen, getStocktakeFromData(mPassedStockTakeIndex).getAreaList());
             mListView.setAdapter(mAreaListAdapter);
         } catch (Exception e) {
             e.printStackTrace();
