@@ -1,7 +1,6 @@
 package com.example.timbersmartbarcodescanner;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +16,19 @@ public class StocktakeListAdapter extends ArrayAdapter {
     private static final String TAG = "StockTakeListAdapter";
     private Context mContext;
     private int mResource;
-    private ArrayList<Stocktake> data;
+    private ArrayList<Stocktake> mData;
 
     public StocktakeListAdapter(@NonNull Context context, int resource, ArrayList<Stocktake> stocktakes) {
         super(context, resource, stocktakes);
         this.mContext = context;
         this.mResource = resource;
-        this.data = stocktakes;
+        this.mData = stocktakes;
     }
 
     @Override
     public int getCount() {
-        if(!data.isEmpty()) {
-            return data.size();
+        if(!mData.isEmpty()) {
+            return mData.size();
         } else{
             return 0;
         }
@@ -37,10 +36,10 @@ public class StocktakeListAdapter extends ArrayAdapter {
 
     @Override
     public Object getItem(int position) {
-        if(data.size() == 0) {
+        if(mData.size() == 0) {
             return null;
         }
-        return data.get(position);
+        return mData.get(position);
     }
 
     @Override

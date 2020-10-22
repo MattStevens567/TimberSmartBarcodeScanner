@@ -32,23 +32,17 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     private static final String TAG = "ScanningScreen";
 
     private int mCountGlobal, mPreCountGlobal;
-
     private TextView mCount, mDifference;
     private EditText mBarcode, mPreCount;
     private Button mEnter, mConfirmPreCount;
     private ListView mListView;
-
-
     private BarcodeListAdapter mBarcodeListAdapter;
-
-
     int mPassedAreaIndex, mPassedStocktakeIndex;
 
     //Camera Variables
     private View mTextureView;
     private UVCCameraHelper mCameraHelper;
     private CameraViewInterface mUVCCameraView;
-
     private boolean isRequest;
     private boolean isPreview;
 
@@ -231,10 +225,10 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
         mDifference.setText(Integer.toString(difference));
     }
 
-    // Constructs new barcode object and adds it to the arrayList
-    // Not sure whether to do processing here or in barcode class
-    // Processing currently done in barcode class
+    // Firstly checks if scanned barcode is already in system
+    // If not it then constructs new barcode object and adds it to the arrayList
     public void addBarcodeLogic (String barcode) throws Exception {
+
         //Check to see if the barcode doesn't exist before adding.
         boolean unique = true;
         for (int i = 0; i < getAreaOnFromPassedInstance().getBarcodeList().size(); i++){
@@ -285,7 +279,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     @Override
     protected void onStart() {
         super.onStart();
-        // step.2 register USB event broadcast
+        // Step.2 register USB event broadcast
         if (mCameraHelper != null) {
             mCameraHelper.registerUSB();
         }
@@ -294,7 +288,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     @Override
     protected void onStop() {
         super.onStop();
-        // step.3 unregister USB event broadcast
+        // Step.3 unregister USB event broadcast
         if (mCameraHelper != null) {
             mCameraHelper.unregisterUSB();
         }
@@ -303,7 +297,7 @@ public class ScanningScreen extends Activity implements Serializable, CameraDial
     protected void onDestroy() {
         super.onDestroy();
 
-        // step.4 release uvc camera resources
+        // Step.4 release uvc camera resources
         if (mCameraHelper != null) {
             mCameraHelper.release();
         }

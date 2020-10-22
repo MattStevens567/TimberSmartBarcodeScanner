@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +32,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_rows_screen);
+        setContentView(R.layout.activity_areas_screen);
 
         // This screen constructs when we have clicked on a stocktake, so we need to retrieve
         // that specific stock take it is passed an integer of the index.
@@ -59,6 +58,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
 
         mNewAreaName = findViewById(R.id.rowsAddAreaEdit);
 
+        // On-Click listener for "ADD NEW AREA" button at bottom of screen
         mAddNewArea = findViewById(R.id.rowAddButton);
         mAddNewArea.setOnClickListener(view -> {
             try {
@@ -95,6 +95,7 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
 
     }
 
+    // Small function to help prevent long lines of code when accessing Data class
     public Stocktake getStocktakeFromData(int i) throws Exception {
         return Data.getDataInstance().getStocktakeList().get(i);
     }
@@ -120,7 +121,10 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
             stream.close();
         }
     }
-    public void AddHandler(View view) throws Exception {
+
+    // On-Click listener assigned to ListViews "Add Barcode" Button
+    // When clicked will open scanning screen in context to area clicked
+    public void addBarcodesToArea(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
@@ -136,8 +140,9 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
         startActivity(intent);
     }
 
-
-    public void DeleteHandler(View view) throws Exception {
+    // On-Click listener assigned to ListViews "Delete Area" Button
+    // Deletes selected area from areaList when clicked
+    public void deleteArea(View view) throws Exception {
         LinearLayout parent = (LinearLayout) view.getParent();
         TextView child = (TextView)parent.getChildAt(0);
         String item = child.getText().toString();
@@ -153,6 +158,8 @@ public class AreasScreen extends AppCompatActivity implements Serializable {
 
         }
     }
+
+
     public void update(){
         mAreaListAdapter.notifyDataSetChanged();
         mListView.invalidateViews();

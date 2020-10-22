@@ -40,9 +40,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40"
+            android:hint="@string/ScanningScreenBarcodeDefault"
             android:importantForAutofill="no"
-            android:inputType="none"
-            tools:text="Scan data here...">
+            android:inputType="none">
 
 
         </EditText>
@@ -62,45 +62,6 @@
             android:layout_height="match_parent"
             android:layout_weight="40"
             android:baselineAligned="false">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/editTextPreCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:importantForAutofill="no"
-                    android:inputType="number"
-                    android:text="0"
-                    android:textSize="15sp">
-
-                </EditText>
-
-                <TextView
-                    android:id="@+id/textViewDifference"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                </TextView>
-
-                <TextView
-                    android:id="@+id/textViewCount"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                </TextView>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -137,6 +98,45 @@
                     android:text="@string/count">
 
                 </TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/editTextPreCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:importantForAutofill="no"
+                    android:inputType="number"
+                    android:text="@string/ScanningScreenPreCountDefault"
+                    android:textSize="15sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/textViewDifference"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                </TextView>
+
+                <TextView
+                    android:id="@+id/textViewCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                </TextView>
+
             </LinearLayout>
 
             <Button
