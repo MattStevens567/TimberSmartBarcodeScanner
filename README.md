@@ -1,8 +1,7 @@
-# StickBarcodeScanner
-TimberSmart StickBarcodeScanner
-This is a Barcode Scanning app which talks to TimberSmart's inventory management system.
-The barcode scanner will be attached at the end of a stick to scan timber which is too high to reach.
-This will help TimberSmart's clients in various ways.
-This is the first development cycle of this app.
+TimberSmart Barcode Scanner
+
+This is a Barcode Scanning app which stores scanned barcodes which can then be exported by csv for use on TimberSmarts Inventory System.
+
+This app will be used in conjunction with a barcode scanner attached to a pole which will scan the barcodes into the app for processing/storage.
 
 
